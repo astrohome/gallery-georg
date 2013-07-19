@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,6 +27,17 @@ public class FileUtils {
                 return f.isDirectory();
             }
         });
+    }
+
+    public File findDirectoryByTitle(final String title) throws IOException {
+        File root = new File(path);
+        File[] result = root.listFiles(new FileFilter() {
+            public boolean accept(File f) {
+                return title.equals(f.getName());
+            }
+        });
+        if (result.length != 1) throw new IOException();
+        return result[0];
     }
 
     public File[] findFiles(String dir) {

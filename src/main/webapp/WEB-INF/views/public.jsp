@@ -14,7 +14,7 @@
 <p>This is the homepage!</p>
 <a href="/admin">admin</a>
 <c:forEach items="${list}" var="gallery">
-    ${gallery.name} <br/>
+    ${gallery.title} <br/>
 </c:forEach>
 </body>
 </html>

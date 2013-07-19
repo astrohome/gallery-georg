@@ -6,9 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -17,6 +16,7 @@ import java.util.Properties;
  * @author SivaLabs
  */
 @Configuration
+@EnableTransactionManagement
 public class RepositoryConfig {
     //${jdbc.driverClassName}
     @Value("${jdbc.driverClassName}")
@@ -35,7 +35,7 @@ public class RepositoryConfig {
     private String hibernateHbm2ddlAuto;
 
     @Bean()
-    public DataSource getDataSource() {
+    public DataSource dataSource() {
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName(driverClassName);
         ds.setUrl(url);
@@ -44,6 +44,22 @@ public class RepositoryConfig {
         return ds;
     }
 
+    /**
+     * Фабрика сессий Hibernate
+     */
+    @Bean
+    @SuppressWarnings("deprecation")
+    public SessionFactory sessionFactory() {
+        return new LocalSessionFactoryBuilder(dataSource())
+                .scanPackages("org.georg.web")
+                .addProperties(hibernateProperties())
+                        // используем устаревший метод, так как Spring не оставляет нам выбора
+                .buildSessionFactory();
+    }
+
+    /**
+     * Менеджер транзакций
+     */
     @Bean
     public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
         HibernateTransactionManager htm = new HibernateTransactionManager();
@@ -51,31 +67,11 @@ public class RepositoryConfig {
         return htm;
     }
 
+    /**
+     * Свойства Hibernate в виде объекта класса Properties
+     */
     @Bean
-    public LocalContainerEntityManagerFactoryBean getEntityManagerFactoryBean() {
-        final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(getDataSource());
-        em.setPackagesToScan(new String[]{"org.georg.web"});
-
-        final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        // vendorAdapter.set
-        em.setJpaVendorAdapter(vendorAdapter);
-        em.setJpaProperties(getHibernateProperties());
-
-        return em;
-    }
-
-    @Bean(name = "gallerySessionFactory")
-    public LocalSessionFactoryBean getSessionFactory() {
-        LocalSessionFactoryBean asfb = new LocalSessionFactoryBean();
-        asfb.setDataSource(getDataSource());
-        asfb.setHibernateProperties(getHibernateProperties());
-        asfb.setPackagesToScan(new String[]{"org.georg.web"});
-        return asfb;
-    }
-
-    @Bean
-    public Properties getHibernateProperties() {
+    public Properties hibernateProperties() {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", hibernateDialect);
         properties.put("hibernate.show_sql", hibernateShowSql);
@@ -83,5 +79,4 @@ public class RepositoryConfig {
 
         return properties;
     }
-
 }
