@@ -18,7 +18,7 @@ public class HomeController {
     @RequestMapping(value = "/")
     public ModelAndView test(HttpServletResponse response) throws IOException {
         ModelAndView modelAndView = new ModelAndView("public");
-        modelAndView.addObject("list", service.getAll());
+        modelAndView.addObject("list", service.getAllByDate());
         return modelAndView;
     }
 }

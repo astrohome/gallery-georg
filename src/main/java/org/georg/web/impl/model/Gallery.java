@@ -2,6 +2,7 @@ package org.georg.web.impl.model;
 
 
 import com.sun.istack.internal.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,9 +16,13 @@ public class Gallery {
     @SequenceGenerator(name = "profile_seq", sequenceName = "profile_seq")
     @NotNull
     private Long id;
-    @Column(name = "title")
+    @NotNull
+    @Column(name = "title", columnDefinition = "varchar(255) COLLATE public.\"ru_RU.utf8\"")
     private String title;
+    @NotNull
     @Temporal(value = TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE NOT NULL")
     private Date created;
 
     private boolean hidden;

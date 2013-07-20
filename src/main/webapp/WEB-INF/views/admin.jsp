@@ -1,3 +1,4 @@
+<%@ page import="java.net.URLEncoder" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -24,10 +25,12 @@ Welcome to admin part !
             <td>${directory.created}</td>
             <td>${directory.hidden}</td>
             <td>${directory.watermark}</td>
+            <c:set var="title" value="${directory.title}"/>
             <c:url var="editLink" value="/admin">
-                <c:param name="title" value="${directory.title}"/>
+                <c:param name="title" value='<%=URLEncoder.encode((String)pageContext.getAttribute("title"))%>'/>
             </c:url>
-            <td><a href="<c:out value="${editLink}" escapeXml="true" />">Edit</a></td>
+
+            <td><a href="<c:out value="${editLink}" escapeXml="false" />">Edit</a></td>
         </tr>
 
     </c:forEach>

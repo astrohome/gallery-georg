@@ -2,11 +2,15 @@ package org.georg.web.impl.service;
 
 import org.georg.web.impl.dao.custom.base.IGalleryDAO;
 import org.georg.web.impl.model.Gallery;
+import org.georg.web.impl.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 @Service
 public class GalleryService {
@@ -18,8 +22,24 @@ public class GalleryService {
     private FileService fileService;
 
     @Transactional(readOnly = true)
-    public List<Gallery> getAll() {
-        return dao.findAll("title", IGalleryDAO.SortingTypes.asc);
+    public SortedMap<String, List<Gallery>> getAllByDate() {
+        List<Gallery> list = dao.findAll("created", IGalleryDAO.SortingTypes.asc);
+
+        SortedMap<String, List<Gallery>> result = new TreeMap<>();
+        for (final Gallery gallery : list) {
+            String date = DateUtil.toString(gallery.getCreated());
+            if (result.containsKey(date)) {
+                if (result.get(date) != null) {
+                    result.get(date).add(gallery);
+                }
+            } else {
+                result.put(date, new ArrayList<Gallery>() {{
+                    add(gallery);
+                }});
+            }
+        }
+
+        return result;
     }
 
     @Transactional(readOnly = true)
