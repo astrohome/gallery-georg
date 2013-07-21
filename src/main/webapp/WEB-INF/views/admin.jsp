@@ -5,9 +5,14 @@
 <html>
 <head>
     <title></title>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css" />"/>
 </head>
 <body>
 Welcome to admin part !
+
+<c:if test="${success}">
+    <div class="success" style="clear: both;">Successfully saved!</div>
+</c:if>
 <table border="1">
     <tr>
         <th>ID</th>

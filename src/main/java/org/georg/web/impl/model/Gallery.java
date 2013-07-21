@@ -12,8 +12,8 @@ import java.util.Date;
 public class Gallery {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "profile_seq")
-    @SequenceGenerator(name = "profile_seq", sequenceName = "profile_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gallery_seq")
+    @SequenceGenerator(name = "gallery_seq", sequenceName = "gallery_seq")
     @NotNull
     private Long id;
     @NotNull

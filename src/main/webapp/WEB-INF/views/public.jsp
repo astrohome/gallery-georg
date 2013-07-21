@@ -17,7 +17,7 @@
 <c:forEach items="${list}" var="item">
     <b>${item.key}</b> <br/>
     <c:forEach items="${item.value}" var="gallery">
-        ${gallery.title}
+        <a href="?id=${gallery.id}">${gallery.title}</a> <br/>
     </c:forEach>
 </c:forEach>
 </body>

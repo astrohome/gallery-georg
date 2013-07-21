@@ -26,10 +26,13 @@ public class AdminController {
     private GalleryService galleryService;
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
-    public ModelAndView adminGet(@RequestParam(required = false) boolean success, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ModelAndView adminGet(@RequestParam(required = false) Boolean success, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         ModelAndView modelAndView = new ModelAndView("admin");
         modelAndView.addObject("listDirectories", fileService.getDirectories());
+        if (success != null) {
+            modelAndView.addObject("success", success);
+        }
         return modelAndView;
     }
 

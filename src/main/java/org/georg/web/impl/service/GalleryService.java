@@ -48,6 +48,11 @@ public class GalleryService {
     }
 
     @Transactional(readOnly = true)
+    public Gallery getById(long id) {
+        return dao.getById(id);
+    }
+
+    @Transactional(readOnly = true)
     public Gallery getByTitleFromDBorFileSystem(String title) {
         Gallery obj = dao.findByTitle(title);
         if (obj == null) {

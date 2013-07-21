@@ -7,18 +7,14 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 
-/**
- * Created with IntelliJ IDEA.
- * User: felix
- * Date: 7/13/13
- * Time: 10:15 PM
- * To change this template use File | Settings | File Templates.
- */
 @Component
 public class FileUtils {
 
     @Value("${file.scandirectory}")
     private String path;
+
+    @Value("${file.scanextention}")
+    private String extension;
 
     public File[] findDirectories() {
         File root = new File(path);
@@ -33,19 +29,37 @@ public class FileUtils {
         File root = new File(path);
         File[] result = root.listFiles(new FileFilter() {
             public boolean accept(File f) {
-                return title.equals(f.getName());
+                return title.equalsIgnoreCase(f.getName());
             }
         });
         if (result.length != 1) throw new IOException();
         return result[0];
     }
 
-    public File[] findFiles(String dir) {
+    public File[] findImages(String dir) {
         File root = new File(path + "/" + dir);
         return root.listFiles(new FileFilter() {
             public boolean accept(File f) {
-                return f.isFile();
+                return f.isFile() && getExtension(f.getName()).equalsIgnoreCase(extension);
             }
         });
+    }
+
+    public File[] findFile(String dir, final String name) {
+        File root = new File(path + "/" + dir);
+        return root.listFiles(new FileFilter() {
+            public boolean accept(File f) {
+                return f.isFile() && f.getName().equalsIgnoreCase(name);
+            }
+        });
+    }
+
+    protected String getExtension(String name) {
+        String[] str = name.split("\\.");
+        if (str.length > 1) {
+            return str[str.length - 1];
+        }
+
+        return ""; //-- no extension
     }
 }

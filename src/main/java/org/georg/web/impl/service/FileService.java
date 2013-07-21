@@ -57,15 +57,4 @@ public class FileService {
         }
         return null;
     }
-
-
-    /*
-    public List<Directory> getFiles(String dir) {
-        List<Directory> list = new ArrayList<>();
-
-        for (File directory : fileUtils.findFiles(dir)) {
-            list.add(new Directory(directory.getName()));
-        }
-        return list;
-    }   */
 }
