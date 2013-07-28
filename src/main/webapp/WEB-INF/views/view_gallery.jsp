@@ -12,8 +12,10 @@
     <title></title>
 </head>
 <body>
+
+<a href="/">Back</a> <br/>
 <c:forEach items="${listImages}" var="image">
-    <img src="/getImage/${gallery.title}/${image}" width="100" height="100"/>
+    <img src="/getImage/${gallery.encodedTitle}/${image}" width="150"/>
 </c:forEach>
 </body>
 </html>

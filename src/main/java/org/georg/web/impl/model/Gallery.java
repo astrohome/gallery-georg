@@ -5,6 +5,8 @@ import com.sun.istack.internal.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 
 @Entity
@@ -34,6 +36,10 @@ public class Gallery {
     public Gallery(String title, Date created) {
         this.title = title;
         this.created = created;
+    }
+
+    public String getEncodedTitle() throws UnsupportedEncodingException {
+        return URLEncoder.encode(this.title, "UTF-8");
     }
 
     public Long getId() {

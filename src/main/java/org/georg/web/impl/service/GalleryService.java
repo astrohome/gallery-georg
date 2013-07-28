@@ -22,20 +22,22 @@ public class GalleryService {
     private FileService fileService;
 
     @Transactional(readOnly = true)
-    public SortedMap<String, List<Gallery>> getAllByDate() {
+    public SortedMap<String, List<Gallery>> getAllByDate(boolean isHidden) {
         List<Gallery> list = dao.findAll("created", IGalleryDAO.SortingTypes.asc);
 
         SortedMap<String, List<Gallery>> result = new TreeMap<>();
         for (final Gallery gallery : list) {
-            String date = DateUtil.toString(gallery.getCreated());
-            if (result.containsKey(date)) {
-                if (result.get(date) != null) {
-                    result.get(date).add(gallery);
+            if (gallery.isHidden() == isHidden) {
+                String date = DateUtil.toString(gallery.getCreated());
+                if (result.containsKey(date)) {
+                    if (result.get(date) != null) {
+                        result.get(date).add(gallery);
+                    }
+                } else {
+                    result.put(date, new ArrayList<Gallery>() {{
+                        add(gallery);
+                    }});
                 }
-            } else {
-                result.put(date, new ArrayList<Gallery>() {{
-                    add(gallery);
-                }});
             }
         }
 

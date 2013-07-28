@@ -8,12 +8,16 @@
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css" />"/>
 </head>
 <body>
-Welcome to admin part !
+Welcome to admin part ! <br/>
+
+<a href="/">Go to home page</a>
+
+<br/>
 
 <c:if test="${success}">
     <div class="success" style="clear: both;">Successfully saved!</div>
 </c:if>
-<table border="1">
+<table class="simple-little-table">
     <tr>
         <th>ID</th>
         <th>Title</th>
@@ -24,18 +28,25 @@ Welcome to admin part !
     </tr>
     <c:forEach items="${listDirectories}" var="directory">
 
-        <tr>
-            <td>${directory.id}</td>
-            <td>${directory.title}</td>
-            <td>${directory.created}</td>
-            <td>${directory.hidden}</td>
-            <td>${directory.watermark}</td>
-            <c:set var="title" value="${directory.title}"/>
-            <c:url var="editLink" value="/admin">
-                <c:param name="title" value='<%=URLEncoder.encode((String)pageContext.getAttribute("title"))%>'/>
-            </c:url>
+        <c:choose>
+            <c:when test="${directory.id != null}">
+                <tr class="created">
+            </c:when>
+            <c:otherwise>
+                <tr>
+            </c:otherwise>
+        </c:choose>
+        <td>${directory.id}</td>
+        <td>${directory.title}</td>
+        <td>${directory.created}</td>
+        <td>${directory.hidden}</td>
+        <td>${directory.watermark}</td>
+        <c:set var="title" value="${directory.title}"/>
+        <c:url var="editLink" value="/admin">
+            <c:param name="title" value='<%=URLEncoder.encode((String)pageContext.getAttribute("title"))%>'/>
+        </c:url>
 
-            <td><a href="<c:out value="${editLink}" escapeXml="false" />">Edit</a></td>
+        <td><a href="<c:out value="${editLink}" escapeXml="false" />">Edit</a></td>
         </tr>
 
     </c:forEach>

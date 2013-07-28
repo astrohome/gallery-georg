@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 @Controller
 public class HomeController {
@@ -24,7 +25,7 @@ public class HomeController {
     @RequestMapping(value = "/")
     public ModelAndView index(HttpServletResponse response) throws IOException {
         ModelAndView modelAndView = new ModelAndView("public");
-        modelAndView.addObject("list", service.getAllByDate());
+        modelAndView.addObject("list", service.getAllByDate(false));
         return modelAndView;
     }
 
@@ -40,8 +41,7 @@ public class HomeController {
     @RequestMapping(value = "/getImage/{folder}/{image}")
     @ResponseBody
     public byte[] helloWorld(@PathVariable("folder") String folder,
-                             @PathVariable("image") String image) {
-        File file = imageService.getFile(folder, image);
-        return imageService.getImage(file);
+                             @PathVariable("image") String image) throws UnsupportedEncodingException {
+        return imageService.getThumb(URLDecoder.decode(folder, "UTF-8"), URLDecoder.decode(image, "UTF-8"));
     }
 }

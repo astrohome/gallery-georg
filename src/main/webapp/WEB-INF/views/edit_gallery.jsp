@@ -25,7 +25,7 @@
             <td><form:input path="created" readonly="true"/></td>
         </tr>
         <tr>
-            <td><form:label path="hidden">Public?</form:label></td>
+            <td><form:label path="hidden">Private?</form:label></td>
             <td><form:checkbox path="hidden"/></td>
         </tr>
         <tr>
