@@ -26,9 +26,12 @@ public class Gallery {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE NOT NULL")
     private Date created;
-
+    @Column
     private boolean hidden;
+    @Column
     private boolean watermark;
+    @Column
+    private boolean password;
 
     public Gallery() {
     }
