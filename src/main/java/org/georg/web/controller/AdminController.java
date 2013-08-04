@@ -4,6 +4,7 @@ import org.georg.web.impl.model.Gallery;
 import org.georg.web.impl.service.FileService;
 import org.georg.web.impl.service.GalleryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ public class AdminController {
     private GalleryService galleryService;
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    @Secured("ROLE_ADMIN")
     public ModelAndView adminGet(@RequestParam(required = false) Boolean success, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         ModelAndView modelAndView = new ModelAndView("admin");

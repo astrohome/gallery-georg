@@ -68,4 +68,11 @@ public class GalleryService {
     public void update(Gallery gallery) {
         dao.update(gallery);
     }
+
+    @Transactional(readOnly = true)
+    public List<Gallery> getByCode(String code) {
+        //User user = (User) (SecurityContextHolder.getContext()).getAuthentication().getPrincipal();
+        List<Gallery> list = dao.getByCode(code);
+        return list;
+    }
 }

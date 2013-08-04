@@ -15,6 +15,13 @@ public class LoginController {
 
     }
 
+    @RequestMapping(value = "/login_private", method = RequestMethod.GET)
+    public String loginPrivate(ModelMap model) {
+
+        return "login_private";
+
+    }
+
     @RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
     public String loginerror(ModelMap model) {
 

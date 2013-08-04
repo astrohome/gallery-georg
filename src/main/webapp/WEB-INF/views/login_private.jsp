@@ -1,6 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix='c' uri='http://java.sun.com/jstl/core_rt' %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>Login Page</title>
@@ -24,18 +22,14 @@
     </div>
 </c:if>
 
-<form name='f' action="<c:url value='/j_spring_security_check' />"
+<form name='f' action="<c:url value='j_spring_security_check' />"
       method='POST'>
+    <input type='hidden' name='j_password' value='gallery'/>
 
     <table>
         <tr>
-            <td>User:</td>
+            <td>Enter your code:</td>
             <td><input type='text' name='j_username' value=''>
-            </td>
-        </tr>
-        <tr>
-            <td>Password:</td>
-            <td><input type='password' name='j_password'/>
             </td>
         </tr>
         <tr>

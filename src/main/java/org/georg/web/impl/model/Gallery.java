@@ -30,8 +30,8 @@ public class Gallery {
     private boolean hidden;
     @Column
     private boolean watermark;
-    @Column
-    private boolean password;
+    @ManyToOne
+    private User password;
 
     public Gallery() {
     }
@@ -83,5 +83,13 @@ public class Gallery {
 
     public void setWatermark(boolean watermark) {
         this.watermark = watermark;
+    }
+
+    public User getPassword() {
+        return password;
+    }
+
+    public void setPassword(User password) {
+        this.password = password;
     }
 }

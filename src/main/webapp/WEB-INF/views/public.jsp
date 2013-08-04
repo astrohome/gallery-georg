@@ -10,7 +10,9 @@
 <body>
 <h1>Hello World!</h1>
 
-<a href="/admin">admin</a>
+<a href="/admin">admin</a> <br/>
+
+<a href="/private">Access by code</a> <br/>
 
 <p>This is the homepage!</p>
 
