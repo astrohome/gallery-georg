@@ -30,8 +30,8 @@ public class Gallery {
     private boolean hidden;
     @Column
     private boolean watermark;
-    @ManyToOne
-    private User password;
+    @Column
+    private String password;
 
     public Gallery() {
     }
@@ -85,11 +85,11 @@ public class Gallery {
         this.watermark = watermark;
     }
 
-    public User getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(User password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 }

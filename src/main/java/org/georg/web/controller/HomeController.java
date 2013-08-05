@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.List;
 
 @Controller
 public class HomeController {
@@ -48,14 +47,15 @@ public class HomeController {
         return imageService.getThumb(URLDecoder.decode(folder, "UTF-8"), URLDecoder.decode(image, "UTF-8"));
     }
 
-    @RequestMapping(value = "/private", method = RequestMethod.GET)
+    @RequestMapping(value = "/private")
     public ModelAndView singlePrivateGallery(HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName(); //get logged in username
 
         ModelAndView modelAndView = new ModelAndView("view_gallery");
-        List<Gallery> gal = service.getByCode(name);
-        modelAndView.addObject("galleryList", gal);
+        Gallery gal = service.getByCode(name);
+        modelAndView.addObject("gallery", gal);
+        modelAndView.addObject("listImages", imageService.getImages(gal));
 
         return modelAndView;
     }

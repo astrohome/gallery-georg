@@ -11,13 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: felix
- * Date: 7/13/13
- * Time: 10:21 PM
- * To change this template use File | Settings | File Templates.
- */
 @Service
 public class FileService {
 

@@ -27,13 +27,11 @@ public class GalleryDAO extends GenericDAO<Gallery, Long> implements IGalleryDAO
     }
 
     @Override
-    public List<Gallery> getByCode(String code) {
-        Criteria query = getSessionFactory().getCurrentSession().createCriteria(Gallery.class).add(Restrictions.eq("password.login", code));
+    public Gallery getByCode(String code) {
+        Criteria query = getSessionFactory().getCurrentSession().createCriteria(Gallery.class).add(Restrictions.eq("password", code));
 
-        List<Gallery> result = query.list();
-        if (result.isEmpty()) {
-            return null;
-        } else return result;
+        Gallery result = (Gallery) query.uniqueResult();
+        return result;
     }
 
     public GalleryDAO() {

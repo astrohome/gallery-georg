@@ -4,6 +4,7 @@ import org.georg.web.impl.dao.base.GenericDAO;
 import org.georg.web.impl.dao.custom.base.IUserDetailsServiceDAO;
 import org.georg.web.impl.model.Gallery;
 import org.georg.web.impl.model.User;
+import org.georg.web.impl.util.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,12 +14,20 @@ import java.util.List;
 public class UserDetailsServiceDAO extends GenericDAO<User, String> implements IUserDetailsServiceDAO {
 
     @Autowired
-    public org.hibernate.SessionFactory sessionFactory;
-
+    private FileUtils fileUtils;
 
     @Override
     public List<Gallery> getAvaliableGalleries(User user) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
+    }
+
+    @Override
+    public void addPrivateUser(String code) {
+        User user = new User();
+        user.setLogin(code);
+        user.setPassword(fileUtils.getDigest("gallery"));
+        user.setRole("ROLE_USER");
+        makePersistent(user);
     }
 
     public UserDetailsServiceDAO() {

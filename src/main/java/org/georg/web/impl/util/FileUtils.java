@@ -79,6 +79,14 @@ public class FileUtils {
         return result[0];
     }
 
+    public String getDigest(String code) {
+        try {
+            return Hex.encodeHexString(MessageDigest.getInstance(thumbsStrategy).digest(code.getBytes()));
+        } catch (NoSuchAlgorithmException e) {
+            return null;
+        }
+    }
+
     public String getDigest(String dir, String name) {
         try {
             return Hex.encodeHexString(MessageDigest.getInstance(thumbsStrategy).digest((dir + "/" + name).getBytes()));

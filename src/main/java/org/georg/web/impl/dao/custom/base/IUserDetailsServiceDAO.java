@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface IUserDetailsServiceDAO extends IGenericDAO<User, String> {
     List<Gallery> getAvaliableGalleries(User user);
+
+    void addPrivateUser(String code);
 }
