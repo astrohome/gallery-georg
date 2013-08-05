@@ -8,6 +8,6 @@
     </jsp:attribute>
     <jsp:body>
         <a href="/">Back</a> <br/>
-        <t:singlegallery listImages="${listImages}"></t:singlegallery>
+        <t:singlegallery listImages="${listImages}"/>
     </jsp:body>
 </t:generic>
