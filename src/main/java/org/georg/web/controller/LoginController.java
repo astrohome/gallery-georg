@@ -1,5 +1,6 @@
 package org.georg.web.controller;
 
+import org.georg.web.impl.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,5 +36,10 @@ public class LoginController {
 
         return "login";
 
+    }
+
+    @RequestMapping(value = "/register_user", method = RequestMethod.POST)
+    public String registerNew(User user) {
+        return "activation_required";
     }
 }

@@ -28,7 +28,7 @@
     </security:http>
 
     <security:authentication-manager>
-        <security:authentication-provider user-service-ref="userService">
+        <security:authentication-provider user-service-ref="authService">
             <security:password-encoder hash="md5"/>
         </security:authentication-provider>
     </security:authentication-manager>

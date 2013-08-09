@@ -1,25 +1,25 @@
 package org.georg.web.impl.service;
 
-import org.georg.web.impl.dao.custom.UserDetailsServiceDAO;
+import org.georg.web.impl.dao.custom.base.IUserDAO;
+import org.georg.web.impl.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service("userService")
-public class UserService implements UserDetailsService {
+@Service
+public class UserService {
 
     @Autowired
-    private UserDetailsServiceDAO userDetailsServiceDAO;
+    private IUserDAO userDAO;
 
-    @Transactional(readOnly = true)
-    @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        org.georg.web.impl.model.User user = userDetailsServiceDAO.getById(s);
-        if (user == null) return null;
-        return user;
+    @Transactional(readOnly = false)
+    public void registerNewUser(User user) {
+
+    }
+
+    @Transactional(readOnly = false)
+    public void activateUser(String code) {
+        userDAO.getByActivationCode(code);
     }
 
 

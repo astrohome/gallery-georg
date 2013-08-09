@@ -6,8 +6,10 @@ import org.georg.web.impl.model.User;
 
 import java.util.List;
 
-public interface IUserDetailsServiceDAO extends IGenericDAO<User, String> {
+public interface IUserDAO extends IGenericDAO<User, String> {
     List<Gallery> getAvaliableGalleries(User user);
+
+    User getByActivationCode(String code);
 
     void addPrivateUser(String code);
 }
