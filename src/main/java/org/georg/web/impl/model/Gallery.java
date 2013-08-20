@@ -27,8 +27,10 @@ public class Gallery {
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE NOT NULL")
     private Date created;
     @Column
+    @NotNull
     private boolean hidden;
     @Column
+    @NotNull
     private boolean watermark;
     @Column
     private String password;

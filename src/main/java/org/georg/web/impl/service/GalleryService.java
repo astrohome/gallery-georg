@@ -1,7 +1,6 @@
 package org.georg.web.impl.service;
 
 import org.georg.web.impl.dao.custom.base.IGalleryDAO;
-import org.georg.web.impl.dao.custom.base.IUserDAO;
 import org.georg.web.impl.model.Gallery;
 import org.georg.web.impl.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +17,6 @@ public class GalleryService {
 
     @Autowired
     private IGalleryDAO dao;
-
-    @Autowired
-    private IUserDAO userDetailsServiceDAO;
 
     @Autowired
     private FileService fileService;
@@ -70,7 +66,6 @@ public class GalleryService {
 
     @Transactional(readOnly = false)
     public void update(Gallery gallery) {
-        userDetailsServiceDAO.addPrivateUser(gallery.getPassword());
         dao.update(gallery);
     }
 

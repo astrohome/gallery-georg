@@ -4,6 +4,7 @@ import org.georg.web.impl.model.Gallery;
 import org.georg.web.impl.service.GalleryService;
 import org.georg.web.impl.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -48,6 +49,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/private")
+    @Secured("ROLE_USER")
     public ModelAndView singlePrivateGallery(HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String name = auth.getName(); //get logged in username

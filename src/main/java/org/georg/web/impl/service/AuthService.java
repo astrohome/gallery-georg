@@ -18,7 +18,8 @@ public class AuthService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         org.georg.web.impl.model.User user = userDetailsServiceDAO.getById(s);
-        if (user == null) return null;
+        if (user == null) throw new UsernameNotFoundException("User " + s + " not found.");
+
         return user;
     }
 

@@ -39,6 +39,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin", params = {"title"}, method = RequestMethod.GET)
+    @Secured("ROLE_ADMIN")
     public ModelAndView adminEditGallery(HttpSession session, HttpServletRequest request, HttpServletResponse response,
                                          @RequestParam("title") String title) throws IOException {
 
@@ -49,6 +50,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/saveGallery", method = RequestMethod.POST)
+    @Secured("ROLE_ADMIN")
     public ModelAndView adminPost(@ModelAttribute("gallery") Gallery gallery, BindingResult result) throws IOException {
         galleryService.update(gallery);
         ModelAndView modelAndView = new ModelAndView("admin");

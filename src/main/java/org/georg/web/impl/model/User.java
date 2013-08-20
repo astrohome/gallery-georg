@@ -19,17 +19,20 @@ public class User implements Serializable, UserDetails {
     @Id
     @Column
     @NotNull
-    private String login;
+    private String email;
     @Column
     @NotNull
     private String password;
     @Column
     private String role;
     @Column
+    @NotNull
     private String firstName;
     @Column
+    @NotNull
     private String lastName;
     @Column
+    @NotNull
     private String activationCode;
     @Column
     @NotNull
@@ -41,11 +44,11 @@ public class User implements Serializable, UserDetails {
      * @return
      */
     public String getLogin() {
-        return login;
+        return email;
     }
 
     public void setLogin(String login) {
-        this.login = login;
+        this.email = login;
     }
 
     /**
@@ -74,7 +77,7 @@ public class User implements Serializable, UserDetails {
      */
     @Override
     public String getUsername() {
-        return login;
+        return email;
     }
 
     @Override
@@ -156,4 +159,5 @@ public class User implements Serializable, UserDetails {
     public void setActivated(boolean activated) {
         this.activated = activated;
     }
+
 }

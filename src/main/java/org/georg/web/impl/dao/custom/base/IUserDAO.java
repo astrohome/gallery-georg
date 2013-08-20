@@ -10,6 +10,4 @@ public interface IUserDAO extends IGenericDAO<User, String> {
     List<Gallery> getAvaliableGalleries(User user);
 
     User getByActivationCode(String code);
-
-    void addPrivateUser(String code);
 }
