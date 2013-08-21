@@ -5,8 +5,6 @@ import org.georg.web.impl.service.GalleryService;
 import org.georg.web.impl.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -48,14 +46,16 @@ public class HomeController {
         return imageService.getThumb(URLDecoder.decode(folder, "UTF-8"), URLDecoder.decode(image, "UTF-8"));
     }
 
-    @RequestMapping(value = "/private")
-    @Secured("ROLE_USER")
-    public ModelAndView singlePrivateGallery(HttpServletResponse response) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String name = auth.getName(); //get logged in username
+    @RequestMapping(value = "/private", method = RequestMethod.GET)
+    public String showCodeAccessPage() {
+        return "private";
+    }
 
+    @RequestMapping(value = "/private", method = RequestMethod.POST)
+    @Secured("ROLE_USER")
+    public ModelAndView singlePrivateGallery(HttpServletResponse response, @RequestParam("code") String code) {
         ModelAndView modelAndView = new ModelAndView("view_gallery");
-        Gallery gal = service.getByCode(name);
+        Gallery gal = service.getByCode(code);
         modelAndView.addObject("gallery", gal);
         modelAndView.addObject("listImages", imageService.getImages(gal));
 

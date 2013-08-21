@@ -58,7 +58,7 @@
                 }
             });
         </script>
-        <form:form method="POST" action="saveGallery.html" modelAttribute="gallery">
+        <form:form method="POST" cssClass="navbar-form pull-left" action="saveGallery.html" modelAttribute="gallery">
 
             <table>
                 <tr>

@@ -71,7 +71,6 @@ public class GalleryService {
 
     @Transactional(readOnly = true)
     public Gallery getByCode(String code) {
-        //User user = (User) (SecurityContextHolder.getContext()).getAuthentication().getPrincipal();
         Gallery list = dao.getByCode(code);
         return list;
     }

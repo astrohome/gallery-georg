@@ -4,10 +4,12 @@
 
 <t:generic>
     <jsp:attribute name="title">Welcome</jsp:attribute>
+
+    <jsp:attribute name="menu"><t:menu></t:menu></jsp:attribute>
+
     <jsp:body>
         <a href="/admin">admin</a> <br/>
 
-        <a href="/private">Access by code</a> <br/>
         <sec:authorize access="not isAuthenticated()">
             <a href="/login.html">Login</a>
         </sec:authorize>
