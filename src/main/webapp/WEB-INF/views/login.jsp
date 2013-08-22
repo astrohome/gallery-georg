@@ -24,6 +24,7 @@
                 <input type="checkbox" value="remember-me"> Remember me
             </label>
             <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+            <a class="btn btn-large pull-right" href="/register_user.html">Register</a>
         </form>
     </jsp:body>
 </t:generic>

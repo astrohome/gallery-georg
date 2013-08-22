@@ -39,11 +39,18 @@ public class HomeController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/getThumb/{folder}/{image}")
+    @ResponseBody
+    public byte[] getThumb(@PathVariable("folder") String folder,
+                           @PathVariable("image") String image) throws UnsupportedEncodingException {
+        return imageService.getThumb(URLDecoder.decode(folder, "UTF-8"), URLDecoder.decode(image, "UTF-8"));
+    }
+
     @RequestMapping(value = "/getImage/{folder}/{image}")
     @ResponseBody
-    public byte[] helloWorld(@PathVariable("folder") String folder,
-                             @PathVariable("image") String image) throws UnsupportedEncodingException {
-        return imageService.getThumb(URLDecoder.decode(folder, "UTF-8"), URLDecoder.decode(image, "UTF-8"));
+    public byte[] getBigImage(@PathVariable("folder") String folder,
+                              @PathVariable("image") String image) throws UnsupportedEncodingException {
+        return imageService.getBig(URLDecoder.decode(folder, "UTF-8"), URLDecoder.decode(image, "UTF-8"));
     }
 
     @RequestMapping(value = "/private", method = RequestMethod.GET)

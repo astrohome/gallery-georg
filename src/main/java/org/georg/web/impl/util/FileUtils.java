@@ -1,14 +1,12 @@
 package org.georg.web.impl.util;
 
-import org.apache.commons.codec.binary.Hex;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 @Component
 public class FileUtils {
@@ -22,8 +20,8 @@ public class FileUtils {
     @Value("${file.thumbs.directory}")
     private String thumbsPath;
 
-    @Value("${file.thumbs.strategy}")
-    private String thumbsStrategy;
+    @Autowired
+    private HashCodeUtil hashCodeUtil;
 
     public File[] findDirectories() {
         File root = new File(path);
@@ -32,6 +30,14 @@ public class FileUtils {
                 return f.isDirectory();
             }
         });
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getPath(String file) {
+        return path + "/" + file;
     }
 
     public File findDirectoryByTitle(final String title) throws IOException {
@@ -54,7 +60,7 @@ public class FileUtils {
         });
     }
 
-    public File[] findFile(String dir, final String name) {
+    public File[] findFiles(String dir, final String name) {
         File root = new File(path + "/" + dir);
         return root.listFiles(new FileFilter() {
             public boolean accept(File f) {
@@ -64,11 +70,19 @@ public class FileUtils {
     }
 
     public File findThumb(String dir, String name) {
+        return getImage(dir, name, false);
+    }
+
+    public File findBig(String dir, String name) {
+        return getImage(dir, name, true);
+    }
+
+    private File getImage(String dir, String name, boolean big) {
         File root = new File(thumbsPath);
 
         File[] result = null;
 
-        final String thumbName = getDigest(dir, name);
+        final String thumbName = ((big) ? "big" : "") + hashCodeUtil.getDigest(dir + "/" + name);
         result = root.listFiles(new FileFilter() {
             public boolean accept(File f) {
                 return f.isFile() && f.getName().equalsIgnoreCase(thumbName);
@@ -79,28 +93,12 @@ public class FileUtils {
         return result[0];
     }
 
-    public String getDigest(String code) {
-        try {
-            return Hex.encodeHexString(MessageDigest.getInstance(thumbsStrategy).digest(code.getBytes()));
-        } catch (NoSuchAlgorithmException e) {
-            return null;
-        }
-    }
-
-    public String getDigest(String dir, String name) {
-        try {
-            return Hex.encodeHexString(MessageDigest.getInstance(thumbsStrategy).digest((dir + "/" + name).getBytes()));
-        } catch (NoSuchAlgorithmException e) {
-            return null;
-        }
-    }
-
     public String getThumbsPath() {
         return thumbsPath;
     }
 
-    public String getThumbNameWithPath(String dir, String name) {
-        return getThumbsPath() + "/" + getDigest(dir, name);
+    public String getThumbNameWithPath(String dir, String name, boolean big) {
+        return getThumbsPath() + "/" + ((big) ? "big" : "") + hashCodeUtil.getDigest(dir + "/" + name);
     }
 
     protected String getExtension(String name) {

@@ -1,8 +1,9 @@
 package org.georg.web.impl.service;
 
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.geometry.Positions;
 import org.georg.web.impl.model.Gallery;
 import org.georg.web.impl.util.FileUtils;
-import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class ImageService {
     private FileUtils fileUtils;
 
     public File getFile(String gallery, String image) {
-        File[] files = fileUtils.findFile(gallery, image + ".jpg");
+        File[] files = fileUtils.findFiles(gallery, image + ".jpg");
         if (files.length == 1) {
             return files[0];
         }
@@ -40,38 +41,63 @@ public class ImageService {
         return result;
     }
 
-    public byte[] getThumb(String gallery, String image) {
-        File file = fileUtils.findThumb(gallery, image);
-        if (file == null) {
-            byte[] imageInByte;
-            try {
-                BufferedImage img = ImageIO.read(getFile(gallery, image));
-                BufferedImage thumbnail =
-                        Scalr.resize(img, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC,
-                                200, 200, Scalr.OP_ANTIALIAS);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(thumbnail, "jpg", baos);
-                baos.flush();
-                imageInByte = baos.toByteArray();
-                baos.close();
+    private byte[] proceedFile(String gallery, String image, boolean big) {
+        byte[] imageInByte;
+        try {
+            String path = fileUtils.getThumbNameWithPath(gallery, image, big);
 
-                File output = new File(fileUtils.getThumbNameWithPath(gallery, image));
-                output.createNewFile();
-
-                FileOutputStream fo = new FileOutputStream(output);
-
-                ImageIO.write(thumbnail, "jpg", fo);
-                fo.flush();
-                fo.close();
-            } catch (IOException e) {
-                return null;
+            BufferedImage img;
+            if (big) {
+                img = Thumbnails.of(getFile(gallery, image))
+                        .size(800, 800)
+                        .outputFormat("jpg")
+                        .asBufferedImage();
+            } else {
+                img = Thumbnails.of(getFile(gallery, image))
+                        .size(150, 150)
+                        .crop(Positions.CENTER)
+                        .outputFormat("jpg")
+                        .outputQuality(0.4f)
+                        .asBufferedImage();
             }
 
-            return imageInByte;
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(img, "jpg", baos);
+            baos.flush();
+            imageInByte = baos.toByteArray();
+            baos.close();
+
+            File output = new File(path);
+            output.createNewFile();
+
+            FileOutputStream fo = new FileOutputStream(output);
+
+            ImageIO.write(img, "jpg", fo);
+            fo.flush();
+            fo.close();
+
+        } catch (IOException e) {
+            return null;
+        }
+
+        return imageInByte;
+    }
+
+    public byte[] getBig(String gallery, String image) {
+        File file = fileUtils.findBig(gallery, image);
+        if (file == null) {
+            return proceedFile(gallery, image, true);
         }
         return getImage(file);
     }
 
+    public byte[] getThumb(String gallery, String image) {
+        File file = fileUtils.findThumb(gallery, image);
+        if (file == null) {
+            return proceedFile(gallery, image, false);
+        }
+        return getImage(file);
+    }
 
     public List<String> getImages(Gallery gallery) {
         File[] images = fileUtils.findImages(gallery.getTitle());

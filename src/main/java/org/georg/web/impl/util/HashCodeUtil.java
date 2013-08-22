@@ -1,11 +1,23 @@
 package org.georg.web.impl.util;
 
-/**
- * Created with IntelliJ IDEA.
- * User: felix
- * Date: 7/23/13
- * Time: 11:10 PM
- * To change this template use File | Settings | File Templates.
- */
+import org.apache.commons.codec.binary.Hex;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+@Component
 public class HashCodeUtil {
+
+    @Value("${file.thumbs.strategy}")
+    private String thumbsStrategy;
+
+    public String getDigest(String code) {
+        try {
+            return Hex.encodeHexString(MessageDigest.getInstance(thumbsStrategy).digest(code.getBytes()));
+        } catch (NoSuchAlgorithmException e) {
+            return null;
+        }
+    }
 }

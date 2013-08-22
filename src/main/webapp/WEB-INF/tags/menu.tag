@@ -9,12 +9,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="brand" href="#">GEORG Studio</a>
+            <a class="brand" href="/">GEORG Studio</a>
 
             <div class="nav-collapse collapse">
                 <ul class="nav">
                     <li class="active"><a href="/">Home</a></li>
-                    <li class="btn-success"><a href="private">Access by code</a></li>
+                    <li><a href="private">Access by code</a></li>
                     <li><a href="video">Videos</a></li>
                 </ul>
             </div>

@@ -17,6 +17,7 @@
     </style>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bootstrap.css" />"/>
     <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css" />"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bootstrap-image-gallery.css" />"
     <jsp:invoke fragment="header"/>
 </head>
 <body>
@@ -28,5 +29,7 @@
 
 <script type="text/javascript" src="<c:url value="/resources/js/jquery-2.0.3.min.js" />"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/load-image.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/bootstrap-image-gallery.js"/>"></script>
 </body>
 </html>
