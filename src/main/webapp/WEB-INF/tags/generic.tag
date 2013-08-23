@@ -3,6 +3,7 @@
 <%@attribute name="header" fragment="true" %>
 <%@attribute name="title" fragment="true" %>
 <%@attribute name="menu" fragment="true" %>
+<%@attribute name="bottom" fragment="true" %>
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -11,25 +12,20 @@
     <title>
         <jsp:invoke fragment="title"/>
     </title>
-    <style>
 
-
-    </style>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bootstrap.css" />"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/style.css" />"/>
-    <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/bootstrap-image-gallery.css" />"
+    <%@include file="../views/include/head_system.jsp" %>
     <jsp:invoke fragment="header"/>
 </head>
 <body>
+
 <jsp:invoke fragment="menu"/>
 
 <div class="container">
     <jsp:doBody/>
 </div>
 
-<script type="text/javascript" src="<c:url value="/resources/js/jquery-2.0.3.min.js" />"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/load-image.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/bootstrap-image-gallery.js"/>"></script>
+<%@include file="../views/include/bottom_system.jsp" %>
+<jsp:invoke fragment="bottom"/>
+
 </body>
 </html>
