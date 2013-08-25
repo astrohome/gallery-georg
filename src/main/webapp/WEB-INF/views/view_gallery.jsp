@@ -9,6 +9,9 @@
     <jsp:attribute name="header">
             <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/prettyPhoto.css" />"/>
     </jsp:attribute>
+    <jsp:attribute name="menu">
+        <t:menu/>
+    </jsp:attribute>
     <jsp:attribute name="bottom">
         <script type="text/javascript" src="<c:url value="/resources/js/jquery.prettyPhoto.js"/>"></script>
 
@@ -18,7 +21,7 @@
                     social_tools: ''
                 });
 
-                jQuery("[rel^='thumbnail").one('load',function () {
+                jQuery("[rel^='thumbnail']").one('load',function () {
                     if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
                         alert('broken image!');
                     } else {

@@ -23,27 +23,26 @@ public class GalleryService {
     private FileService fileService;
 
     @Transactional(readOnly = true)
-    public SortedMap<DisplayDate, List<Gallery>> getAllByDate(boolean isHidden) {
+    public SortedMap<DisplayDate, List<Gallery>> getAllByDate(boolean includeHidden) {
         List<Gallery> list = dao.findAll("created", IGalleryDAO.SortingTypes.asc);
 
         SortedMap<DisplayDate, List<Gallery>> result = new TreeMap<>();
         for (final Gallery gallery : list) {
-            if (gallery.isHidden() == isHidden) {
+            if (gallery.isHidden() && !includeHidden) continue;
 
-                String dateText = DateUtil.toTextString(gallery.getCreated());
-                String dateId = DateUtil.toIdString(gallery.getCreated());
+            String dateText = DateUtil.toTextString(gallery.getCreated());
+            String dateId = DateUtil.toIdString(gallery.getCreated());
 
-                DisplayDate dd = new DisplayDate(dateText, dateId);
+            DisplayDate dd = new DisplayDate(dateText, dateId);
 
-                if (result.containsKey(dd)) {
-                    if (result.get(dd) != null) {
-                        result.get(dd).add(gallery);
-                    }
-                } else {
-                    result.put(dd, new ArrayList<Gallery>() {{
-                        add(gallery);
-                    }});
+            if (result.containsKey(dd)) {
+                if (result.get(dd) != null) {
+                    result.get(dd).add(gallery);
                 }
+            } else {
+                result.put(dd, new ArrayList<Gallery>() {{
+                    add(gallery);
+                }});
             }
         }
 

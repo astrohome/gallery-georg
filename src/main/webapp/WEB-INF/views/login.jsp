@@ -4,6 +4,7 @@
 
 <t:generic>
     <jsp:attribute name="title">Login</jsp:attribute>
+
     <jsp:body>
 
         <c:if test="${not empty error}">

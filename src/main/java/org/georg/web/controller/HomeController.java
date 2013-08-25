@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 @Controller
 public class HomeController {
@@ -23,10 +25,19 @@ public class HomeController {
     @Autowired
     private ImageService imageService;
 
+    private void constructPublicMenu(ModelAndView modelAndView) {
+        SortedMap<String, String> menu = new TreeMap();
+        menu.put("/", "page.menu.public.index");
+        menu.put("/private", "page.menu.public.code");
+        menu.put("/videos", "page.menu.public.video");
+        modelAndView.addObject("menuItems", menu);
+    }
+
     @RequestMapping(value = "/")
     public ModelAndView index(HttpServletResponse response) throws IOException {
         ModelAndView modelAndView = new ModelAndView("public");
-        modelAndView.addObject("list", service.getAllByDate(false));
+        modelAndView.addObject("list", service.getAllByDate(true));
+        constructPublicMenu(modelAndView);
         return modelAndView;
     }
 
@@ -59,13 +70,21 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/private", method = RequestMethod.POST)
-    @Secured("ROLE_USER")
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ModelAndView singlePrivateGallery(HttpServletResponse response, @RequestParam("code") String code) {
         ModelAndView modelAndView = new ModelAndView("view_gallery");
         Gallery gal = service.getByCode(code);
         modelAndView.addObject("gallery", gal);
         modelAndView.addObject("listImages", imageService.getImages(gal));
 
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/videos")
+    public ModelAndView videos(HttpServletResponse response) throws IOException {
+        ModelAndView modelAndView = new ModelAndView("public");
+        modelAndView.addObject("list", service.getAllByDate(true));
+        constructPublicMenu(modelAndView);
         return modelAndView;
     }
 }

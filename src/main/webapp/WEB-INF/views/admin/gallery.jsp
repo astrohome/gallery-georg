@@ -1,4 +1,4 @@
-<%@ include file="include/init.jsp" %>
+<%@ include file="../include/init.jsp" %>
 
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
@@ -14,11 +14,11 @@
         <t:menu type="admin" menuItems="${menuItems}"/>
 
         <c:if test="${success}">
-            <div class="alert alert-success">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <h4>Успех!</h4>
-                Successfully saved!
-            </div>
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>Успех!</h4>
+            Successfully saved!
+        </div>
         </c:if>
 
         <table class="table table-hover">
@@ -33,36 +33,36 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${listDirectories}" var="directory">
+                <c:forEach items="${listDirectories}" var="directory">
 
                 <c:choose>
-                    <c:when test="${directory.id != null}">
-                        <tr class="success">
+                <c:when test="${directory.id != null}">
+            <tr class="success">
                     </c:when>
                     <c:otherwise>
-                        <tr>
+            <tr>
                     </c:otherwise>
-                </c:choose>
+                    </c:choose>
                 <td>${directory.id}</td>
                 <td>${directory.title}</td>
                 <td>${directory.created}</td>
                 <td>
                     <input type="checkbox"
-                    <c:if test="${directory.hidden}">
+                        <c:if test="${directory.hidden}">
                            checked
-                    </c:if>
+                        </c:if>
                             >
                 </td>
                 <td>
                     <input type="checkbox"
-                    <c:if test="${directory.watermark}">
+                        <c:if test="${directory.watermark}">
                            checked
-                    </c:if>
+                        </c:if>
                             >
                 </td>
-                <c:url var="editLink" value="/admin">
+                    <c:url var="editLink" value="/admin">
                     <c:param name="title" value="${directory.encodedTitle}"/>
-                </c:url>
+                    </c:url>
 
                 <td>
                     <div class="btn-group">
@@ -82,9 +82,9 @@
                         </ul>
                     </div>
                 </td>
-                </tr>
+            </tr>
 
-            </c:forEach>
+                </c:forEach>
             </tbody>
         </table>
     </jsp:body>

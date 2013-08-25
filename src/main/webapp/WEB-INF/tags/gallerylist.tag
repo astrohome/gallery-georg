@@ -3,7 +3,7 @@
 <%@attribute name="list" required="true" type="java.util.SortedMap" %>
 
 <div class="clearfix"></div>
-<div class="input-append date" id="dp3" data-date="12-02-2012" data-date-format="dd mm yyyy">
+<div class="input-append date" id="dp3" data-date="12-02-2013" data-date-format="dd mm yyyy">
     <input class="datevalue span2" size="16" type="text">
     <span class="opencalendar add-on"><i class="icon-calendar"></i></span>
     <span class="clean add-on"><i class="icon-remove"></i></span>
@@ -16,7 +16,16 @@
         <b>${item.key.text}</b>
         <br/>
         <c:forEach items="${item.value}" var="gallery">
-            <a href="?id=${gallery.id}">${gallery.title}</a> <br/>
+            <c:choose>
+                <c:when test="${gallery.hidden}">
+                    <a href="/private">
+                        <div class="icon-lock"></div>
+                            ${gallery.title}</a> <br/>
+                </c:when>
+                <c:otherwise>
+                    <a href="?id=${gallery.id}">${gallery.title}</a> <br/>
+                </c:otherwise>
+            </c:choose>
         </c:forEach>
     </div>
 </c:forEach>
