@@ -3,6 +3,8 @@ package org.georg.web.impl.model;
 import com.sun.istack.internal.NotNull;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Format table for buying photos
@@ -18,6 +20,9 @@ public class Format {
     @Column
     @NotNull
     private String format;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "format", cascade = CascadeType.ALL)
+    private Set<Price> price = new HashSet();
 
     public Integer getId() {
         return id;
@@ -39,5 +44,18 @@ public class Format {
     public boolean equals(Object obj) {
         return (this.id == ((Format) obj).getId())/*
                 && (this.format.equals(((Format)obj).getFormat()))*/;
+    }
+
+    @Override
+    public String toString() {
+        return this.format;
+    }
+
+    public Set<Price> getPrice() {
+        return price;
+    }
+
+    public void setPrice(Set<Price> price) {
+        this.price = price;
     }
 }

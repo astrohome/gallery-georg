@@ -2,12 +2,10 @@ package org.georg.web.controller;
 
 import org.georg.web.container.FormatListContainer;
 import org.georg.web.container.PaperTypeListContainer;
+import org.georg.web.container.PriceListContainer;
 import org.georg.web.impl.dao.base.IGenericDAO;
 import org.georg.web.impl.model.Gallery;
-import org.georg.web.impl.service.FileService;
-import org.georg.web.impl.service.FormatService;
-import org.georg.web.impl.service.GalleryService;
-import org.georg.web.impl.service.PaperTypeService;
+import org.georg.web.impl.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -36,6 +34,9 @@ public class AdminController {
     @Autowired
     private PaperTypeService paperTypeService;
 
+    @Autowired
+    private PriceService priceService;
+
     private void constructMenu(ModelAndView modelAndView) {
         LinkedHashMap<String, String> menu = new LinkedHashMap();
         menu.put("?page=gal", "page.menu.admin.gals");
@@ -62,6 +63,8 @@ public class AdminController {
             modelAndView.addObject("paperTypeListContainer", new PaperTypeListContainer(paperTypeService.getAll("id", IGenericDAO.SortingTypes.asc)));
         } else if ("price".equals(page)) {
             modelAndView = new ModelAndView("admin/price");
+            modelAndView.addObject("priceListContainer", new PriceListContainer(priceService.getAll()));
+            modelAndView.addObject("formats", formatService.getAll("id", IGenericDAO.SortingTypes.asc));
         } else {
             modelAndView = new ModelAndView("admin/gallery");
         }

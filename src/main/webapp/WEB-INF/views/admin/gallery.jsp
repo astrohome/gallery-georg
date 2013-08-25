@@ -23,11 +23,13 @@
                     <thead>
                     <tr>
                         <th class="text-center">ID</th>
-                        <th class="text-center"><i class="icon-quote-left"></i> Title</th>
-                        <th class="text-center"><i class="icon-calendar"></i> Modified</th>
-                        <th class="text-center">Private?</th>
-                        <th class="text-center">Watermarked?</th>
-                        <th class="text-center">Actions</th>
+                        <th class="text-center"><i class="icon-quote-left"></i> <spring:message
+                                code="page.admin.title"/></th>
+                        <th class="text-center"><i class="icon-calendar"></i> <spring:message
+                                code="page.admin.modified"/></th>
+                        <th class="text-center"><spring:message code="page.admin.private"/></th>
+                        <th class="text-center"><spring:message code="page.admin.watermark"/></th>
+                        <th class="text-center"><spring:message code="page.admin.actions"/></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -84,11 +86,12 @@
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a href="/?id=${directory.id}" target="_blank"><i class="icon-eye-open"></i>
-                                            View</a>
+                                            <spring:message code="view"/></a>
                                     </li>
                                     <li class="divider"></li>
-                                    <li class="label-important">
-                                        <a href="/?delete=${directory.id}">Delete</a>
+                                    <li>
+                                        <a href="/?delete=${directory.id}"><i class="icon-remove"></i> <spring:message
+                                                code="delete"/></a>
                                     </li>
                                 </ul>
                             </div>

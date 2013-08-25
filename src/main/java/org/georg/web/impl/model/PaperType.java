@@ -3,6 +3,8 @@ package org.georg.web.impl.model;
 import com.sun.istack.internal.NotNull;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Paper types for buyers
@@ -20,6 +22,9 @@ public class PaperType {
     @NotNull
     private String paperType;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "paperType", cascade = CascadeType.ALL)
+    private Set<Price> price = new HashSet();
+
     public Integer getId() {
         return id;
     }
@@ -34,5 +39,23 @@ public class PaperType {
 
     public void setPaperType(String paperType) {
         this.paperType = paperType;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.id == ((PaperType) obj).getId();
+    }
+
+    @Override
+    public String toString() {
+        return this.paperType;
+    }
+
+    public Set<Price> getPrice() {
+        return price;
+    }
+
+    public void setPrice(Set<Price> price) {
+        this.price = price;
     }
 }
