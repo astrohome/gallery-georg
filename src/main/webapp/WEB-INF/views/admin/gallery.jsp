@@ -22,12 +22,12 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Modified</th>
-                        <th>Private?</th>
-                        <th>Watermarked?</th>
-                        <th>Actions</th>
+                        <th class="text-center">ID</th>
+                        <th class="text-center"><i class="icon-quote-left"></i> Title</th>
+                        <th class="text-center"><i class="icon-calendar"></i> Modified</th>
+                        <th class="text-center">Private?</th>
+                        <th class="text-center">Watermarked?</th>
+                        <th class="text-center">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -41,37 +41,50 @@
                                 <tr>
                             </c:otherwise>
                         </c:choose>
-                        <td>${directory.id}</td>
-                        <td>${directory.title}</td>
-                        <td>${directory.created}</td>
-                        <td>
-                            <input disabled="true" type="checkbox"
-                            <c:if test="${directory.hidden}">
-                                   checked
-                            </c:if>
-                                    >
+                        <td class="text-center">${directory.id}</td>
+                        <td class="text-center">${directory.title}</td>
+                        <td class="text-center">${directory.createdText}</td>
+                        <td class="text-center">
+                            <i
+                                    <c:choose>
+                                        <c:when test="${directory.hidden}">
+                                            class="icon-check"
+                                        </c:when>
+                                        <c:otherwise>
+                                            class="icon-check-empty"
+                                        </c:otherwise>
+                                    </c:choose>
+                                    ></i>
                         </td>
-                        <td>
-                            <input disabled="true" type="checkbox"
-                            <c:if test="${directory.watermark}">
-                                   checked
-                            </c:if>
-                                    >
+                        <td class="text-center">
+                            <i
+                                    <c:choose>
+                                        <c:when test="${directory.watermark}">
+                                            class="icon-check"
+                                        </c:when>
+                                        <c:otherwise>
+                                            class="icon-check-empty"
+                                        </c:otherwise>
+                                    </c:choose>
+                                    ></i>
                         </td>
                         <c:url var="editLink" value="/admin">
                             <c:param name="title" value="${directory.encodedTitle}"/>
                         </c:url>
 
-                        <td>
+                        <td class="text-center">
                             <div class="btn-group">
                                 <a href="<c:out value="${editLink}" escapeXml="false" />"
-                                   class="btn btn-toolbar">Редактировать</a>
+                                   class="btn btn-toolbar">
+                                    <div class="icon-pencil"></div>
+                                    Редактировать</a>
                                 <button class="btn dropdown-toggle" data-toggle="dropdown">
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="/?id=${directory.id}">View</a>
+                                        <a href="/?id=${directory.id}" target="_blank"><i class="icon-eye-open"></i>
+                                            View</a>
                                     </li>
                                     <li class="divider"></li>
                                     <li class="label-important">

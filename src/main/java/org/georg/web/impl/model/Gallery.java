@@ -2,6 +2,7 @@ package org.georg.web.impl.model;
 
 
 import com.sun.istack.internal.NotNull;
+import org.georg.web.impl.util.DateUtil;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -26,6 +27,8 @@ public class Gallery {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE NOT NULL")
     private Date created;
+    @Transient
+    private String createdText;
     @Column
     @NotNull
     private boolean hidden;
@@ -41,6 +44,7 @@ public class Gallery {
     public Gallery(String title, Date created) {
         this.title = title;
         this.created = created;
+        this.createdText = DateUtil.toTextString(this.created);
     }
 
     public String getEncodedTitle() throws UnsupportedEncodingException {
@@ -65,6 +69,13 @@ public class Gallery {
 
     public Date getCreated() {
         return created;
+    }
+
+    public String getCreatedText() {
+        if (createdText == null || createdText.isEmpty()) {
+            createdText = DateUtil.toTextString(created);
+        }
+        return createdText;
     }
 
     public void setCreated(Date created) {
