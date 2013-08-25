@@ -11,7 +11,7 @@ import java.util.List;
 
 
 /**
- * Implementation of {@link org.georg.web.base.IGenericDAO}; basic class for DAO-related work.
+ * Implementation of {@link org.georg.web.impl.dao.base.IGenericDAO}; basic class for DAO-related work.
  *
  * @param <T>  type of object.
  * @param <ID> primary key.

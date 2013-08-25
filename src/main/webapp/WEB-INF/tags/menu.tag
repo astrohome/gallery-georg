@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@attribute name="menuItems" type="java.util.SortedMap<java.lang.String, java.lang.String>" %>
+<%@attribute name="menuItems" type="java.util.LinkedHashMap<java.lang.String, java.lang.String>" %>
 <%@attribute name="type" %>
 
 <c:choose>

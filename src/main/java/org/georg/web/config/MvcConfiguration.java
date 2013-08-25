@@ -1,5 +1,8 @@
 package org.georg.web.config;
 
+import org.georg.web.impl.dao.base.GenericDAO;
+import org.georg.web.impl.dao.base.IGenericDAO;
+import org.georg.web.impl.model.Format;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -63,6 +66,11 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
         // # -1 : never reload, 0 always reload
         messageSource.setCacheSeconds(0);
         return messageSource;
+    }
+
+    @Bean
+    public IGenericDAO<Format, Integer> formatDao() {
+        return new GenericDAO(Format.class);
     }
 
 }

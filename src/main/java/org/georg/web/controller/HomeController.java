@@ -13,8 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.LinkedHashMap;
 
 @Controller
 public class HomeController {
@@ -26,7 +25,7 @@ public class HomeController {
     private ImageService imageService;
 
     private void constructPublicMenu(ModelAndView modelAndView) {
-        SortedMap<String, String> menu = new TreeMap();
+        LinkedHashMap<String, String> menu = new LinkedHashMap();
         menu.put("/", "page.menu.public.index");
         menu.put("/private", "page.menu.public.code");
         menu.put("/videos", "page.menu.public.video");
