@@ -50,7 +50,8 @@ public class Format {
             Format comp = (Format) obj;
             if (comp.getId() == null) return false;
 
-            return this.getId().equals(comp.getId());
+            return this.id.equals(comp.getId()) &&
+                    this.format.equals(comp.getFormat());
         } else return false;
     }
 

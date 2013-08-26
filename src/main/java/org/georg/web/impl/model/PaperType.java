@@ -51,7 +51,8 @@ public class PaperType {
             PaperType comp = (PaperType) obj;
             if (comp.getId() == null) return false;
 
-            return this.getId().equals(comp.getId());
+            return this.id.equals(comp.getId()) &&
+                    this.paperType.equals(comp.getPaperType());
         } else return false;
     }
 
