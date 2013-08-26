@@ -9,13 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * TODO
  */
 @Service
-public class PaperTypeService extends BaseService<PaperType, PaperTypeListContainer> {
+public class PaperTypeService extends BaseService<PaperType, PaperTypeListContainer, Integer> {
+
+    @Override
+    public PaperType getById(Integer id) {
+        return paperTypeDAO.getById(id);
+    }
 
     @Autowired
     private IPaperTypeDAO paperTypeDAO;
@@ -47,6 +53,30 @@ public class PaperTypeService extends BaseService<PaperType, PaperTypeListContai
     @Override
     @Transactional(readOnly = false)
     public List<PaperType> updateFromContainer(PaperTypeListContainer paperTypeListContainer) {
-        return paperTypeDAO.updateList(paperTypeListContainer);
+        List<PaperType> original = paperTypeDAO.findAll();
+        List<PaperType> selected = paperTypeListContainer.getList();
+
+        List<PaperType> add = new ArrayList<>(selected);
+        add.removeAll(original);
+
+        List<PaperType> addOrUpdate = new ArrayList<>();
+
+        for (PaperType paperType : add) {
+
+            PaperType update;
+
+            if (paperType.getId() != null && paperTypeDAO.getById(paperType.getId()) != null) {
+                update = paperTypeDAO.getById(paperType.getId());
+            } else {
+                update = new PaperType();
+            }
+
+            update.setPaperType(paperType.getPaperType());
+            addOrUpdate.add(update);
+        }
+
+        original.removeAll(selected);
+
+        return paperTypeDAO.updateList(addOrUpdate, original);
     }
 }

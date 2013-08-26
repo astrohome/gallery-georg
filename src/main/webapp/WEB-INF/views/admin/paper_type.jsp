@@ -49,10 +49,10 @@
                         </tr>
                         </thead>
                         <tbody id="paperTypeListContainer">
-                        <c:forEach items="${paperTypeListContainer.list}" varStatus="i" var="format">
+                        <c:forEach items="${paperTypeListContainer.list}" varStatus="i" var="paperType">
                             <tr class="person">
                                 <td>
-                                    <form:input path="list[${i.index}].id" disabled="true"/>
+                                    <form:input readonly="true" path="list[${i.index}].id" value="${paperType.id}"/>
                                 </td>
                                 <td>
                                     <form:input path="list[${i.index}].paperType"/>

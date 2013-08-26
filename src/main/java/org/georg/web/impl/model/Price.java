@@ -18,15 +18,16 @@ public class Price implements Serializable {
     @Id
     private PaperType paperType;
 
-    /*@Id
-    private IdPK id;*/
-
     @Column
     @NotNull
     private Float price;
 
     public Float getPrice() {
         return price;
+    }
+
+    public IdPK getId() {
+        return new IdPK(this.format, this.paperType);
     }
 
     public void setPrice(Float price) {
@@ -48,29 +49,26 @@ public class Price implements Serializable {
     public void setPaperType(PaperType paperType) {
         this.paperType = paperType;
     }
-    /*
-    public IdPK getId() {
-        return id;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Price)) return false;
+
+        if (obj == null)
+            return false;
+        Price t = (Price) obj;
+        if (t == null)
+            return false;
+        return (this.format.equals(t.getFormat()) &&
+                this.paperType.equals(t.getPaperType()) &&
+                this.price.equals(t.getPrice()));
     }
 
-    public void setId(IdPK id) {
-        this.id = id;
-    }                  */
-    /*
-    public Format getFormat() {
-        return id.getFormat();
+    @Override
+    public int hashCode() {
+        return 37 * (this.format.hashCode() +
+                this.paperType.hashCode() +
+                Float.floatToIntBits(price)) + 5;
     }
-
-    public void setFormat(Format format) {
-        this.id.setFormat(format);
-    }
-
-    public PaperType getPaperType() {
-        return id.getPaperType();
-    }
-
-    public void setPaperType(PaperType paperType) {
-        this.id.setPaperType(paperType);
-    }             */
 }
 

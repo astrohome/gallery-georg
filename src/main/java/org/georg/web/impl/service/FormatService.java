@@ -9,15 +9,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * TODO
  */
 @Service
-public class FormatService extends BaseService<Format, FormatListContainer> {
+public class FormatService extends BaseService<Format, FormatListContainer, Integer> {
     @Autowired
     private IFormatDAO formatDao;
+
+    @Override
+    public Format getById(Integer id) {
+        return formatDao.getById(id);
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -46,6 +52,30 @@ public class FormatService extends BaseService<Format, FormatListContainer> {
     @Override
     @Transactional(readOnly = false)
     public List<Format> updateFromContainer(FormatListContainer formatListContainer) {
-        return formatDao.updateList(formatListContainer);
+        List<Format> original = formatDao.findAll();
+        List<Format> selected = formatListContainer.getList();
+
+        List<Format> add = new ArrayList<>(selected);
+        add.removeAll(original);
+
+        List<Format> addOrUpdate = new ArrayList<>();
+
+        for (Format format : add) {
+
+            Format update;
+
+            if (format.getId() != null && formatDao.getById(format.getId()) != null) {
+                update = formatDao.getById(format.getId());
+            } else {
+                update = new Format();
+            }
+
+            update.setFormat(format.getFormat());
+            addOrUpdate.add(update);
+        }
+
+        original.removeAll(selected);
+
+        return formatDao.updateList(addOrUpdate, original);
     }
 }

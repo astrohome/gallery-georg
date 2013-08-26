@@ -59,6 +59,11 @@ public class Format {
         return this.format;
     }
 
+    @Override
+    public int hashCode() {
+        return 37 * (this.id + this.format.hashCode()) + 5;
+    }
+
     public Set<Price> getPrice() {
         return price;
     }

@@ -4,18 +4,18 @@
 
 <t:generic>
     <jsp:attribute name="bottom">
-        <script>
+        <script type="text/javascript">
             var i = $('table tr').length - 1;
             $("#addPaperType").click(function () {
-                $("table tr").eq(1).clone().find("input").each(function () {
+                $("table tr").eq(1).clone().find("select").each(function () {
                     $(this).attr('value', '');
                     $(this).attr('name', $(this).attr('name').replace('0', i));
+                    $(this).attr('id', $(this).attr('id').replace('0', i));
                 }).end().appendTo("table");
-                i = $('table tr').length;
             });
 
             $('table').on('click', '.removePaperType', function () {
-                $(this).closest('tr').nextAll('tr').find('input').each(function () {
+                $(this).closest('tr').nextAll('tr').find('select').each(function () {
                     var name = $(this).attr('name');
                     var m = name.match("\\[(.*?)\\]");
                     $(this).attr('name', name.replace(m[1], m[1] - 1));
@@ -54,12 +54,12 @@
                             <tr>
 
                                 <th>
-                                    <form:select path="list[${i.index}].format.id">
+                                    <form:select path="list[${i.index}].format">
                                         <form:options items="${formats}" itemValue="id" itemLabel="format"/>
                                     </form:select>
                                 </th>
                                 <th>
-                                    <form:select path="list[${i.index}].paperType.id">
+                                    <form:select path="list[${i.index}].paperType">
                                         <form:options items="${paperTypes}" itemValue="id" itemLabel="paperType"/>
                                     </form:select>
                                 </th>
@@ -71,6 +71,27 @@
                                 </th>
                             </tr>
                         </c:forEach>
+                        <c:if test="${priceListContainer.list.size() == 0}">
+                            <tr>
+
+                                <th>
+                                    <form:select path="list[0].format.id">
+                                        <form:options items="${formats}" itemValue="id" itemLabel="format"/>
+                                    </form:select>
+                                </th>
+                                <th>
+                                    <form:select path="list[0].paperType.id">
+                                        <form:options items="${paperTypes}" itemValue="id" itemLabel="paperType"/>
+                                    </form:select>
+                                </th>
+                                <th>
+                                    <form:input path="list[0].price"/>
+                                </th>
+                                <th>
+
+                                </th>
+                            </tr>
+                        </c:if>
                         </tbody>
                     </table>
                     <input type="submit" class="btn" value="Save" id="submit"/>&nbsp;&nbsp;

@@ -60,6 +60,11 @@ public class PaperType {
         return this.paperType;
     }
 
+    @Override
+    public int hashCode() {
+        return 37 * (this.id + this.paperType.hashCode()) + 5;
+    }
+
     public Set<Price> getPrice() {
         return price;
     }

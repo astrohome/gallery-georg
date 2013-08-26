@@ -9,16 +9,15 @@ import org.georg.web.impl.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.LinkedHashMap;
 
+@SuppressWarnings("SpringMVCViewInspection")
 @Controller
 @SessionAttributes
 @Secured("ROLE_ADMIN")
@@ -40,7 +39,7 @@ public class AdminController {
     private PriceService priceService;
 
     private void constructMenu(ModelAndView modelAndView) {
-        LinkedHashMap<String, String> menu = new LinkedHashMap();
+        LinkedHashMap<String, String> menu = new LinkedHashMap<>();
         menu.put("?page=gal", "page.menu.admin.gals");
         menu.put("?page=format", "page.menu.admin.format");
         menu.put("?page=type", "page.menu.admin.type");
@@ -55,21 +54,27 @@ public class AdminController {
     public ModelAndView adminGet(@RequestParam(required = false) Boolean success, @RequestParam(required = true) String page)
             throws IOException {
         ModelAndView modelAndView;
-        if ("admin".equals(page)) {
-            modelAndView = new ModelAndView("admin/gallery");
-        } else if ("format".equals(page)) {
-            modelAndView = new ModelAndView("admin/format");
-            modelAndView.addObject("formatListContainer", new FormatListContainer(formatService.getAll("id", IGenericDAO.SortingTypes.asc)));
-        } else if ("type".equals(page)) {
-            modelAndView = new ModelAndView("admin/paper_type");
-            modelAndView.addObject("paperTypeListContainer", new PaperTypeListContainer(paperTypeService.getAll("id", IGenericDAO.SortingTypes.asc)));
-        } else if ("price".equals(page)) {
-            modelAndView = new ModelAndView("admin/price");
-            modelAndView.addObject("priceListContainer", new PriceListContainer(priceService.getAll()));
-            modelAndView.addObject("formats", formatService.getAll("id", IGenericDAO.SortingTypes.asc));
-            modelAndView.addObject("paperTypes", paperTypeService.getAll("id", IGenericDAO.SortingTypes.asc));
-        } else {
-            modelAndView = new ModelAndView("admin/gallery");
+        switch (page) {
+            case "admin":
+                modelAndView = new ModelAndView("admin/gallery");
+                break;
+            case "format":
+                modelAndView = new ModelAndView("admin/format");
+                modelAndView.addObject("formatListContainer", new FormatListContainer(formatService.getAll("id", IGenericDAO.SortingTypes.asc)));
+                break;
+            case "type":
+                modelAndView = new ModelAndView("admin/paper_type");
+                modelAndView.addObject("paperTypeListContainer", new PaperTypeListContainer(paperTypeService.getAll("id", IGenericDAO.SortingTypes.asc)));
+                break;
+            case "price":
+                modelAndView = new ModelAndView("admin/price");
+                modelAndView.addObject("priceListContainer", new PriceListContainer(priceService.getAll()));
+                modelAndView.addObject("formats", formatService.getAll("id", IGenericDAO.SortingTypes.asc));
+                modelAndView.addObject("paperTypes", paperTypeService.getAll("id", IGenericDAO.SortingTypes.asc));
+                break;
+            default:
+                modelAndView = new ModelAndView("admin/gallery");
+                break;
         }
 
         modelAndView.addObject("listDirectories", fileService.getDirectories());
@@ -125,31 +130,11 @@ public class AdminController {
         return "redirect:/admin?page=price&success=true&count=" + newPriceListContainer.getList().size();
     }
 
-    public class IntPropertyEditor extends PropertyEditorSupport {
-        public String getAsText() {
-            Integer value = (Integer) getValue();
-            if (value == null) {
-                return "";
-            } else {
-                return value.toString();
-            }
-        }
-
-        public void setAsText(String value) {
-            if (value != null && value.length() > 0) {
-                setValue(Integer.valueOf(value));
-            } else {
-                setValue(null);
-            }
-        }
-
-    }
-
+    /*
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(Integer.class, new IntPropertyEditor());
-        //binder.setAllowedFields("prop1", "prop2", ...);
-        binder.setDisallowedFields("id", "*Id"); //wild-card pattern
-        //binder.registerCustomEditor(String.class, new StringPropertyEditor(String.class, true));
-    }
+        //binder.registerCustomEditor(Format.class, new FormatPropertyEditor());
+        //binder.registerCustomEditor(PaperType.class, new PaperTypePropertyEditor());
+     }     */
 }

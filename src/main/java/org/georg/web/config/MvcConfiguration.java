@@ -1,13 +1,18 @@
 package org.georg.web.config;
 
-import org.georg.web.impl.dao.base.GenericDAO;
-import org.georg.web.impl.dao.base.IGenericDAO;
+import org.georg.web.converters.FloatConverter;
+import org.georg.web.converters.FormatConverter;
+import org.georg.web.converters.IntConverter;
+import org.georg.web.converters.PaperTypeConverter;
 import org.georg.web.impl.model.Format;
+import org.georg.web.impl.model.PaperType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -18,6 +23,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
 
 @Configuration
 @ComponentScan(basePackages = "org.georg.web")
@@ -31,6 +37,18 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
         resolver.setSuffix(".jsp");
         return resolver;
     }
+
+    @Autowired
+    private FormatConverter formatConverter;
+
+    @Autowired
+    private PaperTypeConverter paperTypeConverter;
+
+    @Autowired
+    private IntConverter intConverter;
+
+    @Autowired
+    private FloatConverter floatConverter;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -68,9 +86,12 @@ public class MvcConfiguration extends WebMvcConfigurerAdapter {
         return messageSource;
     }
 
-    @Bean
-    public IGenericDAO<Format, Integer> formatDao() {
-        return new GenericDAO(Format.class);
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(String.class, Format.class, formatConverter);
+        registry.addConverter(String.class, PaperType.class, paperTypeConverter);
+        registry.addConverter(String.class, Integer.class, intConverter);
+        registry.addConverter(floatConverter);
     }
 
 }
