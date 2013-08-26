@@ -7,7 +7,7 @@
         <script type="text/javascript">
             var i = $('table tr').length - 1;
             $("#addPaperType").click(function () {
-                $("table tr").eq(1).clone().find("select").each(function () {
+                $("table tr").eq(1).clone().find("select, input").each(function () {
                     $(this).attr('value', '');
                     $(this).attr('name', $(this).attr('name').replace('0', i));
                     $(this).attr('id', $(this).attr('id').replace('0', i));

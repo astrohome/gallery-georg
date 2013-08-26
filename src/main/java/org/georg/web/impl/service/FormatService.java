@@ -21,6 +21,7 @@ public class FormatService extends BaseService<Format, FormatListContainer, Inte
     private IFormatDAO formatDao;
 
     @Override
+    @Transactional(readOnly = true)
     public Format getById(Integer id) {
         return formatDao.getById(id);
     }

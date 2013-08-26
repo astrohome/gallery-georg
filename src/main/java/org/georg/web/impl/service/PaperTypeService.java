@@ -19,6 +19,7 @@ import java.util.List;
 public class PaperTypeService extends BaseService<PaperType, PaperTypeListContainer, Integer> {
 
     @Override
+    @Transactional(readOnly = true)
     public PaperType getById(Integer id) {
         return paperTypeDAO.getById(id);
     }

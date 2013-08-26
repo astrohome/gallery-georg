@@ -129,12 +129,4 @@ public class AdminController {
         session.setAttribute("priceListContainer", newPriceListContainer);
         return "redirect:/admin?page=price&success=true&count=" + newPriceListContainer.getList().size();
     }
-
-    /*
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(Integer.class, new IntPropertyEditor());
-        //binder.registerCustomEditor(Format.class, new FormatPropertyEditor());
-        //binder.registerCustomEditor(PaperType.class, new PaperTypePropertyEditor());
-     }     */
 }

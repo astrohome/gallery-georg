@@ -30,6 +30,7 @@ public class PriceService extends BaseService<Price, PriceListContainer, IdPK> {
     private IPaperTypeDAO paperTypeDAO;
 
     @Override
+    @Transactional(readOnly = true)
     public Price getById(IdPK id) {
         return priceDAO.getById(id);
     }
