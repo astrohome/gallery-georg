@@ -51,18 +51,11 @@
                         <c:forEach items="${formatListContainer.list}" varStatus="i" var="format">
                             <tr class="person">
                                 <td>
-                                    <spring:bind path="list[${i.index}].id">
-                                        <input type="text" disabled="true" name="${status.expression}"
-                                               value="${status.value}"/>
-                                    </spring:bind>
+                                    <form:input readonly="true" path="list[${i.index}].id" value="${format.id}"/>
                                 </td>
                                 <td>
-                                    <spring:bind path="list[${i.index}].format">
-                                        <input type="text" name="${status.expression}" value="${status.value}"/>
-                                    </spring:bind>
+                                    <form:input path="list[${i.index}].format"/>
                                 </td>
-                                    <%--  <form:input path="formatList[${i.index}].id" id="id${i.index}" value="${format.id}" /></td>
-                                  <td><form:input path="formatList[${i.index}].format" id="format${i.index}" value="${format.format}" /></td>    --%>
                                 <td><a href="#" class="btn btn-danger removeFormat">
                                     <div class="icon-remove"></div>
                                     Delete format</a></td>
@@ -71,18 +64,11 @@
                         <c:if test="${formatListContainer.list.size() == 0}">
                             <tr class="person">
                                 <td>
-                                    <spring:bind path="list[0].id">
-                                        <input type="text" disabled="true" name="${status.expression}"
-                                               value="${status.value}"/>
-                                    </spring:bind>
+                                    <form:input path="list[0].id" disabled="true"/>
                                 </td>
                                 <td>
-                                    <spring:bind path="list[0].format">
-                                        <input type="text" name="${status.expression}" value="${status.value}"/>
-                                    </spring:bind>
+                                    <form:input path="list[0].format"/>
                                 </td>
-                                    <%--  <form:input path="formatList[${i.index}].id" id="id${i.index}" value="${format.id}" /></td>
-                                  <td><form:input path="formatList[${i.index}].format" id="format${i.index}" value="${format.format}" /></td>    --%>
                                 <td><a href="#" class="btn btn-danger removeFormat">
                                     <div class="icon-remove"></div>
                                     Delete format</a></td>

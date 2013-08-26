@@ -9,10 +9,12 @@ import org.georg.web.impl.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.LinkedHashMap;
@@ -65,6 +67,7 @@ public class AdminController {
             modelAndView = new ModelAndView("admin/price");
             modelAndView.addObject("priceListContainer", new PriceListContainer(priceService.getAll()));
             modelAndView.addObject("formats", formatService.getAll("id", IGenericDAO.SortingTypes.asc));
+            modelAndView.addObject("paperTypes", paperTypeService.getAll("id", IGenericDAO.SortingTypes.asc));
         } else {
             modelAndView = new ModelAndView("admin/gallery");
         }
@@ -111,6 +114,42 @@ public class AdminController {
         PaperTypeListContainer newFormatListContainer = new PaperTypeListContainer(paperTypeService.updateFromContainer(paperTypeListContainer));
 
         session.setAttribute("formatListContainer", newFormatListContainer);
-        return "redirect:/admin?page=format&success=true&count=" + newFormatListContainer.getList().size();
+        return "redirect:/admin?page=type&success=true&count=" + newFormatListContainer.getList().size();
+    }
+
+    @RequestMapping(value = "/editprice", method = RequestMethod.POST)
+    public String editPriceListContainer(@ModelAttribute PriceListContainer priceListContainer, HttpSession session) {
+        PriceListContainer newPriceListContainer = new PriceListContainer(priceService.updateFromContainer(priceListContainer));
+
+        session.setAttribute("priceListContainer", newPriceListContainer);
+        return "redirect:/admin?page=price&success=true&count=" + newPriceListContainer.getList().size();
+    }
+
+    public class IntPropertyEditor extends PropertyEditorSupport {
+        public String getAsText() {
+            Integer value = (Integer) getValue();
+            if (value == null) {
+                return "";
+            } else {
+                return value.toString();
+            }
+        }
+
+        public void setAsText(String value) {
+            if (value != null && value.length() > 0) {
+                setValue(Integer.valueOf(value));
+            } else {
+                setValue(null);
+            }
+        }
+
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Integer.class, new IntPropertyEditor());
+        //binder.setAllowedFields("prop1", "prop2", ...);
+        binder.setDisallowedFields("id", "*Id"); //wild-card pattern
+        //binder.registerCustomEditor(String.class, new StringPropertyEditor(String.class, true));
     }
 }

@@ -20,12 +20,12 @@ public class PriceListContainer implements BaseContainer<Price> {
     }
 
     @Override
-    public List getList() {
+    public List<Price> getList() {
         return priceList;
     }
 
     @Override
-    public void setList(List container) {
+    public void setList(List<Price> container) {
         this.priceList = container;
     }
 }

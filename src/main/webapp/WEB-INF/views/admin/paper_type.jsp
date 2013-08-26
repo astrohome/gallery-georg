@@ -52,15 +52,10 @@
                         <c:forEach items="${paperTypeListContainer.list}" varStatus="i" var="format">
                             <tr class="person">
                                 <td>
-                                    <spring:bind path="list[${i.index}].id">
-                                        <input type="text" disabled="true" name="${status.expression}"
-                                               value="${status.value}"/>
-                                    </spring:bind>
+                                    <form:input path="list[${i.index}].id" disabled="true"/>
                                 </td>
                                 <td>
-                                    <spring:bind path="list[${i.index}].paperType">
-                                        <input type="text" name="${status.expression}" value="${status.value}"/>
-                                    </spring:bind>
+                                    <form:input path="list[${i.index}].paperType"/>
                                 </td>
                                 <td><a href="#" class="btn btn-danger removeFormat">
                                     <div class="icon-remove"></div>
@@ -70,15 +65,10 @@
                         <c:if test="${paperTypeListContainer.list.size() == 0}">
                             <tr class="person">
                                 <td>
-                                    <spring:bind path="list[0].id">
-                                        <input type="text" disabled="true" name="${status.expression}"
-                                               value="${status.value}"/>
-                                    </spring:bind>
+                                    <form:input path="list[0].id" disabled="true"/>
                                 </td>
                                 <td>
-                                    <spring:bind path="list[0].paperType">
-                                        <input type="text" name="${status.expression}" value="${status.value}"/>
-                                    </spring:bind>
+                                    <form:input path="list[0].paperType"/>
                                 </td>
                                 <td><a href="#" class="btn btn-danger removeFormat">
                                     <div class="icon-remove"></div>

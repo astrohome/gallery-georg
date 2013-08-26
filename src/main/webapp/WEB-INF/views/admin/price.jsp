@@ -54,43 +54,21 @@
                             <tr>
 
                                 <th>
-                                    <spring:bind path="list[${i.index}].format">
-
-                                        <select name="<${status.expression}">
-
-                                            <option value="NONE">---SELECT---</option>
-
-                                            <c:forEach items="${formats }" var="format">
-
-                                                <c:set var="selectMe" value=""/>
-
-                                                <c:if test="${status.actualValue == format.format}">
-
-                                                    <c:set var="selectMe" value="selected"/>
-
-                                                </c:if>
-
-                                                <option
-
-                                                        value="${format.format }"
-
-                                                    ${selectMe }
-
-                                                        >
-
-                                                        ${format.format }
-
-                                                </option>
-
-                                            </c:forEach>
-
-                                        </select>
-
-                                    </spring:bind>
+                                    <form:select path="list[${i.index}].format.id">
+                                        <form:options items="${formats}" itemValue="id" itemLabel="format"/>
+                                    </form:select>
                                 </th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
+                                <th>
+                                    <form:select path="list[${i.index}].paperType.id">
+                                        <form:options items="${paperTypes}" itemValue="id" itemLabel="paperType"/>
+                                    </form:select>
+                                </th>
+                                <th>
+                                    <form:input path="list[${i.index}].price"/>
+                                </th>
+                                <th>
+
+                                </th>
                             </tr>
                         </c:forEach>
                         </tbody>

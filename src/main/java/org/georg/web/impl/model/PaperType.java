@@ -43,7 +43,16 @@ public class PaperType {
 
     @Override
     public boolean equals(Object obj) {
-        return this.id == ((PaperType) obj).getId();
+        if (obj == null) return false;
+
+        if (this.getId() == null) return false;
+
+        if (obj instanceof PaperType) {
+            PaperType comp = (PaperType) obj;
+            if (comp.getId() == null) return false;
+
+            return this.getId().equals(comp.getId());
+        } else return false;
     }
 
     @Override
