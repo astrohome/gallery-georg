@@ -14,7 +14,7 @@
                 }).end().appendTo("table");
             });
 
-            $('table').on('click', '.removePaperType', function () {
+            $('table').on('click', '.removePrice', function () {
                 $(this).closest('tr').nextAll('tr').find('select').each(function () {
                     var name = $(this).attr('name');
                     var m = name.match("\\[(.*?)\\]");
@@ -30,7 +30,7 @@
         <t:menu type="admin" menuItems="${menuItems}"/>
 
         <div class="row">
-            <div class="span7">
+            <div class="span9">
                 <c:if test="${success}">
                     <div class="alert alert-success">
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -43,8 +43,8 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th>Type</th>
                             <th>Format</th>
+                            <th>Type</th>
                             <th>Price</th>
                             <th></th>
                         </tr>
@@ -67,7 +67,9 @@
                                     <form:input path="list[${i.index}].price"/>
                                 </th>
                                 <th>
-
+                                    <a href="#" class="btn btn-danger removePrice">
+                                        <div class="icon-remove"></div>
+                                        Delete price</a>
                                 </th>
                             </tr>
                         </c:forEach>
@@ -88,7 +90,9 @@
                                     <form:input path="list[0].price"/>
                                 </th>
                                 <th>
-
+                                    <a href="#" class="btn btn-danger removePrice">
+                                        <div class="icon-remove"></div>
+                                        Delete price</a>
                                 </th>
                             </tr>
                         </c:if>

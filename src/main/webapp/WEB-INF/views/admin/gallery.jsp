@@ -27,8 +27,10 @@
                                 code="page.admin.title"/></th>
                         <th class="text-center"><i class="icon-calendar"></i> <spring:message
                                 code="page.admin.modified"/></th>
-                        <th class="text-center"><spring:message code="page.admin.private"/></th>
-                        <th class="text-center"><spring:message code="page.admin.watermark"/></th>
+                        <th class="text-center"><i class="icon-lock"></i> <spring:message code="page.admin.private"/>
+                        </th>
+                        <th class="text-center"><i class="icon-shield"></i> <spring:message
+                                code="page.admin.watermark"/></th>
                         <th class="text-center"><spring:message code="page.admin.actions"/></th>
                     </tr>
                     </thead>
