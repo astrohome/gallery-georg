@@ -4,7 +4,7 @@ import org.georg.web.container.PaperTypeListContainer;
 import org.georg.web.impl.dao.base.IGenericDAO;
 import org.georg.web.impl.dao.custom.base.IPaperTypeDAO;
 import org.georg.web.impl.model.PaperType;
-import org.georg.web.impl.service.base.BaseService;
+import org.georg.web.impl.service.base.BaseContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ import java.util.List;
  * TODO
  */
 @Service
-public class PaperTypeService extends BaseService<PaperType, PaperTypeListContainer, Integer> {
+public class PaperTypeService extends BaseContainerService<PaperType, PaperTypeListContainer, Integer> {
 
     @Override
     @Transactional(readOnly = true)
@@ -47,8 +47,8 @@ public class PaperTypeService extends BaseService<PaperType, PaperTypeListContai
 
     @Override
     @Transactional(readOnly = false)
-    public void updateItem(PaperType item) {
-        paperTypeDAO.update(item);
+    public PaperType updateItem(PaperType item) {
+        return paperTypeDAO.update(item);
     }
 
     @Override

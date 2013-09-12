@@ -45,6 +45,6 @@
         <sec:authorize access="isAuthenticated()">
             <a href="<c:url value="j_spring_security_logout" />"> Logout</a>
         </sec:authorize>
-        <t:gallerylist list="${list}"/>
+        <t:gallerylist list="${list}" showFilter="false"/>
     </jsp:body>
 </t:generic>

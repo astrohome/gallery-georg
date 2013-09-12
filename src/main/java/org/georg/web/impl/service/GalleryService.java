@@ -1,8 +1,10 @@
 package org.georg.web.impl.service;
 
+import org.georg.web.impl.dao.base.IGenericDAO;
 import org.georg.web.impl.dao.custom.base.IGalleryDAO;
 import org.georg.web.impl.model.DisplayDate;
 import org.georg.web.impl.model.Gallery;
+import org.georg.web.impl.service.base.BaseService;
 import org.georg.web.impl.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +16,28 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 @Service
-public class GalleryService {
+public class GalleryService extends BaseService<Gallery, Long> {
 
     @Autowired
     private IGalleryDAO dao;
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long getCount() {
+        return dao.count();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Gallery> getAll() {
+        return null;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Gallery> getAll(String column, IGenericDAO.SortingTypes sort) {
+        return null;
+    }
 
     @Autowired
     private FileService fileService;
@@ -54,8 +74,9 @@ public class GalleryService {
         return dao.findByTitle(title);
     }
 
+    @Override
     @Transactional(readOnly = true)
-    public Gallery getById(long id) {
+    public Gallery getById(Long id) {
         return dao.getById(id);
     }
 
@@ -69,9 +90,10 @@ public class GalleryService {
         return obj;
     }
 
+    @Override
     @Transactional(readOnly = false)
-    public void update(Gallery gallery) {
-        dao.update(gallery);
+    public Gallery updateItem(Gallery gallery) {
+        return dao.update(gallery);
     }
 
     @Transactional(readOnly = true)

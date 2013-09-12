@@ -14,6 +14,7 @@
     </jsp:attribute>
     <jsp:attribute name="bottom">
         <script type="text/javascript" src="<c:url value="/resources/js/jquery.prettyPhoto.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/resources/js/simpleCart.js"/>"></script>
 
         <script type="text/javascript">
             jQuery(document).ready(function () {
@@ -31,12 +32,53 @@
                 }).each(function () {
                             if (this.complete) $(this).load();
                         });
-                ;
+
+                jQuery(".item_price").on('change', function () {
+                    //alert();
+                    var value = $("option:selected", this).attr('format');
+                    $(this).parent().parent().find('.item_size').val(value);
+
+                    value = $("option:selected", this).attr('format-id');
+                    $(this).parent().parent().find('.item_sizeid').val(value);
+
+                    value = $("option:selected", this).attr('paper-id');
+                    $(this).parent().parent().find('.item_paperTypeId').val(value);
+                });
+            });
+        </script>
+
+        <script>
+            simpleCart({
+                checkout: {
+                    type: "SendForm",
+                    url: "putOrder.html",
+                    method: "POST",
+                    success: "orderSuccess.html",
+                    cancel: "orderCancel.html"
+                },
+                cartStyle: 'table',
+                currency: "UAH",
+                cartColumns: [
+                    { attr: "name", label: "Название"},
+                    { view: "currency", attr: "price", label: "Цена"},
+                    { attr: "quantity", label: "Шт."},
+                    { view: "currency", attr: "total", label: "Сумма" },
+                    { attr: "size", label: "Формат" },
+                    { view: "remove", text: "Удалить", label: false}
+                ]
             });
         </script>
     </jsp:attribute>
     <jsp:body>
         <a href="/">Back</a> <br/>
         <t:singlegallery listImages="${listImages}"/>
+
+
+        <span class="simpleCart_quantity"></span> items - <span class="simpleCart_total"></span>
+
+        <div class="simpleCart_items">
+        </div>
+        <a href="#" class="btn btn-small" onclick="simpleCart.empty();">Clear</a>
+        <a href="javascript:;" class="btn btn-small simpleCart_checkout">Checkout</a>
     </jsp:body>
 </t:generic>

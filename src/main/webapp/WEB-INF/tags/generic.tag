@@ -20,7 +20,7 @@
 
 <jsp:invoke fragment="menu"/>
 
-<div class="container">
+<div class="container" id="main-container">
     <jsp:doBody/>
 </div>
 

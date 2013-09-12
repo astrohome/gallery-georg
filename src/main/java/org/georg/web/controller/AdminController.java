@@ -98,7 +98,7 @@ public class AdminController {
     @RequestMapping(value = "/saveGallery", method = RequestMethod.POST)
     @Secured("ROLE_ADMIN")
     public ModelAndView adminPost(@ModelAttribute("gallery") Gallery gallery) throws IOException {
-        galleryService.update(gallery);
+        galleryService.updateItem(gallery);
         ModelAndView modelAndView = new ModelAndView("redirect:/admin?page=gal");
         modelAndView.addObject("listDirectories", fileService.getDirectories());
         modelAndView.addObject("success", true);

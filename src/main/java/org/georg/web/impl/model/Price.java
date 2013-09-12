@@ -51,6 +51,11 @@ public class Price implements Serializable {
     }
 
     @Override
+    public String toString() {
+        return this.format + " - " + this.paperType + " (" + this.price + " грн.)";
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Price)) return false;
 

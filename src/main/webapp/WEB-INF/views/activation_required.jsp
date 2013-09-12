@@ -7,7 +7,7 @@
     <jsp:body>
         Check you email shortly. Click on the link there.
 
-        ${code}
+        <a href="http://90.29.203.213:8080/activate_user/${code}"/>Link in email</a>
 
         <a href="/">Back to index</a>
     </jsp:body>

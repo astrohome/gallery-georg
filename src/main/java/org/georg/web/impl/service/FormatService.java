@@ -4,7 +4,7 @@ import org.georg.web.container.FormatListContainer;
 import org.georg.web.impl.dao.base.IGenericDAO;
 import org.georg.web.impl.dao.custom.base.IFormatDAO;
 import org.georg.web.impl.model.Format;
-import org.georg.web.impl.service.base.BaseService;
+import org.georg.web.impl.service.base.BaseContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ import java.util.List;
  * TODO
  */
 @Service
-public class FormatService extends BaseService<Format, FormatListContainer, Integer> {
+public class FormatService extends BaseContainerService<Format, FormatListContainer, Integer> {
     @Autowired
     private IFormatDAO formatDao;
 
@@ -40,8 +40,8 @@ public class FormatService extends BaseService<Format, FormatListContainer, Inte
 
     @Override
     @Transactional(readOnly = false)
-    public void updateItem(Format item) {
-        formatDao.update(item);
+    public Format updateItem(Format item) {
+        return formatDao.update(item);
     }
 
     @Override

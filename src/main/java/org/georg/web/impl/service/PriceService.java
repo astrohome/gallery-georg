@@ -7,7 +7,7 @@ import org.georg.web.impl.dao.custom.base.IPaperTypeDAO;
 import org.georg.web.impl.dao.custom.base.IPriceDAO;
 import org.georg.web.impl.model.IdPK;
 import org.georg.web.impl.model.Price;
-import org.georg.web.impl.service.base.BaseService;
+import org.georg.web.impl.service.base.BaseContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ import java.util.List;
  * TODO
  */
 @Service
-public class PriceService extends BaseService<Price, PriceListContainer, IdPK> {
+public class PriceService extends BaseContainerService<Price, PriceListContainer, IdPK> {
     @Autowired
     private IPriceDAO priceDAO;
 
@@ -55,8 +55,8 @@ public class PriceService extends BaseService<Price, PriceListContainer, IdPK> {
 
     @Override
     @Transactional(readOnly = false)
-    public void updateItem(Price item) {
-        priceDAO.update(item);
+    public Price updateItem(Price item) {
+        return priceDAO.update(item);
     }
 
     @Override
