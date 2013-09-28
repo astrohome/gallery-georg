@@ -9,7 +9,7 @@
     </jsp:attribute>
     <jsp:body>
         <sec:authorize access="isAuthenticated()">
-            <form:form action="private.html" cssClass="navbar-form pull-left" method="POST">
+            <form:form action="private" cssClass="navbar-form pull-left" method="POST">
                 <input type="text" class="span2" name="code"/>
                 <input type="submit" class="btn"/>
             </form:form>

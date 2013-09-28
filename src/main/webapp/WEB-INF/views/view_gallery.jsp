@@ -44,6 +44,24 @@
                     value = $("option:selected", this).attr('paper-id');
                     $(this).parent().parent().find('.item_paperTypeId').val(value);
                 });
+
+                jQuery(".fileDownload").click(function () {
+
+                    var preparingFileModal = $("#preparing-file-modal");
+
+                    preparingFileModal.dialog({ modal: true });
+
+                    jQuery.fileDownload($(this).attr('url'), {
+                        successCallback: function () {
+                            preparingFileModal.dialog('close');
+                        },
+                        successCallback: function () {
+                            preparingFileModal.dialog('close');
+                            $("#error-modal").dialog({ modal: true });
+                        }
+                    });
+                    return false; //this is critical to stop the click event which will trigger a normal file download!
+                });
             });
         </script>
 

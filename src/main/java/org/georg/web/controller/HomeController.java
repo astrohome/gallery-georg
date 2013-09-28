@@ -9,11 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Set;
@@ -83,6 +85,7 @@ public class HomeController {
     @RequestMapping(value = "/private", method = RequestMethod.GET)
     public ModelAndView showCodeAccessPage() {
         ModelAndView modelAndView = new ModelAndView("private");
+        modelAndView.addObject("prices", priceService.getAll());
         constructPublicMenu(modelAndView);
         return modelAndView;
     }
@@ -93,9 +96,26 @@ public class HomeController {
         ModelAndView modelAndView = new ModelAndView("view_gallery");
         Gallery gal = service.getByCode(code);
         modelAndView.addObject("gallery", gal);
+        modelAndView.addObject("prices", priceService.getAll());
         modelAndView.addObject("listImages", imageService.getImages(gal));
 
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/private/download/{gallery}", produces = "application/octet-stream")
+    @ResponseBody
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    public byte[] getDirectoryArchive(@PathVariable("gallery") String gallery, HttpServletResponse response)
+            throws UnsupportedEncodingException {
+
+        response.addHeader("Content-Disposition", "attachment; filename*=UTF-8''"
+                + URLEncoder.encode(gallery.replace(' ', '_'), "UTF-8") + ".zip");
+        response.addHeader("Content-Transfer-Encoding", "binary");
+        response.addCookie(new Cookie("fileDownload", "true") {{
+            setPath("/");
+        }});
+        response.addHeader("Cache-Control", "max-age=60, must-revalidate");
+        return imageService.createAndGetArchive(gallery);
     }
 
     @RequestMapping(value = "/putOrder", method = RequestMethod.POST)

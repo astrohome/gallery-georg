@@ -108,4 +108,11 @@ public class ImageService {
 
         return result;
     }
+
+    public byte[] createAndGetArchive(String gallery) {
+        File file = fileUtils.downloadDirectory(gallery);
+        if (file == null)
+            return null;
+        return getImage(file);
+    }
 }

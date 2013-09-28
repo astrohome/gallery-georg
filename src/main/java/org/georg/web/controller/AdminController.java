@@ -2,6 +2,7 @@ package org.georg.web.controller;
 
 import org.georg.web.container.FormatListContainer;
 import org.georg.web.container.PaperTypeListContainer;
+import org.georg.web.container.PaymentMethodListContainer;
 import org.georg.web.container.PriceListContainer;
 import org.georg.web.impl.dao.base.IGenericDAO;
 import org.georg.web.impl.model.Gallery;
@@ -38,12 +39,16 @@ public class AdminController {
     @Autowired
     private PriceService priceService;
 
+    @Autowired
+    private PaymentMethodService paymentMethodService;
+
     private void constructMenu(ModelAndView modelAndView) {
         LinkedHashMap<String, String> menu = new LinkedHashMap<>();
         menu.put("?page=gal", "page.menu.admin.gals");
         menu.put("?page=format", "page.menu.admin.format");
         menu.put("?page=type", "page.menu.admin.type");
         menu.put("?page=price", "page.menu.admin.price");
+        menu.put("?page=payment", "page.menu.admin.payment");
         menu.put("?page=system", "page.menu.admin.system");
         menu.put("?page=videos", "page.menu.admin.videos");
         modelAndView.addObject("menuItems", menu);
@@ -71,6 +76,10 @@ public class AdminController {
                 modelAndView.addObject("priceListContainer", new PriceListContainer(priceService.getAll()));
                 modelAndView.addObject("formats", formatService.getAll("id", IGenericDAO.SortingTypes.asc));
                 modelAndView.addObject("paperTypes", paperTypeService.getAll("id", IGenericDAO.SortingTypes.asc));
+                break;
+            case "payment":
+                modelAndView = new ModelAndView("admin/payment");
+                modelAndView.addObject("paymentMethods", new PaymentMethodListContainer(paymentMethodService.getAll("id", IGenericDAO.SortingTypes.asc)));
                 break;
             default:
                 modelAndView = new ModelAndView("admin/gallery");
@@ -128,5 +137,11 @@ public class AdminController {
 
         session.setAttribute("priceListContainer", newPriceListContainer);
         return "redirect:/admin?page=price&success=true&count=" + newPriceListContainer.getList().size();
+    }
+
+    @RequestMapping(value = "/editpaymentmethod", method = RequestMethod.POST)
+    public String editPaymentMethods(@ModelAttribute PaymentMethodListContainer paymentMethodListContainer, HttpSession session) {
+        PaymentMethodListContainer newPaymentMethodListContainer = new PaymentMethodListContainer(paymentMethodService.updateFromContainer(paymentMethodListContainer));
+        return "redirect:/admin?page=payment&success=true&count=" + newPaymentMethodListContainer.getList().size();
     }
 }

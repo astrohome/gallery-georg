@@ -3,6 +3,24 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@attribute name="listImages" required="true" type="java.util.List" %>
 
+<c:if test="${gallery.hidden}">
+
+    <div id="preparing-file-modal" title="<spring:message code="page.public.download.preparing"/>"
+         style="display: none;">
+        <spring:message code="page.public.download.pleasewait"/>
+
+        <div class="progress progress-striped active">
+            <div class="bar" style="width: 100%;"></div>
+        </div>
+    </div>
+
+    <div id="error-modal" title="Error" style="display: none;">
+        There was a problem generating your report, please try again.
+    </div>
+
+    <a url="/private/download/${gallery.title}" href="#" class="fileDownload">Download</a>
+</c:if>
+
 <ul class="thumbnails">
     <c:forEach items="${listImages}" var="image">
         <li>

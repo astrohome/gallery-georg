@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
+import java.io.*;
+import java.util.Calendar;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @Component
 public class FileUtils {
@@ -20,8 +21,13 @@ public class FileUtils {
     @Value("${file.thumbs.directory}")
     private String thumbsPath;
 
+    @Value("${file.download.temp}")
+    private String archivePath;
+
     @Autowired
     private HashCodeUtil hashCodeUtil;
+
+    final static int BUFFER = 2048;
 
     public File[] findDirectories() {
         File root = new File(path);
@@ -38,6 +44,47 @@ public class FileUtils {
 
     public String getPath(String file) {
         return path + "/" + file;
+    }
+
+    public File downloadDirectory(String directory) {
+        try {
+            BufferedInputStream origin = null;
+
+            String title = archivePath + "/" + Calendar.getInstance().getTimeInMillis() + ".zip";
+
+            FileOutputStream dest =
+                    new FileOutputStream(new File(title));
+
+            ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
+            byte data[] = new byte[BUFFER];
+
+            File subDir = new File(path + "/" + directory);
+            String subdirList[] = subDir.list();
+            for (String sd : subdirList) {
+                // get a list of files from current directory
+                File f = new File(path + "/" + directory + "/" + sd);
+                if (!f.isDirectory() && getExtension(f.getName()).equalsIgnoreCase(extension)) {
+                    FileInputStream fi = new FileInputStream(f);
+                    origin = new BufferedInputStream(fi, BUFFER);
+                    ZipEntry entry = new ZipEntry(sd);
+                    out.putNextEntry(entry);
+                    int count;
+                    while ((count = origin.read(data, 0, BUFFER)) != -1) {
+                        out.write(data, 0, count);
+                        out.flush();
+                    }
+                }
+            }
+            origin.close();
+            out.flush();
+            out.close();
+
+            File result = new File(title);
+            return result;
+        } catch (Exception e) {
+            return null;
+
+        }
     }
 
     public File findDirectoryByTitle(final String title) throws IOException {
