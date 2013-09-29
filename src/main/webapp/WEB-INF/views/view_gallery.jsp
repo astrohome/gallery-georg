@@ -7,7 +7,7 @@
         ${galleryTitle}
     </jsp:attribute>
     <jsp:attribute name="header">
-            <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/prettyPhoto.css" />"/>
+        <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/prettyPhoto.css" />"/>
     </jsp:attribute>
     <jsp:attribute name="menu">
         <t:menu/>
@@ -55,7 +55,7 @@
                         successCallback: function () {
                             preparingFileModal.dialog('close');
                         },
-                        successCallback: function () {
+                        failCallback: function () {
                             preparingFileModal.dialog('close');
                             $("#error-modal").dialog({ modal: true });
                         }
@@ -88,15 +88,14 @@
         </script>
     </jsp:attribute>
     <jsp:body>
-        <a href="/">Back</a> <br/>
         <t:singlegallery listImages="${listImages}"/>
 
-
-        <span class="simpleCart_quantity"></span> items - <span class="simpleCart_total"></span>
+        <span class="simpleCart_quantity"></span> фотографий - <span class="simpleCart_total"></span>
 
         <div class="simpleCart_items">
         </div>
-        <a href="#" class="btn btn-small" onclick="simpleCart.empty();">Clear</a>
-        <a href="javascript:;" class="btn btn-small simpleCart_checkout">Checkout</a>
+        <a href="#" class="btn btn-small" onclick="simpleCart.empty();"><i class="icon-remove"></i> <spring:message
+                code="clear"/> </a>
+        <a href="javascript:;" class="btn btn-small simpleCart_checkout"><spring:message code="checkout"/></a>
     </jsp:body>
 </t:generic>

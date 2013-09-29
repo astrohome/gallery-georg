@@ -39,12 +39,7 @@
     <jsp:body>
         <a href="/admin?page=gal">admin</a> <br/>
 
-        <sec:authorize access="not isAuthenticated()">
-            <a href="/login.html">Login</a>
-        </sec:authorize>
-        <sec:authorize access="isAuthenticated()">
-            <a href="<c:url value="j_spring_security_logout" />"> Logout</a>
-        </sec:authorize>
+
         <t:gallerylist list="${list}" showFilter="true"/>
     </jsp:body>
 </t:generic>

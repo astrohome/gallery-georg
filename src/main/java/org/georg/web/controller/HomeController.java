@@ -64,7 +64,7 @@ public class HomeController {
         modelAndView.addObject("gallery", gal);
         modelAndView.addObject("listImages", imageService.getImages(gal));
         modelAndView.addObject("prices", priceService.getAll());
-        //modelAndView.addObject("paperTypes", paperTypeService.getAll());
+        constructPublicMenu(modelAndView);
         return modelAndView;
     }
 
@@ -98,7 +98,7 @@ public class HomeController {
         modelAndView.addObject("gallery", gal);
         modelAndView.addObject("prices", priceService.getAll());
         modelAndView.addObject("listImages", imageService.getImages(gal));
-
+        constructPublicMenu(modelAndView);
         return modelAndView;
     }
 

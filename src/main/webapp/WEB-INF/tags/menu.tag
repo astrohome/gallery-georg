@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@attribute name="menuItems" type="java.util.LinkedHashMap<java.lang.String, java.lang.String>" %>
 <%@attribute name="type" %>
 
@@ -22,9 +23,9 @@
 <c:forEach items="${menuItems}" var="item">
     <li
             <c:if test="${(requestScope['javax.servlet.forward.servlet_path'] eq item.key)
-                                                    or (
-                                                    (fn:length(requestScope['javax.servlet.forward.query_string']) > 0) and
-                                                    fn:contains(requestScope['javax.servlet.forward.query_string'], fn:substringAfter(item.key, '?')))}">
+                                                                                or (
+                                                                                (fn:length(requestScope['javax.servlet.forward.query_string']) > 0) and
+                                                                                fn:contains(requestScope['javax.servlet.forward.query_string'], fn:substringAfter(item.key, '?')))}">
                 class="active"
             </c:if>
             >
@@ -32,6 +33,33 @@
         <a href="${item.key}"><spring:message code="${item.value}"/></a>
     </li>
 </c:forEach>
+</ul>
+
+<ul class="nav pull-right">
+    <li class="divider-vertical"></li>
+    <sec:authorize access="not isAuthenticated()">
+        <li class="btn-primary">
+            <a href="/login" style="color: white;">Login</a>
+        </li>
+    </sec:authorize>
+    <sec:authorize access="isAuthenticated()">
+        <p class="nav navbar-text" style="color: #ffffff;">Вы вошли как:</p>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" style="color: #ffffff;" data-toggle="dropdown"><sec:authentication
+                    property="principal.username"/> <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="#">
+                        My profile
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="<c:url value="j_spring_security_logout" />"><spring:message code="logout"/></a>
+                </li>
+            </ul>
+        </li>
+    </sec:authorize>
 </ul>
 <c:if test="${type != 'admin'}">
     </div>

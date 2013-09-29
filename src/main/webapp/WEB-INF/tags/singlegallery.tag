@@ -14,11 +14,14 @@
         </div>
     </div>
 
-    <div id="error-modal" title="Error" style="display: none;">
-        There was a problem generating your report, please try again.
+    <div id="error-modal" title="Ошибка" style="display: none;">
+        <spring:message code="page.public.download.failed"/>
     </div>
 
-    <a url="/private/download/${gallery.title}" href="#" class="fileDownload">Download</a>
+    <a url="/private/download/${gallery.title}" href="#" class="fileDownload btn btn-success"><i
+            class="icon-download"></i> <spring:message code="download-all-zip"/></a>
+    <br/>
+    <br/>
 </c:if>
 
 <ul class="thumbnails">
@@ -44,8 +47,8 @@
                                     paper-id="${price.paperType.id}" value="${price.price}">${price}</option>
                         </c:forEach>
                     </select>
-                    <a class="btn item_add" href="javascript:;">
-                        <i class="icon-shopping-cart"></i> <!--<spring:message code="page.public.addtocard"/>-->
+                    <a class="btn item_add" href="javascript:;" title="<spring:message code="page.public.addtocard"/>">
+                        <i class="icon-shopping-cart"></i>
                     </a>
                 </div>
             </div>
