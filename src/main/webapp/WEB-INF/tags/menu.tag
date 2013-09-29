@@ -3,12 +3,17 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <%@attribute name="menuItems" type="java.util.LinkedHashMap<java.lang.String, java.lang.String>" %>
-<%@attribute name="type" %>
+<%@attribute name="type" type="java.lang.String" %>
+<%@attribute name="showLogin" type="java.lang.Boolean" %>
 
 <c:choose>
     <c:when test="${type eq 'admin'}">
         <ul class="nav nav-tabs">
+        <li>
+            <a href="/">На главную</a>
+        </li>
     </c:when>
     <c:otherwise>
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -37,29 +42,31 @@
 
 <ul class="nav pull-right">
     <li class="divider-vertical"></li>
-    <sec:authorize access="not isAuthenticated()">
-        <li class="btn-primary">
-            <a href="/login" style="color: white;">Login</a>
-        </li>
-    </sec:authorize>
-    <sec:authorize access="isAuthenticated()">
-        <p class="nav navbar-text" style="color: #ffffff;">Вы вошли как:</p>
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" style="color: #ffffff;" data-toggle="dropdown"><sec:authentication
-                    property="principal.username"/> <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-                <li>
-                    <a href="#">
-                        My profile
-                    </a>
-                </li>
-                <li class="divider"></li>
-                <li>
-                    <a href="<c:url value="j_spring_security_logout" />"><spring:message code="logout"/></a>
-                </li>
-            </ul>
-        </li>
-    </sec:authorize>
+    <c:if test="${showLogin}">
+        <sec:authorize access="not isAuthenticated()">
+            <li class="btn-primary">
+                <a href="/login" style="color: white;">Login</a>
+            </li>
+        </sec:authorize>
+        <sec:authorize access="isAuthenticated()">
+            <p class="nav navbar-text" style="color: #ffffff;">Вы вошли как:</p>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" style="color: #ffffff;" data-toggle="dropdown"><sec:authentication
+                        property="principal.username"/> <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#">
+                            My profile
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="<c:url value="j_spring_security_logout" />"><spring:message code="logout"/></a>
+                    </li>
+                </ul>
+            </li>
+        </sec:authorize>
+    </c:if>
 </ul>
 <c:if test="${type != 'admin'}">
     </div>

@@ -1,9 +1,6 @@
 package org.georg.web.controller;
 
-import org.georg.web.container.FormatListContainer;
-import org.georg.web.container.PaperTypeListContainer;
-import org.georg.web.container.PaymentMethodListContainer;
-import org.georg.web.container.PriceListContainer;
+import org.georg.web.container.*;
 import org.georg.web.impl.dao.base.IGenericDAO;
 import org.georg.web.impl.model.Gallery;
 import org.georg.web.impl.service.*;
@@ -40,6 +37,9 @@ public class AdminController {
     private PriceService priceService;
 
     @Autowired
+    private VideoService videoService;
+
+    @Autowired
     private PaymentMethodService paymentMethodService;
 
     private void constructMenu(ModelAndView modelAndView) {
@@ -50,18 +50,23 @@ public class AdminController {
         menu.put("?page=price", "page.menu.admin.price");
         menu.put("?page=payment", "page.menu.admin.payment");
         menu.put("?page=system", "page.menu.admin.system");
-        menu.put("?page=videos", "page.menu.admin.videos");
+        menu.put("?page=video", "page.menu.admin.videos");
         modelAndView.addObject("menuItems", menu);
     }
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     @Secured("ROLE_ADMIN")
-    public ModelAndView adminGet(@RequestParam(required = false) Boolean success, @RequestParam(required = true) String page)
+    public ModelAndView adminGet(@RequestParam(required = false) Boolean success, @RequestParam(required = false) String page)
             throws IOException {
         ModelAndView modelAndView;
+
+        if (page == null || page.isEmpty())
+            page = "admin";
+
         switch (page) {
             case "admin":
                 modelAndView = new ModelAndView("admin/gallery");
+                modelAndView.addObject("listDirectories", fileService.getDirectories());
                 break;
             case "format":
                 modelAndView = new ModelAndView("admin/format");
@@ -81,12 +86,15 @@ public class AdminController {
                 modelAndView = new ModelAndView("admin/payment");
                 modelAndView.addObject("paymentMethods", new PaymentMethodListContainer(paymentMethodService.getAll("id", IGenericDAO.SortingTypes.asc)));
                 break;
+            case "video":
+                modelAndView = new ModelAndView("admin/video");
+                modelAndView.addObject("videoListContainer", new VideoListContainer(videoService.getAll("id", IGenericDAO.SortingTypes.asc)));
+                break;
             default:
                 modelAndView = new ModelAndView("admin/gallery");
+                modelAndView.addObject("listDirectories", fileService.getDirectories());
                 break;
         }
-
-        modelAndView.addObject("listDirectories", fileService.getDirectories());
         if (success != null) {
             modelAndView.addObject("success", success);
         }
@@ -129,6 +137,14 @@ public class AdminController {
 
         session.setAttribute("formatListContainer", newFormatListContainer);
         return "redirect:/admin?page=type&success=true&count=" + newFormatListContainer.getList().size();
+    }
+
+    @RequestMapping(value = "/editvideo", method = RequestMethod.POST)
+    public String editVideoListContainer(@ModelAttribute VideoListContainer videoListContainer, HttpSession session) {
+        VideoListContainer newVideoListContainer = new VideoListContainer(videoService.updateFromContainer(videoListContainer));
+
+        session.setAttribute("videoListContainer", newVideoListContainer);
+        return "redirect:/admin?page=video&success=true&count=" + newVideoListContainer.getList().size();
     }
 
     @RequestMapping(value = "/editprice", method = RequestMethod.POST)

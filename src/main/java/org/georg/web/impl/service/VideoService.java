@@ -58,17 +58,17 @@ public class VideoService extends BaseContainerService<Video, VideoListContainer
 
         List<Video> addOrUpdate = new ArrayList<>();
 
-        for (Video price : add) {
+        for (Video video : add) {
 
             Video update;
 
-            if (videoDAO.getById(price.getId()) != null) {
-                update = videoDAO.getById(price.getId());
+            if (video.getId() != null && videoDAO.getById(video.getId()) != null) {
+                update = videoDAO.getById(video.getId());
             } else {
                 update = new Video();
             }
 
-            update.setVideoId(price.getVideoId());
+            update.setVideoId(video.getVideoId());
             addOrUpdate.add(update);
         }
 

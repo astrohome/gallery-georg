@@ -27,7 +27,7 @@
         </script>
     </jsp:attribute>
     <jsp:body>
-        <t:menu type="admin" menuItems="${menuItems}"/>
+        <t:menu type="admin" menuItems="${menuItems}" showLogin="false"/>
 
         <div class="row">
             <div class="span7">

@@ -6,7 +6,7 @@
     <jsp:attribute name="title"><spring:message code="page.welcome.intro"/> </jsp:attribute>
 
     <jsp:attribute name="menu">
-        <t:menu menuItems="${menuItems}"/>
+       <t:menu menuItems="${menuItems}" showLogin="true"/>
     </jsp:attribute>
     <jsp:attribute name="header">
        <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/datepicker.css" />"/>

@@ -24,7 +24,7 @@ import java.util.Set;
 public class HomeController {
 
     @Autowired
-    private GalleryService service;
+    private GalleryService galleryService;
 
     @Autowired
     private ImageService imageService;
@@ -41,6 +41,9 @@ public class HomeController {
     @Autowired
     private OrderItemService orderItemService;
 
+    @Autowired
+    private VideoService videoService;
+
     private void constructPublicMenu(ModelAndView modelAndView) {
         LinkedHashMap<String, String> menu = new LinkedHashMap();
         menu.put("/", "page.menu.public.index");
@@ -52,7 +55,7 @@ public class HomeController {
     @RequestMapping(value = "/")
     public ModelAndView index(HttpServletResponse response) throws IOException {
         ModelAndView modelAndView = new ModelAndView("public");
-        modelAndView.addObject("list", service.getAllByDate(true));
+        modelAndView.addObject("list", galleryService.getAllByDate(true));
         constructPublicMenu(modelAndView);
         return modelAndView;
     }
@@ -60,7 +63,7 @@ public class HomeController {
     @RequestMapping(value = "/", params = {"id"}, method = RequestMethod.GET)
     public ModelAndView singleGallery(@RequestParam("id") long id) {
         ModelAndView modelAndView = new ModelAndView("view_gallery");
-        Gallery gal = service.getById(id);
+        Gallery gal = galleryService.getById(id);
         modelAndView.addObject("gallery", gal);
         modelAndView.addObject("listImages", imageService.getImages(gal));
         modelAndView.addObject("prices", priceService.getAll());
@@ -94,7 +97,7 @@ public class HomeController {
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ModelAndView singlePrivateGallery(HttpServletResponse response, @RequestParam("code") String code) {
         ModelAndView modelAndView = new ModelAndView("view_gallery");
-        Gallery gal = service.getByCode(code);
+        Gallery gal = galleryService.getByCode(code);
         modelAndView.addObject("gallery", gal);
         modelAndView.addObject("prices", priceService.getAll());
         modelAndView.addObject("listImages", imageService.getImages(gal));
@@ -144,8 +147,8 @@ public class HomeController {
 
     @RequestMapping(value = "/videos")
     public ModelAndView videos(HttpServletResponse response) throws IOException {
-        ModelAndView modelAndView = new ModelAndView("public");
-        modelAndView.addObject("list", service.getAllByDate(true));
+        ModelAndView modelAndView = new ModelAndView("video");
+        modelAndView.addObject("videoList", videoService.getAll());
         constructPublicMenu(modelAndView);
         return modelAndView;
     }

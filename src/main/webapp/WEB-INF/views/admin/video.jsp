@@ -6,7 +6,7 @@
     <jsp:attribute name="bottom">
         <script>
             var i = $('table tr').length - 1;
-            $("#addFormat").click(function () {
+            $("#addVideo").click(function () {
                 $("table tr").eq(1).clone().find("input").each(function () {
                     $(this).attr('value', '');
                     $(this).attr('name', $(this).attr('name').replace('0', i));
@@ -14,7 +14,7 @@
                 i = $('table tr').length;
             });
 
-            $('table').on('click', '.removeFormat', function () {
+            $('table').on('click', '.removeVideo', function () {
                 $(this).closest('tr').nextAll('tr').find('input').each(function () {
                     var name = $(this).attr('name');
                     var m = name.match("\\[(.*?)\\]");
@@ -38,48 +38,48 @@
                         Successfully saved ${count} formats!
                     </div>
                 </c:if>
-                <form:form action="/editformat" modelAttribute="formatListContainer" method="post" id="formatListForm">
+                <form:form action="/editvideo" modelAttribute="videoListContainer" method="post" id="videoListForm">
                     <table class="table table-bordered table-hover">
                         <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Format</th>
+                            <th>Video code</th>
                             <th></th>
                         </tr>
                         </thead>
-                        <tbody id="formatListContainer">
-                        <c:forEach items="${formatListContainer.list}" varStatus="i" var="format">
+                        <tbody id="videoListContainer">
+                        <c:forEach items="${videoListContainer.list}" varStatus="i" var="video">
                             <tr class="person">
                                 <td>
-                                    <form:input readonly="true" path="list[${i.index}].id" value="${format.id}"/>
+                                    <form:input readonly="true" path="list[${i.index}].id" value="${video.id}"/>
                                 </td>
                                 <td>
-                                    <form:input path="list[${i.index}].format"/>
+                                    <form:input path="list[${i.index}].videoId"/>
                                 </td>
-                                <td><a href="#" class="btn btn-danger removeFormat">
+                                <td><a href="#" class="btn btn-danger removeVideo">
                                     <div class="icon-remove"></div>
-                                    Delete format</a></td>
+                                    Delete video</a></td>
                             </tr>
                         </c:forEach>
-                        <c:if test="${formatListContainer.list.size() == 0}">
+                        <c:if test="${videoListContainer.list.size() == 0}">
                             <tr class="person">
                                 <td>
                                     <form:input path="list[0].id" disabled="true"/>
                                 </td>
                                 <td>
-                                    <form:input path="list[0].format"/>
+                                    <form:input path="list[0].videoId"/>
                                 </td>
-                                <td><a href="#" class="btn btn-danger removeFormat">
+                                <td><a href="#" class="btn btn-danger removeVideo">
                                     <div class="icon-remove"></div>
-                                    Delete format</a></td>
+                                    Delete video</a></td>
                             </tr>
                         </c:if>
                         </tbody>
                     </table>
                     <input type="submit" class="btn" value="Save" id="submit"/>&nbsp;&nbsp;
-                    <a href="#" class="btn btn-success" id="addFormat">
+                    <a href="#" class="btn btn-success" id="addVideo">
                         <div class="icon-plus"></div>
-                        Add format</a>&nbsp;&nbsp;
+                        Add video</a>&nbsp;&nbsp;
                 </form:form>
             </div>
         </div>
