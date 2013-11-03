@@ -3,7 +3,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:generic>
-    <jsp:attribute name="title">Register new user</jsp:attribute>
+    <jsp:attribute name="title">Обзор заказа</jsp:attribute>
     <jsp:body>
         Обзор заказа:
         <table class="table table-bordered table-hover">

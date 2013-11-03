@@ -24,6 +24,9 @@ public class FileUtils {
     @Value("${file.download.temp}")
     private String archivePath;
 
+    @Value("${file.thumbs.watermark}")
+    private String thumbsWatermark;
+
     @Autowired
     private HashCodeUtil hashCodeUtil;
 
@@ -85,6 +88,11 @@ public class FileUtils {
             return null;
 
         }
+    }
+
+    public File getWatermarkImage() {
+        File watermark = new File(thumbsWatermark);
+        return watermark;
     }
 
     public File findDirectoryByTitle(final String title) throws IOException {

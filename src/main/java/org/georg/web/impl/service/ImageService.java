@@ -1,6 +1,7 @@
 package org.georg.web.impl.service;
 
 import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.filters.Watermark;
 import net.coobird.thumbnailator.geometry.Positions;
 import org.georg.web.impl.model.Gallery;
 import org.georg.web.impl.util.FileUtils;
@@ -41,7 +42,7 @@ public class ImageService {
         return result;
     }
 
-    private byte[] proceedFile(String gallery, String image, boolean big) {
+    private byte[] proceedFile(String gallery, String image, boolean big, boolean watermark) {
         byte[] imageInByte;
         try {
             String path = fileUtils.getThumbNameWithPath(gallery, image, big);
@@ -52,6 +53,12 @@ public class ImageService {
                         .size(800, 800)
                         .outputFormat("jpg")
                         .asBufferedImage();
+                if (watermark) {
+                    BufferedImage watermarkImage = ImageIO.read(fileUtils.getWatermarkImage());
+
+                    Watermark filter = new Watermark(Positions.CENTER, watermarkImage, 0.5f);
+                    img = filter.apply(img);
+                }
             } else {
                 img = Thumbnails.of(getFile(gallery, image))
                         .size(150, 150)
@@ -83,10 +90,10 @@ public class ImageService {
         return imageInByte;
     }
 
-    public byte[] getBig(String gallery, String image) {
+    public byte[] getBig(String gallery, String image, boolean watermark) {
         File file = fileUtils.findBig(gallery, image);
         if (file == null) {
-            return proceedFile(gallery, image, true);
+            return proceedFile(gallery, image, true, watermark);
         }
         return getImage(file);
     }
@@ -94,7 +101,7 @@ public class ImageService {
     public byte[] getThumb(String gallery, String image) {
         File file = fileUtils.findThumb(gallery, image);
         if (file == null) {
-            return proceedFile(gallery, image, false);
+            return proceedFile(gallery, image, false, false);
         }
         return getImage(file);
     }

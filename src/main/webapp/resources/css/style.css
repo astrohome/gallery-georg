@@ -31,6 +31,7 @@
 
 body {
     padding-top: 60px;
+    padding-bottom: 60px;
     background: #FCFCFC;
 }
 
@@ -51,9 +52,3 @@ header a {
 .modal {
     color: #333;
 }
-
-/*
-#main-container {
-   box-shadow: 1px 1px 12px #555;
-   padding: 30px;
-}        */

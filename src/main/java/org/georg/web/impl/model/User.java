@@ -1,6 +1,6 @@
 package org.georg.web.impl.model;
 
-import com.sun.istack.internal.NotNull;
+import javax.validation.constraints.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;

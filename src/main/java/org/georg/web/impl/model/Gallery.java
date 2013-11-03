@@ -1,7 +1,7 @@
 package org.georg.web.impl.model;
 
 
-import com.sun.istack.internal.NotNull;
+import javax.validation.constraints.NotNull;
 import org.georg.web.impl.util.DateUtil;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,7 +11,7 @@ import java.net.URLEncoder;
 import java.util.Date;
 
 @Entity
-@Table
+@Table(name = "gallery")
 public class Gallery {
     @Id
     @Column(name = "id")

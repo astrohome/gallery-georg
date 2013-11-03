@@ -71,6 +71,26 @@ public class HomeController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/download/{gallery}", produces = "application/octet-stream")
+    @ResponseBody
+    public byte[] getPublicDirectoryArchive(@PathVariable("gallery") String gallery, HttpServletResponse response)
+            throws UnsupportedEncodingException {
+
+        Gallery gal = galleryService.getByTitle(gallery);
+        if (!gal.isWatermark()) {
+            response.addHeader("Content-Disposition", "attachment; filename*=UTF-8''"
+                    + URLEncoder.encode(gallery.replace(' ', '_'), "UTF-8") + ".zip");
+            response.addHeader("Content-Transfer-Encoding", "binary");
+            response.addCookie(new Cookie("fileDownload", "true") {{
+                setPath("/");
+            }});
+            response.addHeader("Cache-Control", "max-age=60, must-revalidate");
+            return imageService.createAndGetArchive(gallery);
+        } else {
+            return null;
+        }
+    }
+
     @RequestMapping(value = "/getThumb/{folder}/{image}")
     @ResponseBody
     public byte[] getThumb(@PathVariable("folder") String folder,
@@ -82,7 +102,9 @@ public class HomeController {
     @ResponseBody
     public byte[] getBigImage(@PathVariable("folder") String folder,
                               @PathVariable("image") String image) throws UnsupportedEncodingException {
-        return imageService.getBig(URLDecoder.decode(folder, "UTF-8"), URLDecoder.decode(image, "UTF-8"));
+        Gallery gal = galleryService.getByTitle(folder);
+        return imageService.getBig(URLDecoder.decode(folder, "UTF-8"), URLDecoder.decode(image, "UTF-8"),
+                gal.isWatermark());
     }
 
     @RequestMapping(value = "/private", method = RequestMethod.GET)

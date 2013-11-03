@@ -3,8 +3,18 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@attribute name="listImages" required="true" type="java.util.List" %>
 
-<c:if test="${gallery.hidden}">
+<c:choose>
+    <c:when test="${gallery.hidden}">
+        <c:set var="url" value="/private/download/${gallery.title}"/>
+    </c:when>
+    <c:otherwise>
+        <c:if test="${not gallery.watermark}">
+            <c:set var="url" value="/download/${gallery.title}"/>
+        </c:if>
+    </c:otherwise>
+</c:choose>
 
+<c:if test="${not empty url}">
     <div id="preparing-file-modal" title="<spring:message code="page.public.download.preparing"/>"
          style="display: none;">
         <spring:message code="page.public.download.pleasewait"/>
@@ -18,7 +28,7 @@
         <spring:message code="page.public.download.failed"/>
     </div>
 
-    <a url="/private/download/${gallery.title}" href="#" class="fileDownload btn btn-success"><i
+    <a url="${url}" href="#" class="fileDownload btn btn-success"><i
             class="icon-download"></i> <spring:message code="download-all-zip"/></a>
     <br/>
     <br/>

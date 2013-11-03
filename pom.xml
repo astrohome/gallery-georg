@@ -13,9 +13,12 @@
 
     <properties>
         <java.version>1.7</java.version>
-        <spring.version>3.2.3.RELEASE</spring.version>
-        <cglib.version>2.2.2</cglib.version>
-        <hibernate.version>4.2.2.Final</hibernate.version>
+        <spring.version>3.2.4.RELEASE</spring.version>
+        <cglib.version>3.0</cglib.version>
+        <hibernate.version>4.2.7.Final</hibernate.version>
+        <server.url>http://localhost/manager/html</server.url>
+        <env>local</env>
+        <server.url>localhost</server.url>
     </properties>
 
     <dependencies>
@@ -98,7 +101,7 @@
         <dependency>
             <groupId>org.hibernate.common</groupId>
             <artifactId>hibernate-commons-annotations</artifactId>
-            <version>4.0.2.Final</version>
+            <version>4.0.4.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
@@ -118,22 +121,22 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>3.2.0.M2</version>
+            <version>3.2.0.RC1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>3.2.0.M2</version>
+            <version>3.2.0.RC1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>3.2.0.M2</version>
+            <version>3.2.0.RC1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-taglibs</artifactId>
-            <version>3.2.0.M2</version>
+            <version>3.2.0.RC1</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -143,7 +146,7 @@
         <dependency>
             <groupId>net.coobird</groupId>
             <artifactId>thumbnailator</artifactId>
-            <version>0.4.5</version>
+            <version>0.4.6</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -167,17 +170,71 @@
         </repository>
     </repositories>
 
+    <profiles>
+        <profile>
+            <id>local</id>
+            <properties>
+                <env>local</env>
+                <server.url>localhost:8080</server.url>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <env>prod</env>
+                <server.url>109.95.47.47:8080</server.url>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <finalName>gallery</finalName>
+        <filters>
+            <filter>application-${env}.properties</filter>
+        </filters>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>labels_en.properties</include>
+                    <include>labels_ru.properties</include>
+                    <include>message_en.properties</include>
+                    <include>message_ru.properties</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0.2</version>
+                <version>3.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>tomcat-maven-plugin</artifactId>
+                <configuration>
+                    <url>http://${server.url}/manager/html</url>
+                    <server>TomcatServer</server>
+                    <path>/gallery</path>
+                </configuration>
+                <version>1.1</version>
             </plugin>
         </plugins>
     </build>
