@@ -4,6 +4,7 @@ import org.georg.web.impl.model.Gallery;
 import org.georg.web.impl.model.OrderItem;
 import org.georg.web.impl.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +45,9 @@ public class HomeController {
     @Autowired
     private VideoService videoService;
 
+    @Value("${gallery.delta}")
+    private Integer delta;
+
     private void constructPublicMenu(ModelAndView modelAndView) {
         LinkedHashMap<String, String> menu = new LinkedHashMap();
         menu.put("/", "page.menu.public.index");
@@ -60,12 +64,21 @@ public class HomeController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/", params = {"id"}, method = RequestMethod.GET)
-    public ModelAndView singleGallery(@RequestParam("id") long id) {
+    @RequestMapping(value = "/view", method = RequestMethod.GET)
+    public ModelAndView singleGallery(@RequestParam("id") long id, @RequestParam(value = "page", defaultValue = "0") Integer page) {
         ModelAndView modelAndView = new ModelAndView("view_gallery");
         Gallery gal = galleryService.getById(id);
         modelAndView.addObject("gallery", gal);
-        modelAndView.addObject("listImages", imageService.getImages(gal));
+
+        int total = imageService.getImagesCount(gal);
+        int pages = 1;
+
+        if (total / delta > 1) {
+            pages = (int) Math.ceil(total / delta);
+        }
+
+        modelAndView.addObject("pages", pages);
+        modelAndView.addObject("listImages", imageService.getImages(gal, page));
         modelAndView.addObject("prices", priceService.getAll());
         constructPublicMenu(modelAndView);
         return modelAndView;
@@ -117,12 +130,15 @@ public class HomeController {
 
     @RequestMapping(value = "/private", method = RequestMethod.POST)
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    public ModelAndView singlePrivateGallery(HttpServletResponse response, @RequestParam("code") String code) {
+    public ModelAndView singlePrivateGallery(HttpServletResponse response,
+                                             @RequestParam("code") String code,
+                                             @RequestParam("page") Integer page) {
+
         ModelAndView modelAndView = new ModelAndView("view_gallery");
         Gallery gal = galleryService.getByCode(code);
         modelAndView.addObject("gallery", gal);
         modelAndView.addObject("prices", priceService.getAll());
-        modelAndView.addObject("listImages", imageService.getImages(gal));
+        modelAndView.addObject("listImages", imageService.getImages(gal, page));
         constructPublicMenu(modelAndView);
         return modelAndView;
     }

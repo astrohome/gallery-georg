@@ -6,6 +6,7 @@ import net.coobird.thumbnailator.geometry.Positions;
 import org.georg.web.impl.model.Gallery;
 import org.georg.web.impl.util.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -19,6 +20,9 @@ public class ImageService {
 
     @Autowired
     private FileUtils fileUtils;
+
+    @Value("${gallery.delta}")
+    private Integer delta;
 
     public File getFile(String gallery, String image) {
         File[] files = fileUtils.findFiles(gallery, image + ".jpg");
@@ -106,14 +110,18 @@ public class ImageService {
         return getImage(file);
     }
 
-    public List<String> getImages(Gallery gallery) {
-        File[] images = fileUtils.findImages(gallery.getTitle());
+    public List<String> getImages(Gallery gallery, int page) {
+        File[] images = fileUtils.findImages(gallery.getTitle(), page);
         List<String> result = new ArrayList<>();
         for (File image : images) {
             result.add(image.getName().toLowerCase());
         }
 
         return result;
+    }
+
+    public Integer getImagesCount(Gallery gallery) {
+        return fileUtils.getCount(gallery.getTitle());
     }
 
     public byte[] createAndGetArchive(String gallery) {

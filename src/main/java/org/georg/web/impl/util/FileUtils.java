@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -26,6 +27,9 @@ public class FileUtils {
 
     @Value("${file.thumbs.watermark}")
     private String thumbsWatermark;
+
+    @Value("${gallery.delta}")
+    private Integer delta;
 
     @Autowired
     private HashCodeUtil hashCodeUtil;
@@ -106,13 +110,35 @@ public class FileUtils {
         return result[0];
     }
 
+    public File[] findImages(String dir, int start) {
+        File[] files = findImages(dir);
+
+        if (files.length > 0) {
+            Arrays.sort(files);
+
+            if (files.length > delta) {
+                return Arrays.copyOfRange(files, start * delta,
+                        ((start + 1) * delta) >= files.length ? files.length - 1 : (start + 1) * delta);
+            }
+
+            return files;
+        }
+
+        return null;
+    }
+
     public File[] findImages(String dir) {
         File root = new File(path + "/" + dir);
+
         return root.listFiles(new FileFilter() {
             public boolean accept(File f) {
                 return f.isFile() && getExtension(f.getName()).equalsIgnoreCase(extension);
             }
         });
+    }
+
+    public Integer getCount(String dir) {
+        return findImages(dir).length;
     }
 
     public File[] findFiles(String dir, final String name) {

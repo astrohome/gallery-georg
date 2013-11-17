@@ -32,7 +32,7 @@
                             ${gallery.title}</a> <br/>
                 </c:when>
                 <c:otherwise>
-                    <a href="?id=${gallery.id}">${gallery.title}</a> <br/>
+                    <a href="/view?id=${gallery.id}">${gallery.title}</a> <br/>
                 </c:otherwise>
             </c:choose>
         </c:forEach>

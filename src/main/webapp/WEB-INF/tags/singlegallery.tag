@@ -40,8 +40,8 @@
             <div class="simpleCart_shelfItem">
                 <a class="thumbnail" rel="lightbox[group]" href="/getImage/${gallery.encodedTitle}/${image}">
                     <img class="loading" src="<c:url value="/resources/img/loading.gif" />" height="150px"/>
-                    <img rel="thumbnail" class="hidden group1" src="/getThumb/${gallery.encodedTitle}/${image}"
-                         title="${image}"/>
+                    <!--<img rel="thumbnail" class="group1" src="/getThumb/${gallery.encodedTitle}/${image}"
+                         title="${image}"/>-->
                 </a>
 
                 <div class="hidden item_name">${gallery.title}/${image}</div>

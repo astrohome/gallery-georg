@@ -17,7 +17,7 @@
         <script type="text/javascript" src="<c:url value="/resources/js/simpleCart.js"/>"></script>
 
         <script type="text/javascript">
-            jQuery(document).ready(function () {
+            /*jQuery(document).ready(function () {
                 jQuery("[rel^='lightbox']").prettyPhoto({
                     social_tools: ''
                 });
@@ -62,11 +62,11 @@
                     });
                     return false; //this is critical to stop the click event which will trigger a normal file download!
                 });
-            });
+            });   */
         </script>
 
         <script>
-            simpleCart({
+          /*  simpleCart({
                 checkout: {
                     type: "SendForm",
                     url: "putOrder.html",
@@ -84,11 +84,13 @@
                     { attr: "size", label: "Формат" },
                     { view: "remove", text: "Удалить", label: false}
                 ]
-            });
+            });     */
         </script>
     </jsp:attribute>
     <jsp:body>
         <t:singlegallery listImages="${listImages}"/>
+
+        <!--<t:pagination url="?id=${gallery.id}" pages="${pages}" />-->
 
         <span class="simpleCart_quantity"></span> фотографий - <span class="simpleCart_total"></span>
 
