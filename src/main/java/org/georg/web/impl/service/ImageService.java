@@ -87,6 +87,8 @@ public class ImageService {
             fo.flush();
             fo.close();
 
+            System.gc();
+
         } catch (IOException e) {
             return null;
         }
@@ -111,6 +113,8 @@ public class ImageService {
     }
 
     public List<String> getImages(Gallery gallery, int page) {
+        if (page <= 0) page = 0;
+
         File[] images = fileUtils.findImages(gallery.getTitle(), page);
         List<String> result = new ArrayList<>();
         for (File image : images) {

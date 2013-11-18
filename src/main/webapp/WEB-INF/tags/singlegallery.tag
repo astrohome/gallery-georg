@@ -40,15 +40,16 @@
             <div class="simpleCart_shelfItem">
                 <a class="thumbnail" rel="lightbox[group]" href="/getImage/${gallery.encodedTitle}/${image}">
                     <img class="loading" src="<c:url value="/resources/img/loading.gif" />" height="150px"/>
-                    <!--<img rel="thumbnail" class="group1" src="/getThumb/${gallery.encodedTitle}/${image}"
-                         title="${image}"/>-->
+                    <img rel="thumbnail" class="group1" src="/getThumb/${gallery.encodedTitle}/${image}"
+                         title="${image}"/>
                 </a>
 
                 <div class="hidden item_name">${gallery.title}/${image}</div>
                 <input type="hidden" value="1" class="item_Quantity"/><br>
-                <input name="size" class="hidden item_size" value="${prices.get(0).format}"/>
-                <input name="sizeid" class="hidden item_sizeid" value="${prices.get(0).format.id}"/>
-                <input name="paperTypeId" class="hidden item_paperTypeId" value="${prices.get(0).paperType.id}"/>
+                <input name="size" class="hidden item_size" value="<c:out value="${prices[0].format}"/>"/>
+                <input name="sizeid" class="hidden item_sizeid" value="<c:out value="${prices[0].format.id}"/>"/>
+                <input name="paperTypeId" class="hidden item_paperTypeId"
+                       value="<c:out value="${prices[0].paperType.id}"/>"/>
 
                 <div class="input-append">
                     <select name="price" class="item_price">

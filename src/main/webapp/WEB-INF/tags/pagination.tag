@@ -4,9 +4,9 @@
 <%@attribute name="url" type="java.lang.String" required="true" %>
 <%@attribute name="pages" type="java.lang.Integer" required="true" %>
 
-
-
 <c:forEach begin="1" end="${pages}" var="i">
-    <a href="${url + "&page=" + i}">${i}</a>
+    <a href="<c:out value='${url}"&page="${i}'/>">${i}</a>
 </c:forEach>
+
+<br/>
 

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -43,14 +44,6 @@ public class FileUtils {
                 return f.isDirectory();
             }
         });
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public String getPath(String file) {
-        return path + "/" + file;
     }
 
     public File downloadDirectory(String directory) {
@@ -114,11 +107,22 @@ public class FileUtils {
         File[] files = findImages(dir);
 
         if (files.length > 0) {
-            Arrays.sort(files);
+            Arrays.sort(files, new Comparator<File>() {
+                @Override
+                public int compare(File o1, File o2) {
+                    if (o1.getName().length() > o2.getName().length()) {
+                        return 1;
+                    } else if (o1.getName().length() < o2.getName().length()) {
+                        return -1;
+                    }
+                    return o1.getName().compareTo(o2.getName());
+
+                }
+            });
 
             if (files.length > delta) {
                 return Arrays.copyOfRange(files, start * delta,
-                        ((start + 1) * delta) >= files.length ? files.length - 1 : (start + 1) * delta);
+                        ((start + 1) * delta) > files.length ? files.length : (start + 1) * delta);
             }
 
             return files;

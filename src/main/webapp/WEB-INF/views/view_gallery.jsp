@@ -17,7 +17,7 @@
         <script type="text/javascript" src="<c:url value="/resources/js/simpleCart.js"/>"></script>
 
         <script type="text/javascript">
-            /*jQuery(document).ready(function () {
+            jQuery(document).ready(function () {
                 jQuery("[rel^='lightbox']").prettyPhoto({
                     social_tools: ''
                 });
@@ -62,11 +62,11 @@
                     });
                     return false; //this is critical to stop the click event which will trigger a normal file download!
                 });
-            });   */
+            });
         </script>
 
         <script>
-          /*  simpleCart({
+            simpleCart({
                 checkout: {
                     type: "SendForm",
                     url: "putOrder.html",
@@ -84,13 +84,33 @@
                     { attr: "size", label: "Формат" },
                     { view: "remove", text: "Удалить", label: false}
                 ]
-            });     */
+            });
         </script>
+
+        <c:url value="/view" var="url">
+            <c:param name="id" value="${param.id}"/>
+        </c:url>
+
+                <script type='text/javascript'>
+                    var options = {
+                        alignment: "center",
+                        numberOfPages: 10,
+                        bootstrapMajorVersion: 2,
+                        onPageClicked: function (e, originalEvent, type, page) {
+                            window.location.href = '${url}&page=' + page;
+                        },
+                        currentPage: ${currentPage},
+                        totalPages: ${pages}
+                    }
+                    jQuery('#example').bootstrapPaginator(options);
+                </script>
     </jsp:attribute>
     <jsp:body>
         <t:singlegallery listImages="${listImages}"/>
 
-        <!--<t:pagination url="?id=${gallery.id}" pages="${pages}" />-->
+        <div id="example"></div>
+
+        <%--<t:pagination url="?id=${gallery.id}" pages="${pages}" />--%>
 
         <span class="simpleCart_quantity"></span> фотографий - <span class="simpleCart_total"></span>
 

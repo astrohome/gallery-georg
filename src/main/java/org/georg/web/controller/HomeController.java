@@ -65,7 +65,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/view", method = RequestMethod.GET)
-    public ModelAndView singleGallery(@RequestParam("id") long id, @RequestParam(value = "page", defaultValue = "0") Integer page) {
+    public ModelAndView singleGallery(@RequestParam("id") long id, @RequestParam(value = "page", defaultValue = "1") Integer page) {
         ModelAndView modelAndView = new ModelAndView("view_gallery");
         Gallery gal = galleryService.getById(id);
         modelAndView.addObject("gallery", gal);
@@ -74,11 +74,17 @@ public class HomeController {
         int pages = 1;
 
         if (total / delta > 1) {
-            pages = (int) Math.ceil(total / delta);
+            pages = (int) Math.ceil(total / (float) delta);
         }
 
+        if (page <= 0)
+            page = 1;
+        if (page > pages)
+            page = pages;
+
         modelAndView.addObject("pages", pages);
-        modelAndView.addObject("listImages", imageService.getImages(gal, page));
+        modelAndView.addObject("currentPage", page);
+        modelAndView.addObject("listImages", imageService.getImages(gal, page - 1));
         modelAndView.addObject("prices", priceService.getAll());
         constructPublicMenu(modelAndView);
         return modelAndView;
