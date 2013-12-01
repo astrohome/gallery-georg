@@ -86,9 +86,6 @@ public class ImageService {
             ImageIO.write(img, "jpg", fo);
             fo.flush();
             fo.close();
-
-            System.gc();
-
         } catch (IOException e) {
             return null;
         }
