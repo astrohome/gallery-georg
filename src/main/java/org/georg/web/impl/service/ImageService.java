@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,26 +26,23 @@ public class ImageService {
     @Value("${gallery.delta}")
     private Integer delta;
 
-    public File getFile(String gallery, String image) {
-        File[] files = fileUtils.findFiles(gallery, image + ".jpg");
-        if (files.length == 1) {
-            return files[0];
+    public Path getFile(String gallery, String image) {
+        try {
+            return fileUtils.getImage(gallery, image);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
+
         return null;
     }
 
-    public byte[] getImage(File file) {
-        if (file == null) return null;
-
-        byte[] result = new byte[(int) file.length()];
+    public byte[] readImage(Path file) {
         try {
-            FileInputStream in = new FileInputStream(file);
-            in.read(result);
-        } catch (Exception ex) {
-            System.out.println("GET IMAGE PROBLEM :: " + ex);
-            ex.printStackTrace();
+            return Files.readAllBytes(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
-        return result;
     }
 
     private byte[] proceedFile(String gallery, String image, boolean big, boolean watermark) {
@@ -53,7 +52,7 @@ public class ImageService {
 
             BufferedImage img;
             if (big) {
-                img = Thumbnails.of(getFile(gallery, image))
+                img = Thumbnails.of(getFile(gallery, image).toFile())
                         .size(800, 800)
                         .outputFormat("jpg")
                         .asBufferedImage();
@@ -64,7 +63,7 @@ public class ImageService {
                     img = filter.apply(img);
                 }
             } else {
-                img = Thumbnails.of(getFile(gallery, image))
+                img = Thumbnails.of(getFile(gallery, image).toFile())
                         .size(150, 150)
                         .crop(Positions.CENTER)
                         .outputFormat("jpg")
@@ -94,28 +93,39 @@ public class ImageService {
     }
 
     public byte[] getBig(String gallery, String image, boolean watermark) {
-        File file = fileUtils.findBig(gallery, image);
-        if (file == null) {
+        Path file = null;
+        try {
+            file = fileUtils.getBigThumb(gallery, image);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (file == null || !Files.exists(file)) {
             return proceedFile(gallery, image, true, watermark);
         }
-        return getImage(file);
+        return readImage(file);
     }
 
     public byte[] getThumb(String gallery, String image) {
-        File file = fileUtils.findThumb(gallery, image);
-        if (file == null) {
+        Path file = null;
+        try {
+            file = fileUtils.getSmallThumb(gallery, image);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (file == null || !Files.exists(file)) {
             return proceedFile(gallery, image, false, false);
         }
-        return getImage(file);
+        return readImage(file);
     }
 
     public List<String> getImages(Gallery gallery, int page) {
         if (page <= 0) page = 0;
 
-        File[] images = fileUtils.findImages(gallery.getTitle(), page);
+        List<Path> images = fileUtils.findImagesInDirectoryStartingFrom(gallery.getTitle(), page);
         List<String> result = new ArrayList<>();
-        for (File image : images) {
-            result.add(image.getName().toLowerCase());
+        for (Path image : images) {
+            result.add(image.getFileName().toString().toLowerCase());
         }
 
         return result;
@@ -126,9 +136,9 @@ public class ImageService {
     }
 
     public byte[] createAndGetArchive(String gallery) {
-        File file = fileUtils.downloadDirectory(gallery);
+        File file = fileUtils.downloadGallery(gallery);
         if (file == null)
             return null;
-        return getImage(file);
+        return readImage(file.toPath());
     }
 }

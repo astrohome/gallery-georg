@@ -110,14 +110,14 @@
 
         <div id="example"></div>
 
-        <%--<t:pagination url="?id=${gallery.id}" pages="${pages}" />--%>
+        <sec:authorize access="isAuthenticated()">
+            <span class="simpleCart_quantity"></span> фотографий - <span class="simpleCart_total"></span>
 
-        <span class="simpleCart_quantity"></span> фотографий - <span class="simpleCart_total"></span>
-
-        <div class="simpleCart_items">
-        </div>
-        <a href="#" class="btn btn-small" onclick="simpleCart.empty();"><i class="icon-remove"></i> <spring:message
-                code="clear"/> </a>
-        <a href="javascript:;" class="btn btn-small simpleCart_checkout"><spring:message code="checkout"/></a>
+            <div class="simpleCart_items">
+            </div>
+            <a href="#" class="btn btn-small" onclick="simpleCart.empty();"><i class="icon-remove"></i> <spring:message
+                    code="clear"/> </a>
+            <a href="javascript:;" class="btn btn-small simpleCart_checkout"><spring:message code="checkout"/></a>
+        </sec:authorize>
     </jsp:body>
 </t:generic>

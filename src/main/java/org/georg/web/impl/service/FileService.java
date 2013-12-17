@@ -5,8 +5,8 @@ import org.georg.web.impl.util.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,20 +23,24 @@ public class FileService {
     public List<Gallery> getDirectories() {
         List<Gallery> list = new ArrayList<>();
 
-        for (File directory : fileUtils.findDirectories()) {
-            if (galleryService.getByTitle(directory.getName()) != null) {
-                list.add(galleryService.getByTitle(directory.getName()));
-            } else {
-                list.add(convert(directory));
+        try {
+            for (Path directory : fileUtils.findDirectories()) {
+                if (galleryService.getByTitle(String.valueOf(directory.getFileName())) != null) {
+                    list.add(galleryService.getByTitle(String.valueOf(directory.getFileName())));
+                } else {
+                    list.add(convert(directory));
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return list;
     }
 
     public Gallery getDirectoryByTitle(String title) {
-        File file = null;
+        Path file = null;
         try {
-            file = fileUtils.findDirectoryByTitle(title);
+            file = fileUtils.getGalleryByName(title);
         } catch (IOException ex) {
             System.out.append("ERROR");
         }
@@ -44,9 +48,13 @@ public class FileService {
         return convert(file);
     }
 
-    public Gallery convert(File file) {
+    public Gallery convert(Path file) {
         if (file != null) {
-            return new Gallery(file.getName(), new Date(file.lastModified()));
+            try {
+                return new Gallery(file.getFileName().toString(), new Date(fileUtils.getLastModified(file)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }

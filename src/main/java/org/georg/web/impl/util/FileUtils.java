@@ -5,48 +5,75 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Comparator;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 @Component
 public class FileUtils {
 
+    final static int BUFFER = 2048;
+    DirectoryStream.Filter<Path> imagesFilter = new DirectoryStream.Filter<Path>() {
+        @Override
+        public boolean accept(Path file) throws IOException {
+            final PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + "**/*.{" + extension +
+                    "," + extension.toUpperCase() + "}");
+            return (Files.isRegularFile(file) && matcher.matches(file));
+        }
+    };
+    DirectoryStream.Filter<Path> directoryFilter = new DirectoryStream.Filter<Path>() {
+        @Override
+        public boolean accept(Path file) throws IOException {
+            return (Files.isDirectory(file));
+        }
+    };
     @Value("${file.scan.directory}")
-    private String path;
-
+    private String galleriesPath;
     @Value("${file.scan.extention}")
     private String extension;
-
     @Value("${file.thumbs.directory}")
     private String thumbsPath;
-
     @Value("${file.download.temp}")
     private String archivePath;
-
     @Value("${file.thumbs.watermark}")
     private String thumbsWatermark;
-
     @Value("${gallery.delta}")
     private Integer delta;
-
     @Autowired
     private HashCodeUtil hashCodeUtil;
 
-    final static int BUFFER = 2048;
-
-    public File[] findDirectories() {
-        File root = new File(path);
-        return root.listFiles(new FileFilter() {
-            public boolean accept(File f) {
-                return f.isDirectory();
-            }
-        });
+    private String formattedExtension() {
+        return "." + extension;
     }
 
-    public File downloadDirectory(String directory) {
+    public List<Path> findDirectories() throws IOException {
+        Path root = getFileOrDirectory(galleriesPath);
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(root, directoryFilter)) {
+            List<Path> result = new ArrayList<>();
+            for (Path path : stream) {
+                result.add(path);
+            }
+            return result;
+        } catch (IOException e) {
+            throw e;
+        }
+    }
+
+    /**
+     * Returns last modification time in ms.
+     *
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public long getLastModified(Path file) throws IOException {
+        BasicFileAttributes attrs = Files.readAttributes(file, BasicFileAttributes.class);
+        return attrs.lastModifiedTime().toMillis();
+    }
+
+    public File downloadGallery(String directory) {
         try {
             BufferedInputStream origin = null;
 
@@ -58,12 +85,12 @@ public class FileUtils {
             ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
             byte data[] = new byte[BUFFER];
 
-            File subDir = new File(path + "/" + directory);
+            File subDir = new File(galleriesPath + "/" + directory);
             String subdirList[] = subDir.list();
             for (String sd : subdirList) {
                 // get a list of files from current directory
-                File f = new File(path + "/" + directory + "/" + sd);
-                if (!f.isDirectory() && getExtension(f.getName()).equalsIgnoreCase(extension)) {
+                File f = new File(galleriesPath + "/" + directory + "/" + sd);
+                if (!f.isDirectory() /*&& formattedExtension(f.getName()).equalsIgnoreCase(extension)*/) {
                     FileInputStream fi = new FileInputStream(f);
                     origin = new BufferedInputStream(fi, BUFFER);
                     ZipEntry entry = new ZipEntry(sd);
@@ -92,37 +119,36 @@ public class FileUtils {
         return watermark;
     }
 
-    public File findDirectoryByTitle(final String title) throws IOException {
-        File root = new File(path);
-        File[] result = root.listFiles(new FileFilter() {
-            public boolean accept(File f) {
-                return title.equalsIgnoreCase(f.getName());
-            }
-        });
-        if (result.length != 1) throw new IOException();
-        return result[0];
+    /**
+     * Gets gallery by its name.
+     *
+     * @param galleryName
+     * @return
+     * @throws IOException
+     */
+    public Path getGalleryByName(final String galleryName) throws IOException {
+        return getFileOrDirectory(galleriesPath, galleryName);
     }
 
-    public File[] findImages(String dir, int start) {
-        File[] files = findImages(dir);
+    /**
+     * Finds all images (with given extension)
+     *
+     * @param galleryName directory imageName
+     * @param start       pagination start
+     * @return list of images, null if nothing found
+     */
+    public List<Path> findImagesInDirectoryStartingFrom(String galleryName, int start) {
 
-        if (files.length > 0) {
-            Arrays.sort(files, new Comparator<File>() {
-                @Override
-                public int compare(File o1, File o2) {
-                    if (o1.getName().length() > o2.getName().length()) {
-                        return 1;
-                    } else if (o1.getName().length() < o2.getName().length()) {
-                        return -1;
-                    }
-                    return o1.getName().compareTo(o2.getName());
+        if (start < 0 || galleryName == null || galleryName.isEmpty()) return null;
 
-                }
-            });
+        List<Path> files = findImages(galleryName);
 
-            if (files.length > delta) {
-                return Arrays.copyOfRange(files, start * delta,
-                        ((start + 1) * delta) > files.length ? files.length : (start + 1) * delta);
+        if (files.size() > 0) {
+            Collections.sort(files, new FileNameSorter());
+
+            if (files.size() > delta) {
+                return files.subList(start * delta,
+                        ((start + 1) * delta) > files.size() ? files.size() : (start + 1) * delta);
             }
 
             return files;
@@ -131,67 +157,128 @@ public class FileUtils {
         return null;
     }
 
-    public File[] findImages(String dir) {
-        File root = new File(path + "/" + dir);
-
-        return root.listFiles(new FileFilter() {
-            public boolean accept(File f) {
-                return f.isFile() && getExtension(f.getName()).equalsIgnoreCase(extension);
-            }
-        });
-    }
-
-    public Integer getCount(String dir) {
-        return findImages(dir).length;
-    }
-
-    public File[] findFiles(String dir, final String name) {
-        File root = new File(path + "/" + dir);
-        return root.listFiles(new FileFilter() {
-            public boolean accept(File f) {
-                return f.isFile() && f.getName().equalsIgnoreCase(name);
-            }
-        });
-    }
-
-    public File findThumb(String dir, String name) {
-        return getImage(dir, name, false);
-    }
-
-    public File findBig(String dir, String name) {
-        return getImage(dir, name, true);
-    }
-
-    private File getImage(String dir, String name, boolean big) {
-        File root = new File(thumbsPath);
-
-        File[] result = null;
-
-        final String thumbName = ((big) ? "big" : "") + hashCodeUtil.getDigest(dir + "/" + name);
-        result = root.listFiles(new FileFilter() {
-            public boolean accept(File f) {
-                return f.isFile() && f.getName().equalsIgnoreCase(thumbName);
-            }
-        });
-
-        if (result == null || result.length != 1) return null;
-        return result[0];
-    }
-
-    public String getThumbsPath() {
-        return thumbsPath;
-    }
-
-    public String getThumbNameWithPath(String dir, String name, boolean big) {
-        return getThumbsPath() + "/" + ((big) ? "big" : "") + hashCodeUtil.getDigest(dir + "/" + name);
-    }
-
-    protected String getExtension(String name) {
-        String[] str = name.split("\\.");
-        if (str.length > 1) {
-            return str[str.length - 1];
+    /**
+     * Internal method for listing all images.
+     *
+     * @param galleryName
+     * @return
+     */
+    private List<Path> findImages(String galleryName) {
+        Path baseDir;
+        try {
+            baseDir = getFileOrDirectory(galleriesPath, galleryName);
+        } catch (FileNotFoundException e) {
+            //TODO: add logger
+            return null;
         }
 
-        return ""; //-- no extension
+        try (DirectoryStream<Path> stream
+                     = Files.newDirectoryStream(baseDir, imagesFilter)) {
+            List<Path> files = new ArrayList<>();
+
+            for (Path file : stream) {
+                files.add(file);
+            }
+            return files;
+        } catch (IOException ex) {
+            return null;
+        }
+    }
+
+    /**
+     * Return total number of images.
+     *
+     * @param dir
+     * @return
+     */
+    public Integer getCount(String dir) {
+        return findImages(dir).size();
+    }
+
+    /**
+     * Gets single image for gallery
+     *
+     * @param galleryName
+     * @param imageName
+     * @return
+     */
+    public Path getImage(String galleryName, final String imageName) throws FileNotFoundException {
+        return getFileOrDirectory(galleriesPath, galleryName, imageName + formattedExtension());
+    }
+
+    /**
+     * Get small thumb for image in gallery.
+     *
+     * @param galleryName
+     * @param imageName
+     * @return
+     */
+    public Path getSmallThumb(String galleryName, String imageName) throws FileNotFoundException {
+        return getThumb(galleryName, imageName, false);
+    }
+
+    /**
+     * Get big thumb for image in gallery.
+     *
+     * @param galleryName
+     * @param imageName
+     * @return
+     */
+    public Path getBigThumb(String galleryName, String imageName) throws FileNotFoundException {
+        return getThumb(galleryName, imageName, true);
+    }
+
+    /**
+     * Internal method for getting
+     *
+     * @param galleryName
+     * @param imageName
+     * @param big
+     * @return
+     */
+    private Path getThumb(String galleryName, String imageName, boolean big) throws FileNotFoundException {
+        Path thumb = getFileOrDirectory(thumbsPath, false,
+                ((big) ? "big" : "") + hashCodeUtil.getDigest(galleryName + "/" + imageName) + formattedExtension());
+        return thumb;
+    }
+
+    /**
+     * Internal universal method for getting file or directory.
+     *
+     * @param basePath
+     * @param paths
+     * @return
+     * @throws FileNotFoundException
+     */
+    private Path getFileOrDirectory(String basePath, String... paths) throws FileNotFoundException {
+        return getFileOrDirectory(basePath, true, paths);
+    }
+
+    private Path getFileOrDirectory(String basePath, boolean returnOnlyIfExists, String... paths) throws FileNotFoundException {
+        Path directory = FileSystems.getDefault().getPath(basePath, paths);
+        if (returnOnlyIfExists) {
+            if (Files.exists(directory)) {
+                return directory;
+            }
+
+            throw new FileNotFoundException("File or directory not found");
+        } else return directory;
+    }
+
+    public String getThumbNameWithPath(String galleryName, String imageName, boolean big) throws FileNotFoundException {
+        return getThumb(galleryName, imageName, big).toString();
+    }
+
+    private class FileNameSorter implements Comparator<Path> {
+        @Override
+        public int compare(Path o1, Path o2) {
+            if (o1.getFileName().toString().length() > o2.getFileName().toString().length()) {
+                return 1;
+            } else if (o1.getFileName().toString().length() < o2.getFileName().toString().length()) {
+                return -1;
+            }
+            return o1.getFileName().toString().compareTo(o2.getFileName().toString());
+
+        }
     }
 }
