@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.*;
 import javax.mail.internet.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 @Component
 public class MailUtil {
@@ -27,57 +30,74 @@ public class MailUtil {
 
     public void sendActivationMail(User user, String code) {
         props.setProperty("mail.smtp.host", smtpServer);
-        props.setProperty("mail.smtp.protocol", "smtps");
+        //props.setProperty("mail.smtp.protocol", "smtps");
         props.setProperty("mail.smtp.starttls.enable", "true");
-        props.setProperty("mail.smtp.ssl.enable", "true");
+        //props.setProperty("mail.smtp.ssl.enable", "true");
         props.setProperty("mail.smtp.port", smtpPort);
-        props.setProperty("mail.smtp.user", smtpUser);
-        props.setProperty("mail.smtp.password", smtpPassword);
+        //props.setProperty("mail.smtp.user", smtpUser);
+        //props.setProperty("mail.smtp.password", smtpPassword);
+        props.setProperty("mail.smtp.auth", "true");
 
-        Session session = Session.getInstance(props, null);
-        MimeMessage message = new MimeMessage(session);
+        Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(smtpUser, smtpPassword);
+            }
+        });
 
         // Create the email addresses involved
         try {
+
+            MimeMessage message = new MimeMessage(session);
             InternetAddress from = new InternetAddress(activationFrom);
-            message.setSubject(activationSubject);
+            message.setHeader("Content-Type", "text/html; charset=UTF-8");
+/*
+            try (ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
+                 OutputStream out = MimeUtility.encode(baos2, "base64");) {
+
+                out.write(activationSubject.getBytes("UTF-8"));
+                out.flush();
+                message.setSubject(baos2.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
+
+            message.setSubject(MimeUtility.encodeText(activationSubject, "UTF-8", "Q"));
             message.setFrom(from);
+            Multipart multiP = new MimeMultipart();
+
+            InternetHeaders ihead = new InternetHeaders();
+            ihead.addHeader("Content-Type", "text/html; charset=UTF-8");
+            ihead.addHeader("Content-Transfer-Encoding", "base64");
+
+            String messageBody = "Пожалуйста нажмите на ссылку для активации Вашего аккаунта :" +
+                    " <a href=\"http://www.georg.org.ua:8080/activate_user/" + code + "\"> ссылка </a>";
+
+            try (ByteArrayOutputStream body = new ByteArrayOutputStream();
+                 OutputStream bodyOut = MimeUtility.encode(body, "base64");) {
+
+                bodyOut.write(messageBody.getBytes("UTF-8"));//str - тип String
+                bodyOut.flush();
+
+                MimeBodyPart mbp = new MimeBodyPart(ihead, body.toByteArray());
+                mbp.setDisposition(Part.INLINE);
+                multiP.addBodyPart(mbp);
+
+                message.setContent(multiP, "text/html");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
             message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getLogin()));
-
-            // Create a multi-part to combine the parts
-            Multipart multipart = new MimeMultipart("alternative");
-
-            // Create your text message part
-            BodyPart messageBodyPart = new MimeBodyPart();
-            messageBodyPart.setText("some text to send");
-
-            // Add the text part to the multipart
-            multipart.addBodyPart(messageBodyPart);
-
-            // Create the html part
-            messageBodyPart = new MimeBodyPart();
-            String htmlMessage = "Our html text";
-            messageBodyPart.setContent(htmlMessage, "text/html");
-
-
-            // Add html part to multi part
-            multipart.addBodyPart(messageBodyPart);
-
-            // Associate multi-part with message
-            message.setContent(multipart);
-
-            // Send message
-            Transport transport = session.getTransport("smtp");
-            transport.connect("smtp.gmail.com", "username", "password");
-            System.out.println("Transport: " + transport.toString());
-            transport.sendMessage(message, message.getAllRecipients());
-
-
+            message.writeTo(System.out);
+            Transport.send(message);
         } catch (AddressException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (MessagingException e) {
             // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

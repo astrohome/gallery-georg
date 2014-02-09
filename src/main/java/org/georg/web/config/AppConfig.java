@@ -18,6 +18,7 @@ public class AppConfig {
         PropertyPlaceholderConfigurer ppc = new PropertyPlaceholderConfigurer();
         ppc.setLocation(new ClassPathResource("application.properties"));
         ppc.setIgnoreUnresolvablePlaceholders(true);
+        ppc.setFileEncoding("UTF-8");
         return ppc;
     }
 }

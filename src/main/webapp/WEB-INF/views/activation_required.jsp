@@ -5,10 +5,8 @@
 <t:generic>
     <jsp:attribute name="title">Register new user</jsp:attribute>
     <jsp:body>
-        Check you email shortly. Click on the link there.
+        <spring:message code="page.activation.info"/>
 
-        <a href="http://90.29.203.213:8080/activate_user/${code}"/>Link in email</a>
-
-        <a href="/">Back to index</a>
+        <a href="/"><spring:message code="page.activation.back-to-index"/> </a>
     </jsp:body>
 </t:generic>

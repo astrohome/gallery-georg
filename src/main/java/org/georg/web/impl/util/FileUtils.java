@@ -25,7 +25,10 @@ public class FileUtils {
     DirectoryStream.Filter<Path> directoryFilter = new DirectoryStream.Filter<Path>() {
         @Override
         public boolean accept(Path file) throws IOException {
-            return (Files.isDirectory(file));
+            if (Files.isDirectory(file)) {
+                return (findImages(file.getFileName().toString()).size() > 0);
+            }
+            return false;
         }
     };
     @Value("${file.scan.directory}")
@@ -148,8 +151,8 @@ public class FileUtils {
             Collections.sort(files, new FileNameSorter());
 
             if (files.size() > delta) {
-                return files.subList(start * delta,
-                        ((start + 1) * delta) > files.size() ? files.size() : (start + 1) * delta);
+                return files.subList((start - 1) * delta,
+                        ((start) * delta) > files.size() ? files.size() : (start) * delta);
             }
 
             return files;

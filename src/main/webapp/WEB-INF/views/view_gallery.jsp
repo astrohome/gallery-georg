@@ -87,9 +87,18 @@
             });
         </script>
 
-        <c:url value="/view" var="url">
-            <c:param name="id" value="${param.id}"/>
-        </c:url>
+        <c:choose>
+            <c:when test="${gallery.hidden}">
+                <c:url value="/code" var="url">
+                    <c:param name="code" value="${param.code}"/>
+                </c:url>
+            </c:when>
+            <c:otherwise>
+                <c:url value="/view" var="url">
+                    <c:param name="id" value="${param.id}"/>
+                </c:url>
+            </c:otherwise>
+        </c:choose>
 
                 <script type='text/javascript'>
                     var options = {
@@ -102,13 +111,13 @@
                         currentPage: ${currentPage},
                         totalPages: ${pages}
                     }
-                    jQuery('#example').bootstrapPaginator(options);
+                    jQuery('#paginationContainer').bootstrapPaginator(options);
                 </script>
     </jsp:attribute>
     <jsp:body>
         <t:singlegallery listImages="${listImages}"/>
 
-        <div id="example"></div>
+        <div id="paginationContainer"></div>
 
         <sec:authorize access="isAuthenticated()">
             <span class="simpleCart_quantity"></span> фотографий - <span class="simpleCart_total"></span>

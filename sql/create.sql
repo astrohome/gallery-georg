@@ -1,0 +1,18 @@
+CREATE USER gal;
+ALTER ROLE gal WITH CREATEDB;
+ALTER USER gal WITH ENCRYPTED PASSWORD 'gal';
+CREATE DATABASE gallery ENCODING 'UTF-8' OWNER gal TEMPLATE template0;
+
+CREATE TABLE gallery
+(
+  id        BIGINT                   NOT NULL,
+  created   TIMESTAMP WITH TIME ZONE NOT NULL,
+  hidden    BOOLEAN,
+  password  CHARACTER VARYING(255),
+  title     CHARACTER VARYING(255),
+  watermark BOOLEAN,
+  CONSTRAINT gallery_pkey PRIMARY KEY (id)
+)
+WITH (
+OIDS = FALSE
+);

@@ -10,7 +10,7 @@
 
     <jsp:body>
         <sec:authorize access="isAuthenticated()">
-            <form:form action="private" cssClass="navbar-form pull-left" method="POST">
+            <form:form action="code" cssClass="navbar-form pull-left" method="GET">
                 <input type="text" class="span2" name="code"/>
                 <input type="submit" class="btn" value="<spring:message code="submit" />"/>
             </form:form>

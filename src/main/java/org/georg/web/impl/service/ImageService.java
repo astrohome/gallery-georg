@@ -119,7 +119,7 @@ public class ImageService {
     }
 
     public List<String> getImages(Gallery gallery, int page) {
-        if (page <= 0) page = 0;
+        if (page <= 0) page = 1;
 
         List<Path> images = fileUtils.findImagesInDirectoryStartingFrom(gallery.getTitle(), page);
         List<String> result = new ArrayList<>();

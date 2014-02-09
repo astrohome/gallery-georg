@@ -2,6 +2,7 @@ package org.georg.web.controller;
 
 import org.georg.web.impl.model.User;
 import org.georg.web.impl.service.UserService;
+import org.georg.web.impl.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,33 +17,28 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private MailUtil mailUtil;
+
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(ModelMap model) {
-
         return "login";
-
     }
 
     @RequestMapping(value = "/login_private", method = RequestMethod.GET)
     public String loginPrivate(ModelMap model) {
-
         return "login_private";
-
     }
 
     @RequestMapping(value = "/loginfailed", method = RequestMethod.GET)
     public String loginerror(ModelMap model) {
-
         model.addAttribute("error", "true");
         return "login";
-
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(ModelMap model) {
-
         return "login";
-
     }
 
     @RequestMapping(value = "/register_user", method = RequestMethod.GET)
@@ -57,6 +53,7 @@ public class LoginController {
         String code = userService.registerNewUser(user);
         ModelAndView page = new ModelAndView("activation_required");
         page.addObject("code", code);
+        mailUtil.sendActivationMail(user, code);
         return page;
     }
 

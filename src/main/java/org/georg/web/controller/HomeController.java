@@ -138,7 +138,7 @@ public class HomeController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/private", method = RequestMethod.POST)
+    @RequestMapping(value = "/code", method = RequestMethod.GET)
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ModelAndView singlePrivateGallery(HttpServletResponse response,
                                              @RequestParam("code") String code,
@@ -185,6 +185,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/putOrder", method = RequestMethod.POST)
+    @Secured({"ROLE_USER"})
     public ModelAndView putOrder(HttpServletResponse response, HttpServletRequest request) {
         Integer itemCount = Integer.valueOf(request.getParameter("itemCount"));
 
