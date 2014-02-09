@@ -14,6 +14,16 @@ import java.util.List;
 
 @Service
 public class PaymentMethodService extends BaseContainerService<PaymentMethod, PaymentMethodListContainer, Integer> {
+    @Autowired
+    private PaymentMethodDAO paymentMethodDAO;
+
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteItem(Integer id) {
+        PaymentMethod obj = paymentMethodDAO.getById(id);
+        paymentMethodDAO.delete(obj);
+    }
+
     @Override
     @Transactional(readOnly = false)
     public List<PaymentMethod> updateFromContainer(PaymentMethodListContainer paymentMethodListContainer) {
@@ -43,9 +53,6 @@ public class PaymentMethodService extends BaseContainerService<PaymentMethod, Pa
 
         return paymentMethodDAO.updateList(addOrUpdate, original);
     }
-
-    @Autowired
-    private PaymentMethodDAO paymentMethodDAO;
 
     @Override
     @Transactional(readOnly = true)

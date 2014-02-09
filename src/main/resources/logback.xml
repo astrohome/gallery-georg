@@ -1,19 +1,21 @@
-<?xml version='1.0' encoding='UTF-8'?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <!-- encoders are assigned the type
-             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d %5p | %t | %-55logger{55} | %m %n</pattern>
         </encoder>
     </appender>
 
-    <logger name="org.springframework" level="WARNING"/>
+    <logger name="org.georg">
+        <level value="DEBUG"/>
+    </logger>
 
-    <root level="warning">
-        <appender-ref ref="STDOUT"/>
-        <appender-ref ref="FILE"/>
+    <logger name="org.springframework">
+        <level value="WARN"/>
+    </logger>
+
+    <root>
+        <level value="INFO"/>
+        <appender-ref ref="CONSOLE"/>
     </root>
 </configuration>

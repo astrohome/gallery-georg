@@ -1,11 +1,11 @@
 package org.georg.web.impl.model;
 
 
-import javax.validation.constraints.NotNull;
 import org.georg.web.impl.util.DateUtil;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Date;
@@ -71,15 +71,15 @@ public class Gallery {
         return created;
     }
 
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
     public String getCreatedText() {
         if (createdText == null || createdText.isEmpty()) {
             createdText = DateUtil.toTextString(created);
         }
         return createdText;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
     }
 
     public boolean isHidden() {

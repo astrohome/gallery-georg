@@ -18,9 +18,8 @@ public class FileUtils {
     DirectoryStream.Filter<Path> imagesFilter = new DirectoryStream.Filter<Path>() {
         @Override
         public boolean accept(Path file) throws IOException {
-            final PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + "**/*.{" + extension +
-                    "," + extension.toUpperCase() + "}");
-            return (Files.isRegularFile(file) && matcher.matches(file));
+            final PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:**/*." + extension);
+            return (!Files.isDirectory(file) && matcher.matches(file));
         }
     };
     DirectoryStream.Filter<Path> directoryFilter = new DirectoryStream.Filter<Path>() {
@@ -44,7 +43,7 @@ public class FileUtils {
     @Autowired
     private HashCodeUtil hashCodeUtil;
 
-    private String formattedExtension() {
+    public String getFormattedExtension() {
         return "." + extension;
     }
 
@@ -79,32 +78,34 @@ public class FileUtils {
 
             String title = archivePath + "/" + Calendar.getInstance().getTimeInMillis() + ".zip";
 
-            FileOutputStream dest =
-                    new FileOutputStream(new File(title));
+            try (FileOutputStream dest =
+                         new FileOutputStream(new File(title));
+                 ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest))) {
+                byte data[] = new byte[BUFFER];
 
-            ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
-            byte data[] = new byte[BUFFER];
+                File subDir = new File(galleriesPath + "/" + directory);
+                String subdirList[] = subDir.list();
 
-            File subDir = new File(galleriesPath + "/" + directory);
-            String subdirList[] = subDir.list();
-            for (String sd : subdirList) {
-                // get a list of files from current directory
-                File f = new File(galleriesPath + "/" + directory + "/" + sd);
-                if (!f.isDirectory() /*&& formattedExtension(f.getName()).equalsIgnoreCase(extension)*/) {
-                    FileInputStream fi = new FileInputStream(f);
-                    origin = new BufferedInputStream(fi, BUFFER);
-                    ZipEntry entry = new ZipEntry(sd);
-                    out.putNextEntry(entry);
-                    int count;
-                    while ((count = origin.read(data, 0, BUFFER)) != -1) {
-                        out.write(data, 0, count);
-                        out.flush();
+                for (String sd : subdirList) {
+                    // get a list of files from current directory
+                    File f = new File(galleriesPath + "/" + directory + "/" + sd);
+                    if (!f.isDirectory() /*&& getFormattedExtension(f.getName()).equalsIgnoreCase(extension)*/) {
+                        try (FileInputStream fi = new FileInputStream(f)) {
+                            origin = new BufferedInputStream(fi, BUFFER);
+                            ZipEntry entry = new ZipEntry(sd);
+                            out.putNextEntry(entry);
+                            int count;
+                            while ((count = origin.read(data, 0, BUFFER)) != -1) {
+                                out.write(data, 0, count);
+                                out.flush();
+                            }
+                        }
                     }
                 }
+                origin.close();
+                out.flush();
+                out.close();
             }
-            origin.close();
-            out.flush();
-            out.close();
 
             File result = new File(title);
             return result;
@@ -203,7 +204,7 @@ public class FileUtils {
      * @return
      */
     public Path getImage(String galleryName, final String imageName) throws FileNotFoundException {
-        return getFileOrDirectory(galleriesPath, galleryName, imageName + formattedExtension());
+        return getFileOrDirectory(galleriesPath, galleryName, imageName);
     }
 
     /**
@@ -238,7 +239,7 @@ public class FileUtils {
      */
     private Path getThumb(String galleryName, String imageName, boolean big) throws FileNotFoundException {
         Path thumb = getFileOrDirectory(thumbsPath, false,
-                ((big) ? "big" : "") + hashCodeUtil.getDigest(galleryName + "/" + imageName) + formattedExtension());
+                ((big) ? "big" : "") + hashCodeUtil.getDigest(galleryName + "/" + imageName) + getFormattedExtension());
         return thumb;
     }
 
@@ -267,6 +268,14 @@ public class FileUtils {
 
     public String getThumbNameWithPath(String galleryName, String imageName, boolean big) throws FileNotFoundException {
         return getThumb(galleryName, imageName, big).toString();
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
     }
 
     private class FileNameSorter implements Comparator<Path> {

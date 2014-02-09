@@ -31,6 +31,12 @@ public class PriceService extends BaseContainerService<Price, PriceListContainer
 
     @Override
     @Transactional(readOnly = true)
+    public void deleteItem(IdPK id) {
+        return;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Price getById(IdPK id) {
         return priceDAO.getById(id);
     }

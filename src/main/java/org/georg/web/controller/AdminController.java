@@ -4,6 +4,8 @@ import org.georg.web.container.*;
 import org.georg.web.impl.dao.base.IGenericDAO;
 import org.georg.web.impl.model.Gallery;
 import org.georg.web.impl.service.*;
+import org.georg.web.impl.util.Log;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.LinkedHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @SuppressWarnings("SpringMVCViewInspection")
 @Controller
@@ -21,11 +25,17 @@ import java.util.LinkedHashMap;
 @Secured("ROLE_ADMIN")
 public class AdminController {
 
+    @Log
+    Logger logger;
+
     @Autowired
     private FileService fileService;
 
     @Autowired
     private GalleryService galleryService;
+
+    @Autowired
+    private ImageService imageService;
 
     @Autowired
     private FormatService formatService;
@@ -90,6 +100,9 @@ public class AdminController {
                 modelAndView = new ModelAndView("admin/video");
                 modelAndView.addObject("videoListContainer", new VideoListContainer(videoService.getAll("id", IGenericDAO.SortingTypes.asc)));
                 break;
+            case "galleryProcessing":
+                modelAndView = new ModelAndView("admin/processing");
+                break;
             default:
                 modelAndView = new ModelAndView("admin/gallery");
                 modelAndView.addObject("listDirectories", fileService.getDirectories());
@@ -105,17 +118,31 @@ public class AdminController {
     @RequestMapping(value = "/admin", params = {"title"}, method = RequestMethod.GET)
     @Secured("ROLE_ADMIN")
     public ModelAndView adminEditGallery(@RequestParam("title") String title) throws IOException {
-
         String realTitle = URLDecoder.decode(title, "UTF-8");
         ModelAndView modelAndView = new ModelAndView("edit_gallery");
-        modelAndView.addObject("gallery", fileService.getDirectoryByTitle(realTitle));
+        modelAndView.addObject("gallery", galleryService.getByTitleFromDBorFileSystem(realTitle));
         return modelAndView;
     }
 
     @RequestMapping(value = "/saveGallery", method = RequestMethod.POST)
     @Secured("ROLE_ADMIN")
-    public ModelAndView adminPost(@ModelAttribute("gallery") Gallery gallery) throws IOException {
-        galleryService.updateItem(gallery);
+    public String adminPost(@ModelAttribute("gallery") Gallery gallery) throws IOException {
+        final Gallery updatedGallery = galleryService.updateItem(gallery);
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                imageService.generatePreviews(updatedGallery);
+            }
+        };
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.submit(r);
+        return "redirect:/admin?page=galleryProcessing";
+    }
+
+    @RequestMapping(value = "/deleteGallery", method = RequestMethod.GET, headers = "Accept=application/json")
+    @Secured("ROLE_ADMIN")
+    public ModelAndView adminDeleteGallery(@RequestParam("id") Integer id) {
+        galleryService.deleteItem(Long.valueOf(id));
         ModelAndView modelAndView = new ModelAndView("redirect:/admin?page=gal");
         modelAndView.addObject("listDirectories", fileService.getDirectories());
         modelAndView.addObject("success", true);
@@ -123,7 +150,35 @@ public class AdminController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/getProgress", method = RequestMethod.GET, headers = "Accept=application/json")
+    @Secured("ROLE_ADMIN")
+    public
+    @ResponseBody
+    int getProgress() {
+        return imageService.getProgress();
+    }
+
+    @RequestMapping(value = "/getTotal", method = RequestMethod.GET, headers = "Accept=application/json")
+    @Secured("ROLE_ADMIN")
+    public
+    @ResponseBody
+    int getTotal() {
+        return imageService.getTotal();
+    }
+
+    @RequestMapping(value = "/processingFinished")
+    @Secured("ROLE_ADMIN")
+    public ModelAndView processingFinished() {
+        ModelAndView modelAndView = new ModelAndView("redirect:/admin?page=gal");
+        modelAndView.addObject("listDirectories", fileService.getDirectories());
+        modelAndView.addObject("success", true);
+        constructMenu(modelAndView);
+        return modelAndView;
+    }
+
+
     @RequestMapping(value = "/editformat", method = RequestMethod.POST)
+    @Secured("ROLE_ADMIN")
     public String editFormatListContainer(@ModelAttribute FormatListContainer formatListContainer, HttpSession session) {
         FormatListContainer newFormatListContainer = new FormatListContainer(formatService.updateFromContainer(formatListContainer));
 
@@ -132,6 +187,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/editpapertype", method = RequestMethod.POST)
+    @Secured("ROLE_ADMIN")
     public String editPaperTypeListContainer(@ModelAttribute PaperTypeListContainer paperTypeListContainer, HttpSession session) {
         PaperTypeListContainer newFormatListContainer = new PaperTypeListContainer(paperTypeService.updateFromContainer(paperTypeListContainer));
 
@@ -140,6 +196,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/editvideo", method = RequestMethod.POST)
+    @Secured("ROLE_ADMIN")
     public String editVideoListContainer(@ModelAttribute VideoListContainer videoListContainer, HttpSession session) {
         VideoListContainer newVideoListContainer = new VideoListContainer(videoService.updateFromContainer(videoListContainer));
 
@@ -148,6 +205,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/editprice", method = RequestMethod.POST)
+    @Secured("ROLE_ADMIN")
     public String editPriceListContainer(@ModelAttribute PriceListContainer priceListContainer, HttpSession session) {
         PriceListContainer newPriceListContainer = new PriceListContainer(priceService.updateFromContainer(priceListContainer));
 
@@ -156,6 +214,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/editpaymentmethod", method = RequestMethod.POST)
+    @Secured("ROLE_ADMIN")
     public String editPaymentMethods(@ModelAttribute PaymentMethodListContainer paymentMethodListContainer, HttpSession session) {
         PaymentMethodListContainer newPaymentMethodListContainer = new PaymentMethodListContainer(paymentMethodService.updateFromContainer(paymentMethodListContainer));
         return "redirect:/admin?page=payment&success=true&count=" + newPaymentMethodListContainer.getList().size();

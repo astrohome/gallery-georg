@@ -80,6 +80,13 @@ public class GalleryService extends BaseService<Gallery, Long> {
         return dao.getById(id);
     }
 
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteItem(Long id) {
+        Gallery obj = dao.getById(id);
+        dao.delete(obj);
+    }
+
     @Transactional(readOnly = true)
     public Gallery getByTitleFromDBorFileSystem(String title) {
         Gallery obj = dao.findByTitle(title);
@@ -90,10 +97,10 @@ public class GalleryService extends BaseService<Gallery, Long> {
         return obj;
     }
 
-    @Override
     @Transactional(readOnly = false)
     public Gallery updateItem(Gallery gallery) {
-        return dao.update(gallery);
+        Gallery updatedGallery = dao.update(gallery);
+        return updatedGallery;
     }
 
     @Transactional(readOnly = true)

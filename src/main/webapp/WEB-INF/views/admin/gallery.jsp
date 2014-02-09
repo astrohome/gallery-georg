@@ -87,13 +87,14 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="/?id=${directory.id}" target="_blank"><i class="icon-eye-open"></i>
+                                        <a href="/view?id=${directory.id}" target="_blank"><i class="icon-eye-open"></i>
                                             <spring:message code="view"/></a>
                                     </li>
                                     <li class="divider"></li>
                                     <li>
-                                        <a href="/?delete=${directory.id}"><i class="icon-remove"></i> <spring:message
-                                                code="delete"/></a>
+                                        <a href="/deleteGallery?id=${directory.id}"><i class="icon-remove"></i>
+                                            <spring:message
+                                                    code="delete"/></a>
                                     </li>
                                 </ul>
                             </div>

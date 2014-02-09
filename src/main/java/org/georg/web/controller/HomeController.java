@@ -3,6 +3,7 @@ package org.georg.web.controller;
 import org.georg.web.impl.model.Gallery;
 import org.georg.web.impl.model.OrderItem;
 import org.georg.web.impl.service.*;
+import org.georg.web.impl.util.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
@@ -47,6 +48,9 @@ public class HomeController {
 
     @Value("${gallery.delta}")
     private Integer delta;
+
+    @Autowired
+    private FileUtils fileUtils;
 
     private void constructPublicMenu(ModelAndView modelAndView) {
         LinkedHashMap<String, String> menu = new LinkedHashMap();
@@ -114,7 +118,7 @@ public class HomeController {
     @ResponseBody
     public byte[] getThumb(@PathVariable("folder") String folder,
                            @PathVariable("image") String image) throws UnsupportedEncodingException {
-        return imageService.getThumb(URLDecoder.decode(folder, "UTF-8"), URLDecoder.decode(image, "UTF-8"));
+        return imageService.getThumb(URLDecoder.decode(folder, "UTF-8"), URLDecoder.decode(image, "UTF-8") + fileUtils.getFormattedExtension());
     }
 
     @RequestMapping(value = "/getImage/{folder}/{image}")
@@ -122,7 +126,7 @@ public class HomeController {
     public byte[] getBigImage(@PathVariable("folder") String folder,
                               @PathVariable("image") String image) throws UnsupportedEncodingException {
         Gallery gal = galleryService.getByTitle(folder);
-        return imageService.getBig(URLDecoder.decode(folder, "UTF-8"), URLDecoder.decode(image, "UTF-8"),
+        return imageService.getBig(URLDecoder.decode(folder, "UTF-8"), URLDecoder.decode(image, "UTF-8") + fileUtils.getFormattedExtension(),
                 gal.isWatermark());
     }
 
@@ -138,10 +142,25 @@ public class HomeController {
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ModelAndView singlePrivateGallery(HttpServletResponse response,
                                              @RequestParam("code") String code,
-                                             @RequestParam("page") Integer page) {
+                                             @RequestParam(value = "page", defaultValue = "1") Integer page) {
 
         ModelAndView modelAndView = new ModelAndView("view_gallery");
         Gallery gal = galleryService.getByCode(code);
+
+        int total = imageService.getImagesCount(gal);
+        int pages = 1;
+
+        if (total / delta > 1) {
+            pages = (int) Math.ceil(total / (float) delta);
+        }
+
+        if (page <= 0)
+            page = 1;
+        if (page > pages)
+            page = pages;
+
+        modelAndView.addObject("pages", pages);
+        modelAndView.addObject("currentPage", page);
         modelAndView.addObject("gallery", gal);
         modelAndView.addObject("prices", priceService.getAll());
         modelAndView.addObject("listImages", imageService.getImages(gal, page));

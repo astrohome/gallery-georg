@@ -54,7 +54,7 @@ public class ImageService {
             if (big) {
                 img = Thumbnails.of(getFile(gallery, image).toFile())
                         .size(800, 800)
-                        .outputFormat("jpg")
+                        .outputFormat(fileUtils.getExtension())
                         .asBufferedImage();
                 if (watermark) {
                     BufferedImage watermarkImage = ImageIO.read(fileUtils.getWatermarkImage());
@@ -66,25 +66,24 @@ public class ImageService {
                 img = Thumbnails.of(getFile(gallery, image).toFile())
                         .size(150, 150)
                         .crop(Positions.CENTER)
-                        .outputFormat("jpg")
+                        .outputFormat(fileUtils.getExtension())
                         .outputQuality(0.4f)
                         .asBufferedImage();
             }
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(img, "jpg", baos);
-            baos.flush();
-            imageInByte = baos.toByteArray();
-            baos.close();
+            try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+                ImageIO.write(img, fileUtils.getExtension(), baos);
+                baos.flush();
+                imageInByte = baos.toByteArray();
+            }
 
             File output = new File(path);
             output.createNewFile();
 
-            FileOutputStream fo = new FileOutputStream(output);
-
-            ImageIO.write(img, "jpg", fo);
-            fo.flush();
-            fo.close();
+            try (FileOutputStream fo = new FileOutputStream(output)) {
+                ImageIO.write(img, fileUtils.getExtension(), fo);
+                fo.flush();
+            }
         } catch (IOException e) {
             return null;
         }
@@ -125,10 +124,33 @@ public class ImageService {
         List<Path> images = fileUtils.findImagesInDirectoryStartingFrom(gallery.getTitle(), page);
         List<String> result = new ArrayList<>();
         for (Path image : images) {
-            result.add(image.getFileName().toString().toLowerCase());
+            result.add(image.getFileName().toString());
         }
 
         return result;
+    }
+
+    private Integer progress;
+    private Integer imageCount;
+
+    public void generatePreviews(Gallery gallery) {
+        imageCount = getImagesCount(gallery);
+        Integer pageSize = getPageSize();
+        Integer pages = (int) Math.ceil(imageCount / (float) pageSize);
+
+        for (int i = 0; i < pages; i++) {
+            List<String> images = getImages(gallery, i);
+            for (int j = 0; j < images.size(); j++) {
+                getThumb(gallery.getTitle(), images.get(j));
+                getBig(gallery.getTitle(), images.get(j), gallery.isWatermark());
+                this.progress = (i * pageSize + j);
+                System.out.println("-------- processing preview " + (i * pageSize + j) + " of " + imageCount);
+            }
+        }
+    }
+
+    public Integer getPageSize() {
+        return this.delta;
     }
 
     public Integer getImagesCount(Gallery gallery) {
@@ -140,5 +162,13 @@ public class ImageService {
         if (file == null)
             return null;
         return readImage(file.toPath());
+    }
+
+    public Integer getProgress() {
+        return progress;
+    }
+
+    public Integer getTotal() {
+        return imageCount;
     }
 }

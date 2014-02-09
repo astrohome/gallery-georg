@@ -21,6 +21,13 @@ public class FormatService extends BaseContainerService<Format, FormatListContai
     private IFormatDAO formatDao;
 
     @Override
+    @Transactional(readOnly = false)
+    public void deleteItem(Integer id) {
+        Format obj = formatDao.getById(id);
+        formatDao.delete(obj);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Format getById(Integer id) {
         return formatDao.getById(id);

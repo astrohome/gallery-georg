@@ -6,8 +6,8 @@
     <jsp:attribute name="title">
         Edit gallery ${gallery.title}
     </jsp:attribute>
-    <jsp:body>
-        <script>
+    <jsp:attribute name="bottom">
+        <script type="text/javascript">
             $(document).ready(function () {
 
                 $("#generate").click(function () {
@@ -58,6 +58,8 @@
                 }
             });
         </script>
+    </jsp:attribute>
+    <jsp:body>
         <form:form method="POST" cssClass="navbar-form pull-left" action="saveGallery.html" modelAttribute="gallery">
 
             <table>
@@ -75,11 +77,15 @@
                 </tr>
                 <tr>
                     <td><form:label path="hidden">Private?</form:label></td>
-                    <td><form:checkbox path="hidden"/></td>
+                    <td><form:checkbox path="hidden"/>
+                        <c:if test="${not empty gallery.password}">
+                            Password: <c:out value="${gallery.password}"/>
+                        </c:if>
+                    </td>
                 </tr>
                 <tr id="password_generation" class="hidden">
                     <td><form:label path="password">Password</form:label></td>
-                    <td><form:input path="password"/> <input type="button" id="generate" value="Generate new"></td>
+                    <td><form:input path="password"/><input type="button" id="generate" value="Generate new"></td>
                 </tr>
                 <tr>
                     <td><form:label path="watermark">Watermark?</form:label></td>

@@ -68,9 +68,8 @@ public class GenericDAO<T, ID extends Serializable> implements IGenericDAO<T, ID
     }
 
     @Override
-    final public T delete(T entity) {
+    final public void delete(T entity) {
         this.getCurrentSession().delete(entity);
-        return entity;
     }
 
     final public Session getCurrentSession() {

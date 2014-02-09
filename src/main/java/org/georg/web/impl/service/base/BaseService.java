@@ -19,4 +19,6 @@ public abstract class BaseService<T, I extends Serializable> {
     public abstract List<T> getAll(String column, IGenericDAO.SortingTypes sort);
 
     public abstract T updateItem(T item);
+
+    public abstract void deleteItem(I id);
 }

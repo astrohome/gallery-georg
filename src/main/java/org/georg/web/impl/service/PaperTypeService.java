@@ -24,6 +24,13 @@ public class PaperTypeService extends BaseContainerService<PaperType, PaperTypeL
         return paperTypeDAO.getById(id);
     }
 
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteItem(Integer id) {
+        PaperType obj = paperTypeDAO.getById(id);
+        paperTypeDAO.delete(obj);
+    }
+
     @Autowired
     private IPaperTypeDAO paperTypeDAO;
 

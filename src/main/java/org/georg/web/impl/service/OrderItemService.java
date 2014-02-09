@@ -19,6 +19,13 @@ public class OrderItemService extends BaseService<OrderItem, Integer> {
     private IOrderItemDAO orderItemDAO;
 
     @Override
+    @Transactional(readOnly = false)
+    public void deleteItem(Integer id) {
+        OrderItem obj = orderItemDAO.getById(id);
+        orderItemDAO.delete(obj);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public OrderItem getById(Integer id) {
         return orderItemDAO.getById(id);

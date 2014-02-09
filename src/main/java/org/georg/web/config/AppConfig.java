@@ -14,7 +14,7 @@ import org.springframework.core.io.ClassPathResource;
 public class AppConfig {
     //<context:property-placeholder location="classpath:application.properties"></context:property-placeholder>
     @Bean
-    public PropertyPlaceholderConfigurer getPropertyPlaceholderConfigurer() {
+    public static PropertyPlaceholderConfigurer getPropertyPlaceholderConfigurer() {
         PropertyPlaceholderConfigurer ppc = new PropertyPlaceholderConfigurer();
         ppc.setLocation(new ClassPathResource("application.properties"));
         ppc.setIgnoreUnresolvablePlaceholders(true);

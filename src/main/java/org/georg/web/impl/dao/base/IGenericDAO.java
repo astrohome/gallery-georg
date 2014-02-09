@@ -57,7 +57,7 @@ public interface IGenericDAO<T, ID extends Serializable> {
      * @param entity
      * @return Object
      */
-    T delete(T entity);
+    void delete(T entity);
 
     /**
      * @return The number of DB rows matching to the DAO

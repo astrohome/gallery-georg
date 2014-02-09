@@ -26,7 +26,13 @@ public class VideoService extends BaseContainerService<Video, VideoListContainer
     @Override
     @Transactional(readOnly = true)
     public Video getById(Integer id) {
-        return null;
+        return videoDAO.getById(id);
+    }
+
+    @Override
+    public void deleteItem(Integer id) {
+        Video obj = videoDAO.getById(id);
+        videoDAO.delete(obj);
     }
 
     @Override
