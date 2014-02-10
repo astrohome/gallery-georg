@@ -54,7 +54,7 @@
                                     <form:input readonly="true" path="list[${i.index}].id" value="${format.id}"/>
                                 </td>
                                 <td>
-                                    <form:input path="list[${i.index}].format"/>
+                                    <form:input path="list[${i.index}].format" required="true"/>
                                 </td>
                                 <td><a href="#" class="btn btn-danger removeFormat">
                                     <div class="icon-remove"></div>
@@ -67,7 +67,7 @@
                                     <form:input path="list[0].id" disabled="true"/>
                                 </td>
                                 <td>
-                                    <form:input path="list[0].format"/>
+                                    <form:input path="list[0].format" required="true"/>
                                 </td>
                                 <td><a href="#" class="btn btn-danger removeFormat">
                                     <div class="icon-remove"></div>

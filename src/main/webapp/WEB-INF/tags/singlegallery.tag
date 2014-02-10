@@ -17,7 +17,7 @@
 <c:if test="${not empty url}">
     <div id="preparing-file-modal" title="<spring:message code="page.public.download.preparing"/>"
          style="display: none;">
-        <spring:message code="page.public.download.pleasewait"/>
+        <spring:message code="page.public.download.please-wait"/>
 
         <div class="progress progress-striped active">
             <div class="bar" style="width: 100%;"></div>
@@ -58,7 +58,8 @@
                                     paper-id="${price.paperType.id}" value="${price.price}">${price}</option>
                         </c:forEach>
                     </select>
-                    <a class="btn item_add" href="javascript:;" title="<spring:message code="page.public.addtocard"/>">
+                    <a class="btn item_add" href="javascript:;"
+                       title="<spring:message code="page.public.add-to-card"/>">
                         <i class="icon-shopping-cart"></i>
                     </a>
                 </div>

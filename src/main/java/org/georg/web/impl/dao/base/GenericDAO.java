@@ -68,6 +68,16 @@ public class GenericDAO<T, ID extends Serializable> implements IGenericDAO<T, ID
     }
 
     @Override
+    public T createIfNotExists(T entity, ID id) {
+        T obj = (T) getCurrentSession().get(persistentClass, id);
+        if (obj != null) {
+            return null;
+        }
+        getCurrentSession().save(entity);
+        return entity;
+    }
+
+    @Override
     final public void delete(T entity) {
         this.getCurrentSession().delete(entity);
     }

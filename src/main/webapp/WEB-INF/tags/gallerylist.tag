@@ -6,7 +6,7 @@
 
 <c:if test="${showFilter}">
     <div class="clearfix"></div>
-    <spring:message key="page.public.datesearch"/><br/>
+    <spring:message key="page.public.date-search"/><br/>
 
     <div class="input-append date" id="dp3" data-date="12-02-2013" data-date-format="dd mm yyyy">
         <input class="datevalue span2" size="16" type="text" readonly="true">

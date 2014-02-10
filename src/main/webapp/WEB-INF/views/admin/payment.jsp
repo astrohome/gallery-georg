@@ -56,7 +56,7 @@
                                     <form:input readonly="true" path="list[${i.index}].id" value="${payment.id}"/>
                                 </td>
                                 <td>
-                                    <form:input path="list[${i.index}].text"/>
+                                    <form:input path="list[${i.index}].text" required="true"/>
                                 </td>
                                 <td><a href="#" class="btn btn-danger removeMethod">
                                     <div class="icon-remove"></div>
@@ -69,7 +69,7 @@
                                     <form:input path="list[0].id" disabled="true"/>
                                 </td>
                                 <td>
-                                    <form:input path="list[0].text"/>
+                                    <form:input path="list[0].text" required="true"/>
                                 </td>
                                 <td><a href="#" class="btn btn-danger removeMethod">
                                     <div class="icon-remove"></div>

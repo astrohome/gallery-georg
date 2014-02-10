@@ -32,7 +32,12 @@ public class UserService {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        userDAO.update(user);
+
+        User created = userDAO.createIfNotExists(user, user.getLogin());
+        if (created == null) {
+            //TODO !!!!!!!!
+        }
+
         return code;
     }
 

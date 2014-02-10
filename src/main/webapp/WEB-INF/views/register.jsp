@@ -18,45 +18,26 @@
                 <spring:message code="email" var="email"/>
                 <spring:message code="password" var="password"/>
 
-                <div class="form-control-group">
-                    <label class="control-label" for="firstName"><spring:message code="page.registration.name"/></label>
 
-                    <div class="controls">
-                        <form:input id="firstName" path="firstName" placeholder="${your_name}"/>
-                    </div>
-                </div>
+                <label for="firstName"><spring:message code="page.registration.name"/></label>
+                <form:input id="firstName" path="firstName" placeholder="${your_name}" required="true"/><br/>
+                <form:errors path="firstName" cssClass="alert-error"></form:errors>
 
-                <div class="form-control-group">
-                    <label class="control-label" for="lastName"><spring:message
-                            code="page.registration.surname"/></label>
+                <label for="lastName"><spring:message code="page.registration.surname"/></label>
+                <form:input id="lastName" path="lastName" placeholder="${your_surname}" required="true"/><br/>
+                <form:errors path="lastName" cssClass="alert-error"></form:errors>
 
-                    <div class="controls">
-                        <form:input id="lastName" path="lastName" placeholder="${your_surname}"/>
-                    </div>
-                </div>
+                <label for="login"><spring:message code="page.registration.email"/></label>
+                <form:input type="email" id="login" path="login" placeholder="${email}" required="true"/><br/>
+                <form:errors path="login" cssClass="alert-error"></form:errors>
 
-                <div class="form-control-group">
-                    <label class="control-label" for="login"><spring:message code="page.registration.email"/></label>
-
-                    <div class="controls">
-                        <input type="email" id="login" path="login" placeholder="${email}" required
-                               data-validation-required-message="Это поле является обязательным."
-                               data-validation-email-message="Тести"/>
-
-                        <p class="help-block"></p>
-                    </div>
-                </div>
-
-                <div class="form-control-group">
-                    <label class="control-label" for="password"><spring:message
-                            code="page.registration.password"/></label>
-
-                    <div class="controls">
-                        <form:input id="password" path="password" placeholder="${password}"/>
-                    </div>
-                </div>
-
+                <label for="password"><spring:message code="page.registration.password"/></label>
+                <form:input id="password" path="password" placeholder="${password}" required="true"
+                            type="password"/><br/>
+                <form:errors path="password" cssClass="alert-error"></form:errors>
                 <br/>
+
+                <input id="activationCode" name="activationCode" type="hidden" value="activationCode"/>
 
                 <button type="submit" class="btn btn-primary"><spring:message code="submit"/></button>
             </fieldset>

@@ -3,9 +3,9 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:generic>
-    <jsp:attribute name="title">Register new user</jsp:attribute>
+    <jsp:attribute name="title"><spring:message code="page.activation-required.title"/></jsp:attribute>
     <jsp:body>
-        <spring:message code="page.activation.info"/>
+        <spring:message code="page.activation.info" arguments="${email}"/>
 
         <a href="/"><spring:message code="page.activation.back-to-index"/> </a>
     </jsp:body>

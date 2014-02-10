@@ -6,10 +6,13 @@ import org.georg.web.impl.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 @Controller
 public class LoginController {
@@ -44,16 +47,21 @@ public class LoginController {
     @RequestMapping(value = "/register_user", method = RequestMethod.GET)
     public ModelAndView registerNew() {
         ModelAndView page = new ModelAndView("register");
-        page.addObject("user", new User());
+        User newUser = new User();
+        newUser.setActivationCode("code");
+        page.addObject("user", newUser);
         return page;
     }
 
     @RequestMapping(value = "/register_user", method = RequestMethod.POST)
-    public ModelAndView registerNewPost(User user) {
-        String code = userService.registerNewUser(user);
+    public ModelAndView registerNewPost(@Valid User user, BindingResult r) {
+        if (r.hasErrors()) {
+            return new ModelAndView("register");
+        }
+        userService.registerNewUser(user);
         ModelAndView page = new ModelAndView("activation_required");
-        page.addObject("code", code);
-        mailUtil.sendActivationMail(user, code);
+        page.addObject("email", user.getLogin());
+        mailUtil.sendActivationMail(user);
         return page;
     }
 

@@ -54,7 +54,7 @@
                                     <form:input readonly="true" path="list[${i.index}].id" value="${video.id}"/>
                                 </td>
                                 <td>
-                                    <form:input path="list[${i.index}].videoId"/>
+                                    <form:input path="list[${i.index}].videoId" required="true"/>
                                 </td>
                                 <td><a href="#" class="btn btn-danger removeVideo">
                                     <div class="icon-remove"></div>
@@ -67,7 +67,7 @@
                                     <form:input path="list[0].id" disabled="true"/>
                                 </td>
                                 <td>
-                                    <form:input path="list[0].videoId"/>
+                                    <form:input path="list[0].videoId" required="true"/>
                                 </td>
                                 <td><a href="#" class="btn btn-danger removeVideo">
                                     <div class="icon-remove"></div>

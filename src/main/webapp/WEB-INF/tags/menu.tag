@@ -45,11 +45,11 @@
     <c:if test="${showLogin}">
         <sec:authorize access="not isAuthenticated()">
             <li class="btn-primary">
-                <a href="/login" style="color: white;">Login</a>
+                <a href="/login" style="color: white;"><spring:message code="login"/></a>
             </li>
         </sec:authorize>
         <sec:authorize access="isAuthenticated()">
-            <p class="nav navbar-text" style="color: #ffffff;">Вы вошли как:</p>
+            <p class="nav navbar-text" style="color: #ffffff;"><spring:message code="logged-in-as"/></p>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" style="color: #ffffff;" data-toggle="dropdown"><sec:authentication
                         property="principal.username"/> <b class="caret"></b></a>

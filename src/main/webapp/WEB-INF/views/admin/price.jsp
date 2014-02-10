@@ -54,17 +54,17 @@
                             <tr>
 
                                 <th>
-                                    <form:select path="list[${i.index}].format">
+                                    <form:select path="list[${i.index}].format" required="true">
                                         <form:options items="${formats}" itemValue="id" itemLabel="format"/>
                                     </form:select>
                                 </th>
                                 <th>
-                                    <form:select path="list[${i.index}].paperType">
+                                    <form:select path="list[${i.index}].paperType" required="true">
                                         <form:options items="${paperTypes}" itemValue="id" itemLabel="paperType"/>
                                     </form:select>
                                 </th>
                                 <th>
-                                    <form:input path="list[${i.index}].price"/>
+                                    <form:input path="list[${i.index}].price" required="true"/>
                                 </th>
                                 <th>
                                     <a href="#" class="btn btn-danger removePrice">
@@ -77,17 +77,17 @@
                             <tr>
 
                                 <th>
-                                    <form:select path="list[0].format.id">
+                                    <form:select path="list[0].format.id" required="true">
                                         <form:options items="${formats}" itemValue="id" itemLabel="format"/>
                                     </form:select>
                                 </th>
                                 <th>
-                                    <form:select path="list[0].paperType.id">
+                                    <form:select path="list[0].paperType.id" required="true">
                                         <form:options items="${paperTypes}" itemValue="id" itemLabel="paperType"/>
                                     </form:select>
                                 </th>
                                 <th>
-                                    <form:input path="list[0].price"/>
+                                    <form:input path="list[0].price" required="true"/>
                                 </th>
                                 <th>
                                     <a href="#" class="btn btn-danger removePrice">

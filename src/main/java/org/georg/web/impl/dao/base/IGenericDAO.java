@@ -51,6 +51,8 @@ public interface IGenericDAO<T, ID extends Serializable> {
      */
     T update(T entity);
 
+    T createIfNotExists(T entity, ID id);
+
     /**
      * Delete an object of type T
      *

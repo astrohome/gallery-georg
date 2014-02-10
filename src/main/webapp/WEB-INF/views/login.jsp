@@ -18,11 +18,17 @@
         <form class="form-signin" name='f'
               action="<c:url value='/j_spring_security_check' />"
               method='POST'>
-            <h2 class="form-signin-heading"><spring:message code="please-sign-in"/></h2>
+            <legend><h3><spring:message code="please-sign-in"/></h3></legend>
+
+            <div class="alert alert-success">
+                <spring:message code="login-info"/>
+            </div>
+            <hr/>
+
             <input type="text" class="input-block-level" name="j_username"
-                   placeholder="<spring:message code="email" />">
+                   placeholder="<spring:message code="email" />" required>
             <input type="password" class="input-block-level" name="j_password"
-                   placeholder="<spring:message code="password" />">
+                   placeholder="<spring:message code="password" />" required>
             <label class="checkbox">
                 <input type="checkbox" value="remember-me"> <spring:message code="remember-me"/>
             </label>
