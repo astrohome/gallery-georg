@@ -76,6 +76,9 @@ public class RepositoryConfig {
         properties.put("hibernate.dialect", hibernateDialect);
         properties.put("hibernate.show_sql", hibernateShowSql);
         properties.put("hibernate.hbm2ddl.auto", hibernateHbm2ddlAuto);
+        properties.put("hibernate.connection.characterEncoding", "utf8");
+        properties.put("hibernate.connection.useUnicode", "true");
+        properties.put("hibernate.connection.CharSet", "utf8");
 
         return properties;
     }

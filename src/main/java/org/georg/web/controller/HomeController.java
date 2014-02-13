@@ -1,5 +1,6 @@
 package org.georg.web.controller;
 
+import org.georg.web.container.OrderItemContainer;
 import org.georg.web.impl.model.Gallery;
 import org.georg.web.impl.model.OrderItem;
 import org.georg.web.impl.service.*;
@@ -18,9 +19,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Set;
+import java.util.List;
 
 @Controller
 public class HomeController {
@@ -69,7 +70,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/view", method = RequestMethod.GET)
-    public ModelAndView singleGallery(@RequestParam("id") long id, @RequestParam(value = "page", defaultValue = "1") Integer page) {
+    public ModelAndView singleGallery(@RequestParam("id") Integer id, @RequestParam(value = "page", defaultValue = "1") Integer page) {
         ModelAndView modelAndView = new ModelAndView("view_gallery");
         Gallery gal = galleryService.getById(id);
         modelAndView.addObject("gallery", gal);
@@ -189,7 +190,7 @@ public class HomeController {
     public ModelAndView putOrder(HttpServletResponse response, HttpServletRequest request) {
         Integer itemCount = Integer.valueOf(request.getParameter("itemCount"));
 
-        Set<OrderItem> items = new HashSet<>();
+        List<OrderItem> items = new ArrayList<>();
 
         for (int i = 1; i <= itemCount; i++) {
             String itemName = request.getParameter("item_name_" + i);
@@ -200,12 +201,22 @@ public class HomeController {
             Integer formatId = Integer.valueOf(opt.split(",")[1].split(": ")[1]);
             Integer paperId = Integer.valueOf(opt.split(",")[2].split(": ")[1]);
 
-            OrderItem item = new OrderItem(gallery, photo, formatService.getById(formatId), paperTypeService.getById(paperId), itemQuantity);
+            Gallery galleryDB = galleryService.getByTitle(gallery);
+
+            OrderItem item = new OrderItem(photo, galleryDB, formatService.getById(formatId), paperTypeService.getById(paperId), itemQuantity);
             items.add(orderItemService.updateItem(item));
         }
 
-        ModelAndView modelAndView = new ModelAndView("order/view");
-        modelAndView.addObject("items", items);
+        ModelAndView modelAndView = new ModelAndView("order/confirmation");
+        modelAndView.addObject("container", new OrderItemContainer(items));
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/confirmOrder", method = RequestMethod.POST)
+    @Secured({"ROLE_USER"})
+    public ModelAndView confirmOrder(@ModelAttribute OrderItemContainer orderItemContainer) {
+        //Order order = orderService.
+        ModelAndView modelAndView = new ModelAndView("order/finished");
         return modelAndView;
     }
 

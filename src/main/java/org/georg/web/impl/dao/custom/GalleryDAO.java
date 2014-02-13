@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class GalleryDAO extends GenericDAO<Gallery, Long> implements IGalleryDAO {
+public class GalleryDAO extends GenericDAO<Gallery, Integer> implements IGalleryDAO {
 
     @Override
     public Gallery findByTitle(String name) {

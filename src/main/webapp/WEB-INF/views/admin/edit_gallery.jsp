@@ -1,4 +1,4 @@
-<%@include file="include/init.jsp" %>
+<%@include file="../include/init.jsp" %>
 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 

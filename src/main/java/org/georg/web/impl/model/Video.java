@@ -7,9 +7,7 @@ import javax.validation.constraints.NotNull;
 @Table
 public class Video {
     @Id
-    @Column(name = "id", nullable = false)
-    @SequenceGenerator(name = "video_seq", sequenceName = "video_seq_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "video_seq")
+    @GeneratedValue
     private Integer id;
     @Column
     @NotNull

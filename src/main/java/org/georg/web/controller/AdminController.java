@@ -119,7 +119,7 @@ public class AdminController {
     @Secured("ROLE_ADMIN")
     public ModelAndView adminEditGallery(@RequestParam("title") String title) throws IOException {
         String realTitle = URLDecoder.decode(title, "UTF-8");
-        ModelAndView modelAndView = new ModelAndView("edit_gallery");
+        ModelAndView modelAndView = new ModelAndView("admin/edit_gallery");
         modelAndView.addObject("gallery", galleryService.getByTitleFromDBorFileSystem(realTitle));
         return modelAndView;
     }
@@ -142,7 +142,7 @@ public class AdminController {
     @RequestMapping(value = "/deleteGallery", method = RequestMethod.GET, headers = "Accept=application/json")
     @Secured("ROLE_ADMIN")
     public ModelAndView adminDeleteGallery(@RequestParam("id") Integer id) {
-        galleryService.deleteItem(Long.valueOf(id));
+        galleryService.deleteItem(Integer.valueOf(id));
         ModelAndView modelAndView = new ModelAndView("redirect:/admin?page=gal");
         modelAndView.addObject("listDirectories", fileService.getDirectories());
         modelAndView.addObject("success", true);

@@ -1,5 +1,7 @@
 package org.georg.web.impl.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 
 /**
@@ -9,27 +11,34 @@ import javax.persistence.*;
 @Table
 public class OrderItem {
     @Id
-    @Column(name = "id", nullable = false)
-    @SequenceGenerator(name = "order_item_seq", sequenceName = "order_item_seq_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_item_seq")
+    @GeneratedValue
     private Integer id;
 
     @Column
+    @NotEmpty
     private String image;
 
-    @Column
-    private String gallery;
+    @ManyToOne
+    @JoinColumn(name = "gallery_id")
+    private Gallery gallery;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "format_id")
     private Format format;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "paperType_id")
     private PaperType paperType;
 
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
     @Column
+    @NotEmpty
     private Integer quantity;
 
-    public OrderItem(String image, String gallery, Format format, PaperType paperType, Integer quantity) {
+    public OrderItem(String image, Gallery gallery, Format format, PaperType paperType, Integer quantity) {
         this.image = image;
         this.gallery = gallery;
         this.format = format;
@@ -57,10 +66,6 @@ public class OrderItem {
         return format;
     }
 
-    public void setFormat(Format format) {
-        this.format = format;
-    }
-
     public PaperType getPaperType() {
         return paperType;
     }
@@ -69,11 +74,11 @@ public class OrderItem {
         this.paperType = paperType;
     }
 
-    public String getGallery() {
+    public Gallery getGallery() {
         return gallery;
     }
 
-    public void setGallery(String gallery) {
+    public void setGallery(Gallery gallery) {
         this.gallery = gallery;
     }
 
@@ -83,5 +88,17 @@ public class OrderItem {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public void setFormat(Format format) {
+        this.format = format;
     }
 }

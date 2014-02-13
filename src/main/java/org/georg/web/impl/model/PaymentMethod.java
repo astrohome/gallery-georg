@@ -6,9 +6,7 @@ import javax.persistence.*;
 @Table
 public class PaymentMethod {
     @Id
-    @Column(name = "id", nullable = false)
-    @SequenceGenerator(name = "payment_seq", sequenceName = "payment_seq_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_seq")
+    @GeneratedValue
     private Integer id;
 
     @Column

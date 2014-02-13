@@ -4,21 +4,19 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * TODO
- */
+@Entity
+@Table(name = "Order_")
 public class Order {
     @Id
-    @Column(name = "id", nullable = false)
-    @SequenceGenerator(name = "order_seq", sequenceName = "order_seq_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_seq")
+    @GeneratedValue
     private Integer id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
-    /*
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL) */
-    private Set<OrderItem> items = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
+    private Set<OrderItem> items = new HashSet<>(0);
 
     public Integer getId() {
         return id;

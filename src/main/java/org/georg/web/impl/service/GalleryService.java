@@ -16,7 +16,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 @Service
-public class GalleryService extends BaseService<Gallery, Long> {
+public class GalleryService extends BaseService<Gallery, Integer> {
 
     @Autowired
     private IGalleryDAO dao;
@@ -76,13 +76,13 @@ public class GalleryService extends BaseService<Gallery, Long> {
 
     @Override
     @Transactional(readOnly = true)
-    public Gallery getById(Long id) {
+    public Gallery getById(Integer id) {
         return dao.getById(id);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public void deleteItem(Long id) {
+    public void deleteItem(Integer id) {
         Gallery obj = dao.getById(id);
         dao.delete(obj);
     }

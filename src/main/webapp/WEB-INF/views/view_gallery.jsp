@@ -30,8 +30,8 @@
                         $(this).removeClass("hidden")
                     }
                 }).each(function () {
-                            if (this.complete) $(this).load();
-                        });
+                    if (this.complete) $(this).load();
+                });
 
                 jQuery(".item_price").on('change', function () {
                     //alert();
@@ -120,13 +120,11 @@
         <div id="paginationContainer"></div>
 
         <sec:authorize access="isAuthenticated()">
-            <span class="simpleCart_quantity"></span> фотографий - <span class="simpleCart_total"></span>
-
-            <div class="simpleCart_items">
-            </div>
+            <div class="simpleCart_items"></div>
             <a href="#" class="btn btn-small" onclick="simpleCart.empty();"><i class="icon-remove"></i> <spring:message
                     code="clear"/> </a>
-            <a href="javascript:;" class="btn btn-small simpleCart_checkout"><spring:message code="checkout"/></a>
+            <a href="javascript:;" class="btn btn-small simpleCart_checkout"><spring:message code="checkout"/></a> <br/>
+            <span class="simpleCart_quantity"></span> фотографий - <span class="simpleCart_total"></span>
         </sec:authorize>
     </jsp:body>
 </t:generic>

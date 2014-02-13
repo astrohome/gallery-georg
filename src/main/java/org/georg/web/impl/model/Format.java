@@ -12,16 +12,18 @@ import java.util.Set;
 @Table
 public class Format {
     @Id
-    @Column(name = "id", nullable = false)
-    @SequenceGenerator(name = "format_seq", sequenceName = "format_seq_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "format_seq")
+    @GeneratedValue
     private Integer id;
+
     @Column
     @NotNull
     private String format;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "format", cascade = CascadeType.ALL)
     private Set<Price> price = new HashSet();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "format", cascade = CascadeType.ALL)
+    private Set<OrderItem> orderItems = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -70,5 +72,13 @@ public class Format {
 
     public void setPrice(Set<Price> price) {
         this.price = price;
+    }
+
+    public Set<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(Set<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 }

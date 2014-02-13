@@ -1,8 +1,7 @@
 package org.georg.web.impl.model;
 
-import javax.validation.constraints.NotNull;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,10 +12,7 @@ import java.util.Set;
 @Table
 public class PaperType {
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "paper_seq")
-    @SequenceGenerator(name = "paper_seq", sequenceName = "paper_seq_id")
-    @NotNull
+    @GeneratedValue
     private Integer id;
     @Column
     @NotNull
@@ -24,6 +20,9 @@ public class PaperType {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "paperType", cascade = CascadeType.ALL)
     private Set<Price> price = new HashSet();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "paperType", cascade = CascadeType.ALL)
+    private Set<OrderItem> orderItems = new HashSet<>();
 
     public Integer getId() {
         return id;
@@ -72,5 +71,13 @@ public class PaperType {
 
     public void setPrice(Set<Price> price) {
         this.price = price;
+    }
+
+    public Set<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(Set<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 }
