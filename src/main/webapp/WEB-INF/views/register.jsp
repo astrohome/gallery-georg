@@ -4,9 +4,6 @@
 
 <t:generic>
     <jsp:attribute name="title"><spring:message code="page.registration.title"/></jsp:attribute>
-    <jsp:attribute name="bottom">
-        <script type="text/javascript" src="<c:url value="/resources/js/jqBootstrapValidation.js" />"></script>
-    </jsp:attribute>
     <jsp:body>
         <form:form id="register-user" action="register_user.html" method="POST" cssClass="form-signin"
                    modelAttribute="user">
