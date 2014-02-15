@@ -6,9 +6,6 @@ import org.georg.web.impl.model.PaperType;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * TODO
- */
 public class PaperTypeListContainer implements BaseContainer<PaperType> {
 
     private List<PaperType> paperTypeList = new ArrayList<>();

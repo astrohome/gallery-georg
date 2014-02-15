@@ -1,6 +1,7 @@
 package org.georg.web.impl.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table
@@ -10,6 +11,7 @@ public class PaymentMethod {
     private Integer id;
 
     @Column
+    @NotNull
     private String text;
 
     public Integer getId() {

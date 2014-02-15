@@ -13,7 +13,7 @@
             <spring:message code="page.404.description"/>
 
             <a href="/" class="btn btn-large btn-info"><i class="icon-home icon-white"></i> <spring:message
-                    code="page.activation.back-to-index"/></a>
+                    code="back-to-index"/></a>
         </div>
         <br/>
     </jsp:body>

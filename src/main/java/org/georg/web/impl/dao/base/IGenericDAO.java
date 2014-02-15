@@ -1,5 +1,7 @@
 package org.georg.web.impl.dao.base;
 
+import org.hibernate.Session;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -72,4 +74,6 @@ public interface IGenericDAO<T, ID extends Serializable> {
      * @return A list of all the objects of type T
      */
     List<T> findAll(String sortColumn, SortingTypes order);
+
+    Session getCurrentSession();
 }

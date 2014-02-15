@@ -8,7 +8,7 @@
     <jsp:body>
 
         <c:if test="${not empty error}">
-            <div class="alert">
+            <div class="alert alert-error">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <strong><spring:message code="attention"/></strong> <spring:message code="login-failed"/><br/><!-- Caused :
                     ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}                -->

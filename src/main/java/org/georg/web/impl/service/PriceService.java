@@ -5,7 +5,9 @@ import org.georg.web.impl.dao.base.IGenericDAO;
 import org.georg.web.impl.dao.custom.base.IFormatDAO;
 import org.georg.web.impl.dao.custom.base.IPaperTypeDAO;
 import org.georg.web.impl.dao.custom.base.IPriceDAO;
+import org.georg.web.impl.model.Format;
 import org.georg.web.impl.model.IdPK;
+import org.georg.web.impl.model.PaperType;
 import org.georg.web.impl.model.Price;
 import org.georg.web.impl.service.base.BaseContainerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,15 @@ public class PriceService extends BaseContainerService<Price, PriceListContainer
     @Transactional(readOnly = true)
     public Price getById(IdPK id) {
         return priceDAO.getById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Price getById(Integer formatId, Integer paperTypeId) {
+        Format format = formatDAO.getById(formatId);
+        PaperType paperType = paperTypeDAO.getById(paperTypeId);
+        if (format == null || paperType == null) return null;
+
+        return getById(new IdPK(format, paperType));
     }
 
     @Override

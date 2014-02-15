@@ -6,9 +6,6 @@ import org.georg.web.impl.model.Video;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * TODO
- */
 public class VideoListContainer implements BaseContainer {
     private List<Video> videoList = new ArrayList<>();
 

@@ -1,9 +1,10 @@
 package org.georg.web.impl.model;
 
-import javax.validation.constraints.NotNull;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * TODO
@@ -21,6 +22,9 @@ public class Price implements Serializable {
     @Column
     @NotNull
     private Float price;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "price", cascade = CascadeType.ALL)
+    private Set<OrderItem> orderItems = new HashSet<>();
 
     public Float getPrice() {
         return price;
@@ -74,6 +78,10 @@ public class Price implements Serializable {
         return 37 * (this.format.hashCode() +
                 this.paperType.hashCode() +
                 Float.floatToIntBits(price)) + 5;
+    }
+
+    public void setOrderItems(Set<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 }
 

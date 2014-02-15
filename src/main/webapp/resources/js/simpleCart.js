@@ -95,7 +95,7 @@
                     "CHF": { code: "CHF", symbol: "CHF&nbsp;", name: "Swiss Franc" },
                     "THB": { code: "THB", symbol: "&#3647;", name: "Thai Baht" },
                     "BTC": { code: "BTC", symbol: " BTC", name: "Bitcoin", accuracy: 4, after: true    },
-                    "UAH": { code: "UAH", symbol: " UAH.", name: "Украинская гривка" }
+                    "UAH": { code: "UAH", symbol: " UAH", name: "Украинская гривна" }
                 },
 
             // default options

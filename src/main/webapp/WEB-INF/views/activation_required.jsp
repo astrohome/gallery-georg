@@ -7,6 +7,6 @@
     <jsp:body>
         <spring:message code="page.activation.info" arguments="${email}"/>
 
-        <a href="/"><spring:message code="page.activation.back-to-index"/> </a>
+        <a href="/"><spring:message code="back-to-index"/> </a>
     </jsp:body>
 </t:generic>

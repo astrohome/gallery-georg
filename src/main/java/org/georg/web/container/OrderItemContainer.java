@@ -12,6 +12,9 @@ import java.util.List;
 public class OrderItemContainer implements BaseContainer<OrderItem> {
     private List<OrderItem> orderItemList = new ArrayList();
 
+    public OrderItemContainer() {
+    }
+
     public OrderItemContainer(List<OrderItem> list) {
         this.orderItemList = list;
     }

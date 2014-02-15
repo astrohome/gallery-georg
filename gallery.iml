@@ -64,6 +64,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet.jsp:jsp-api:2.2" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.logging:jboss-logging-annotations:1.2.0.Beta1" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.27" level="project" />
+    <orderEntry type="library" name="Maven: postgresql:postgresql:9.1-901.jdbc4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-core:3.2.0.RC2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:3.2.0.RC2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.security:spring-security-config:3.2.0.RC2" level="project" />

@@ -21,9 +21,6 @@ public class PaperType {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "paperType", cascade = CascadeType.ALL)
     private Set<Price> price = new HashSet();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "paperType", cascade = CascadeType.ALL)
-    private Set<OrderItem> orderItems = new HashSet<>();
-
     public Integer getId() {
         return id;
     }
@@ -62,7 +59,7 @@ public class PaperType {
 
     @Override
     public int hashCode() {
-        return 37 * (this.id + this.paperType.hashCode()) + 5;
+        return 37 * ((this.id != null) ? this.id : 1 + this.paperType.hashCode()) + 5;
     }
 
     public Set<Price> getPrice() {
@@ -71,13 +68,5 @@ public class PaperType {
 
     public void setPrice(Set<Price> price) {
         this.price = price;
-    }
-
-    public Set<OrderItem> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(Set<OrderItem> orderItems) {
-        this.orderItems = orderItems;
     }
 }

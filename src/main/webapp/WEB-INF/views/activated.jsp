@@ -3,12 +3,15 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:generic>
-    <jsp:attribute name="title">Activating new user</jsp:attribute>
+    <jsp:attribute name="title"><spring:message code="page.activated.title"/></jsp:attribute>
     <jsp:body>
-        <spring:message code="page.activation.success"/>
+        <p>
 
-        <a class="btn" href="/private"></a>
+        <h1><spring:message code="page.activated.intro"/></h1></p>
+        <p><spring:message code="page.activated.success"/></p>
 
-        <a href="/"><spring:message code="page.activation.back-to-index"/></a>
+        <p><a class="btn btn-info" href="/private"><i class="icon-key"></i> <spring:message code="enter-code"/></a></p>
+
+        <a href="/" class="btn"><i class="icon-home"></i> <spring:message code="back-to-index"/></a><br/>
     </jsp:body>
 </t:generic>

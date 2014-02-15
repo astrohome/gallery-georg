@@ -1,8 +1,7 @@
 package org.georg.web.impl.model;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * TODO
@@ -15,35 +14,44 @@ public class OrderItem {
     private Integer id;
 
     @Column
-    @NotEmpty
+    @NotNull
     private String image;
 
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "gallery_id")
     private Gallery gallery;
 
     @ManyToOne
-    @JoinColumn(name = "format_id")
-    private Format format;
+    @NotNull
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "paperType_id")
-    private PaperType paperType;
+    @NotNull
+    @JoinColumns({
+            @JoinColumn(name = "format_id"),
+            @JoinColumn(name = "paperType_id")
+    })
+    private Price price;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
 
     @Column
-    @NotEmpty
+    @NotNull
     private Integer quantity;
 
-    public OrderItem(String image, Gallery gallery, Format format, PaperType paperType, Integer quantity) {
+    public OrderItem() {
+    }
+
+    public OrderItem(String image, Gallery gallery, Price price, Integer quantity, User user) {
         this.image = image;
         this.gallery = gallery;
-        this.format = format;
-        this.paperType = paperType;
         this.quantity = quantity;
+        this.price = price;
+        this.user = user;
     }
 
     public Integer getId() {
@@ -60,18 +68,6 @@ public class OrderItem {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public Format getFormat() {
-        return format;
-    }
-
-    public PaperType getPaperType() {
-        return paperType;
-    }
-
-    public void setPaperType(PaperType paperType) {
-        this.paperType = paperType;
     }
 
     public Gallery getGallery() {
@@ -98,7 +94,19 @@ public class OrderItem {
         this.order = order;
     }
 
-    public void setFormat(Format format) {
-        this.format = format;
+    public Price getPrice() {
+        return price;
+    }
+
+    public void setPrice(Price price) {
+        this.price = price;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

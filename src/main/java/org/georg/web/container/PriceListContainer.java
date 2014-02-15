@@ -6,9 +6,6 @@ import org.georg.web.impl.model.Price;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * TODO
- */
 public class PriceListContainer implements BaseContainer<Price> {
     private List<Price> priceList = new ArrayList<>();
 

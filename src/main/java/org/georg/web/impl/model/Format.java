@@ -22,9 +22,6 @@ public class Format {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "format", cascade = CascadeType.ALL)
     private Set<Price> price = new HashSet();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "format", cascade = CascadeType.ALL)
-    private Set<OrderItem> orderItems = new HashSet<>();
-
     public Integer getId() {
         return id;
     }
@@ -63,7 +60,7 @@ public class Format {
 
     @Override
     public int hashCode() {
-        return 37 * (this.id + this.format.hashCode()) + 5;
+        return 37 * ((this.id != null) ? this.id : 1 + this.format.hashCode()) + 5;
     }
 
     public Set<Price> getPrice() {
@@ -72,13 +69,5 @@ public class Format {
 
     public void setPrice(Set<Price> price) {
         this.price = price;
-    }
-
-    public Set<OrderItem> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(Set<OrderItem> orderItems) {
-        this.orderItems = orderItems;
     }
 }

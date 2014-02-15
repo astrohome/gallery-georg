@@ -1,7 +1,6 @@
 package org.georg.web.impl.model;
 
 import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,13 +20,11 @@ public class User implements Serializable, UserDetails {
     @Id
     @Column(unique = true)
     @NotNull
-    @NotEmpty
     @Email
     private String email;
 
     @Column
     @NotNull
-    @NotEmpty
     @Size(min = 4)
     private String password;
 
@@ -36,13 +33,11 @@ public class User implements Serializable, UserDetails {
 
     @Column
     @NotNull
-    @NotEmpty
     @Size(min = 2)
     private String firstName;
 
     @Column
     @NotNull
-    @NotEmpty
     @Size(min = 2)
     private String lastName;
 

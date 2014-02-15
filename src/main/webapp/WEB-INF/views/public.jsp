@@ -3,7 +3,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:generic>
-    <jsp:attribute name="title"><spring:message code="page.welcome.intro"/> </jsp:attribute>
+    <jsp:attribute name="title"><spring:message code="page.welcome.intro"/></jsp:attribute>
 
     <jsp:attribute name="menu">
        <t:menu menuItems="${menuItems}" showLogin="true"/>
@@ -37,8 +37,9 @@
     </jsp:attribute>
 
     <jsp:body>
-        <a href="/admin?page=gal">admin</a> <br/>
-
+        <sec:authorize ifAnyGranted="ROLE_ADMIN">
+            <a href="/admin?page=gal">admin</a> <br/>
+        </sec:authorize>
 
         <t:gallerylist list="${list}" showFilter="true"/>
     </jsp:body>

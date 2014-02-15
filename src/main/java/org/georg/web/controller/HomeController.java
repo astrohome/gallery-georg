@@ -2,12 +2,16 @@ package org.georg.web.controller;
 
 import org.georg.web.container.OrderItemContainer;
 import org.georg.web.impl.model.Gallery;
+import org.georg.web.impl.model.Order;
 import org.georg.web.impl.model.OrderItem;
+import org.georg.web.impl.model.User;
 import org.georg.web.impl.service.*;
 import org.georg.web.impl.util.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,16 +40,13 @@ public class HomeController {
     private PriceService priceService;
 
     @Autowired
-    private PaperTypeService paperTypeService;
-
-    @Autowired
-    private FormatService formatService;
-
-    @Autowired
     private OrderItemService orderItemService;
 
     @Autowired
     private VideoService videoService;
+
+    @Autowired
+    private OrderService orderService;
 
     @Value("${gallery.delta}")
     private Integer delta;
@@ -89,7 +90,7 @@ public class HomeController {
 
         modelAndView.addObject("pages", pages);
         modelAndView.addObject("currentPage", page);
-        modelAndView.addObject("listImages", imageService.getImages(gal, page - 1));
+        modelAndView.addObject("listImages", imageService.getImages(gal, page));
         modelAndView.addObject("prices", priceService.getAll());
         constructPublicMenu(modelAndView);
         return modelAndView;
@@ -188,7 +189,11 @@ public class HomeController {
     @RequestMapping(value = "/putOrder", method = RequestMethod.POST)
     @Secured({"ROLE_USER"})
     public ModelAndView putOrder(HttpServletResponse response, HttpServletRequest request) {
+
         Integer itemCount = Integer.valueOf(request.getParameter("itemCount"));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
 
         List<OrderItem> items = new ArrayList<>();
 
@@ -203,7 +208,7 @@ public class HomeController {
 
             Gallery galleryDB = galleryService.getByTitle(gallery);
 
-            OrderItem item = new OrderItem(photo, galleryDB, formatService.getById(formatId), paperTypeService.getById(paperId), itemQuantity);
+            OrderItem item = new OrderItem(photo, galleryDB, priceService.getById(formatId, paperId), itemQuantity, user);
             items.add(orderItemService.updateItem(item));
         }
 
@@ -214,9 +219,16 @@ public class HomeController {
 
     @RequestMapping(value = "/confirmOrder", method = RequestMethod.POST)
     @Secured({"ROLE_USER"})
-    public ModelAndView confirmOrder(@ModelAttribute OrderItemContainer orderItemContainer) {
-        //Order order = orderService.
+    public ModelAndView confirmOrder() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        List<OrderItem> allConfirmedItems = orderItemService.findAllConfirmedItems(user);
+        Order order = orderService.composeOrder(allConfirmedItems);
+
         ModelAndView modelAndView = new ModelAndView("order/finished");
+        String orderDetails = order.getId() + ";" + user.getLogin();
+        modelAndView.addObject("orderDetails", orderDetails);
         return modelAndView;
     }
 

@@ -3,6 +3,7 @@ package org.georg.web.impl.service;
 import org.georg.web.impl.dao.base.IGenericDAO;
 import org.georg.web.impl.dao.custom.base.IOrderItemDAO;
 import org.georg.web.impl.model.OrderItem;
+import org.georg.web.impl.model.User;
 import org.georg.web.impl.service.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,13 @@ public class OrderItemService extends BaseService<OrderItem, Integer> {
     @Transactional(readOnly = true)
     public List<OrderItem> getAll() {
         return orderItemDAO.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderItem> findAllConfirmedItems(User user) {
+        if (user == null || user.getLogin() == null || user.getLogin().isEmpty())
+            return null;
+        return orderItemDAO.findAllConfirmedItems(user.getLogin());
     }
 
     @Override

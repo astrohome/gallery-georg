@@ -27,11 +27,16 @@
 </c:choose>
 <c:forEach items="${menuItems}" var="item">
     <li
-            <c:if test="${(requestScope['javax.servlet.forward.servlet_path'] eq item.key)
-                                                                                or (
-                                                                                (fn:length(requestScope['javax.servlet.forward.query_string']) > 0) and
-                                                                                fn:contains(requestScope['javax.servlet.forward.query_string'], fn:substringAfter(item.key, '?')))}">
-                class="active"
+            <c:if test="${(requestScope['javax.servlet.forward.servlet_path'] eq item.key)}">
+            class="active"
+            </c:if>
+
+            <c:if test="${type eq 'admin'}">
+                <c:if test="${(fn:length(requestScope['javax.servlet.forward.query_string']) > 0) and
+                               fn:contains(requestScope['javax.servlet.forward.query_string'],
+                               fn:substringAfter(item.key, '?'))}">
+                    class="active"
+                </c:if>
             </c:if>
             >
 
@@ -42,13 +47,13 @@
 
 <ul class="nav pull-right">
     <li class="divider-vertical"></li>
-    <c:if test="${showLogin}">
-        <sec:authorize access="not isAuthenticated()">
-            <li class="btn-primary">
-                <a href="/login" style="color: white;"><spring:message code="login"/></a>
-            </li>
-        </sec:authorize>
-        <sec:authorize access="isAuthenticated()">
+    <sec:authorize access="not isAuthenticated()">
+        <li class="btn-primary">
+            <a href="/login" style="color: white;"><spring:message code="login"/></a>
+        </li>
+    </sec:authorize>
+    <sec:authorize access="isAuthenticated()">
+        <c:if test="${type ne 'admin'}">
             <p class="nav navbar-text" style="color: #ffffff;"><spring:message code="logged-in-as"/></p>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" style="color: #ffffff;" data-toggle="dropdown"><sec:authentication
@@ -56,7 +61,7 @@
                 <ul class="dropdown-menu">
                     <li>
                         <a href="#">
-                            My profile
+                            <spring:message code="menu.user.my-profile"/>
                         </a>
                     </li>
                     <li class="divider"></li>
@@ -65,11 +70,11 @@
                     </li>
                 </ul>
             </li>
-        </sec:authorize>
-    </c:if>
+        </c:if>
+    </sec:authorize>
 </ul>
-<c:if test="${type != 'admin'}">
-    </div>
+<c:if test="${type ne 'admin'}">
+</div>
     </div>
     </div>
     </div>
