@@ -39,17 +39,16 @@ public class PaperType {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) return false;
+        //check for self-comparison
+        if (this == obj) return true;
 
-        if (this.getId() == null) return false;
+        if (!(obj instanceof PaperType)) return false;
 
-        if (obj instanceof PaperType) {
-            PaperType comp = (PaperType) obj;
-            if (comp.getId() == null) return false;
+        PaperType that = (PaperType) obj;
 
-            return this.id.equals(comp.getId()) &&
-                    this.paperType.equals(comp.getPaperType());
-        } else return false;
+        if (that.id == null || this.id == null) return false;
+
+        return this.id.equals(that.id);
     }
 
     @Override

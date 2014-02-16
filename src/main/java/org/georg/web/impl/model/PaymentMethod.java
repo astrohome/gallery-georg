@@ -14,6 +14,20 @@ public class PaymentMethod {
     @NotNull
     private String text;
 
+    @Override
+    public boolean equals(Object obj) {
+        //check for self-comparison
+        if (this == obj) return true;
+
+        if (!(obj instanceof PaymentMethod)) return false;
+
+        PaymentMethod that = (PaymentMethod) obj;
+
+        if (that.id == null || this.id == null) return false;
+
+        return this.id.equals(that.id);
+    }
+
     public Integer getId() {
         return id;
     }

@@ -239,4 +239,11 @@ public class HomeController {
         constructPublicMenu(modelAndView);
         return modelAndView;
     }
+
+    @ExceptionHandler(Exception.class)
+    public ModelAndView handleNotFoundException(Exception ex) {
+
+        ModelAndView model = new ModelAndView("service/404");
+        return model;
+    }
 }

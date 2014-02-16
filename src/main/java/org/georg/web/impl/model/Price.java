@@ -61,16 +61,19 @@ public class Price implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
+        if (this == obj) return true;
+
         if (!(obj instanceof Price)) return false;
 
-        if (obj == null)
+        if (obj == null) return false;
+
+        Price that = (Price) obj;
+        if (that.format == null || that.paperType == null
+                || this.format == null || this.paperType == null)
             return false;
-        Price t = (Price) obj;
-        if (t == null)
-            return false;
-        return (this.format.equals(t.getFormat()) &&
-                this.paperType.equals(t.getPaperType()) &&
-                this.price.equals(t.getPrice()));
+
+        return (this.format.equals(that.getFormat()) &&
+                this.paperType.equals(that.getPaperType()));
     }
 
     @Override

@@ -12,6 +12,7 @@
                     $(this).attr('name', $(this).attr('name').replace('0', i));
                     $(this).attr('id', $(this).attr('id').replace('0', i));
                 }).end().appendTo("table");
+                i = $('table tr').length - 1;
             });
 
             $('table').on('click', '.removePrice', function () {
@@ -22,7 +23,7 @@
                 });
                 $(this).closest('tr').remove();
 
-                i = $('table tr').length;
+                i = $('table tr').length - 1;
             });
         </script>
     </jsp:attribute>

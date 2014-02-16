@@ -10,6 +10,7 @@
                 $("table tr").eq(1).clone().find("input").each(function () {
                     $(this).attr('value', '');
                     $(this).attr('name', $(this).attr('name').replace('0', i));
+                    $(this).attr('id', $(this).attr('id').replace('0', i));
                 }).end().appendTo("table");
                 i = $('table tr').length;
             });

@@ -40,17 +40,16 @@ public class Format {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) return false;
+        //check for self-comparison
+        if (this == obj) return true;
 
-        if (this.getId() == null) return false;
+        if (!(obj instanceof Format)) return false;
 
-        if (obj instanceof Format) {
-            Format comp = (Format) obj;
-            if (comp.getId() == null) return false;
+        Format that = (Format) obj;
 
-            return this.id.equals(comp.getId()) &&
-                    this.format.equals(comp.getFormat());
-        } else return false;
+        if (that.id == null || this.id == null) return false;
+
+        return this.id.equals(that.id);
     }
 
     @Override
