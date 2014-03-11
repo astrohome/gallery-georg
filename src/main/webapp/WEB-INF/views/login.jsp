@@ -7,8 +7,8 @@
 
     <jsp:body>
 
-        <c:if test="${not empty error}">
-            <div class="alert alert-error">
+        <c:if test="${param.error != null}">
+        <div class="alert alert-error">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <strong><spring:message code="attention"/></strong> <spring:message code="login-failed"/><br/><!-- Caused :
                     ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}                -->
@@ -16,7 +16,7 @@
         </c:if>
 
         <form class="form-signin" name='f'
-              action="<c:url value='/j_spring_security_check' />"
+              action="<c:url value='/login' />"
               method='POST'>
             <legend><h3><spring:message code="please-sign-in"/></h3></legend>
 
@@ -25,13 +25,16 @@
             </div>
             <hr/>
 
-            <input type="text" class="input-block-level" name="j_username"
+            <input type="text" class="input-block-level" name="username"
                    placeholder="<spring:message code="email" />" required>
-            <input type="password" class="input-block-level" name="j_password"
+            <input type="password" class="input-block-level" name="password"
                    placeholder="<spring:message code="password" />" required>
             <label class="checkbox">
                 <input type="checkbox" value="remember-me"> <spring:message code="remember-me"/>
             </label>
+            <input type="hidden"
+                   name="${_csrf.parameterName}"
+                   value="${_csrf.token}"/>
             <button class="btn btn-large btn-primary" type="submit"><spring:message code="login"/></button>
             <a class="btn btn-large pull-right" href="/register_user.html"><spring:message code="register"/></a>
         </form>

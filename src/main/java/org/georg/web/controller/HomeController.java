@@ -240,6 +240,19 @@ public class HomeController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/profile")
+    @Secured("ROLE_USER")
+    public ModelAndView profile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        ModelAndView modelAndView = new ModelAndView("user/profile");
+        List<Order> byUser = orderService.getByUser(user);
+        modelAndView.addObject("orderListContainer", byUser);
+        constructPublicMenu(modelAndView);
+        return modelAndView;
+    }
+
     @ExceptionHandler(Exception.class)
     public ModelAndView handleNotFoundException(Exception ex) {
 

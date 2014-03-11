@@ -4,6 +4,8 @@ import org.georg.web.impl.dao.base.IGenericDAO;
 import org.georg.web.impl.dao.custom.base.IOrderDAO;
 import org.georg.web.impl.model.Order;
 import org.georg.web.impl.model.OrderItem;
+import org.georg.web.impl.model.OrderStatus;
+import org.georg.web.impl.model.User;
 import org.georg.web.impl.service.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,6 +65,12 @@ public class OrderService extends BaseService<Order, Integer> {
         Order item = new Order();
         item.setItems(new HashSet<>(items));
         item.setUser(items.get(0).getUser());
+        item.setStatus(OrderStatus.CONFIRMED);
         return orderDAO.update(item);
+    }
+
+    public List<Order> getByUser(User user) {
+        orderDAO.getByUser(user.getLogin());
+        return null;
     }
 }

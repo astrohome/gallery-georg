@@ -28,7 +28,7 @@
 <c:forEach items="${menuItems}" var="item">
     <li
             <c:if test="${(requestScope['javax.servlet.forward.servlet_path'] eq item.key)}">
-            class="active"
+                class="active"
             </c:if>
 
             <c:if test="${type eq 'admin'}">
@@ -60,7 +60,7 @@
                         property="principal.username"/> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="#">
+                        <a href="/profile">
                             <spring:message code="menu.user.my-profile"/>
                         </a>
                     </li>
@@ -74,7 +74,7 @@
     </sec:authorize>
 </ul>
 <c:if test="${type ne 'admin'}">
-</div>
+    </div>
     </div>
     </div>
     </div>

@@ -9,7 +9,6 @@ import org.georg.web.impl.model.PaperType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
@@ -26,7 +25,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 
 @Configuration
-@ComponentScan(basePackages = "org.georg.web")
 @EnableWebMvc
 public class MvcConfiguration extends WebMvcConfigurerAdapter {
 

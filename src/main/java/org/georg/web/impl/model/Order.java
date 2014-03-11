@@ -1,6 +1,7 @@
 package org.georg.web.impl.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,6 +15,10 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Column
+    @NotNull
+    private OrderStatus status;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderItem> items = new HashSet<>(0);
@@ -41,4 +46,13 @@ public class Order {
     public void setItems(Set<OrderItem> items) {
         this.items = items;
     }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
 }
+
