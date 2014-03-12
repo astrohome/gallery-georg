@@ -1,7 +1,10 @@
 package org.georg.web.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,20 +23,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Resource(name = "authService")
     private UserDetailsService userDetailsService;
-
+/*
     @Resource(name = "authenticationManagerImpl")
-    private AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;*/
 
+    @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
-        return authenticationManager;
+        return super.authenticationManagerBean();
     }
-/*
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        ShaPasswordEncoder encoder = new ShaPasswordEncoder();
+        Md5PasswordEncoder encoder = new Md5PasswordEncoder();
         auth.userDetailsService(userDetailsService).passwordEncoder(encoder);
-    }*/
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
