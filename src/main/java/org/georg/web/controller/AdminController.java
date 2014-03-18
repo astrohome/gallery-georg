@@ -8,6 +8,7 @@ import org.georg.web.impl.util.Log;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,7 +23,6 @@ import java.util.concurrent.Executors;
 @SuppressWarnings("SpringMVCViewInspection")
 @Controller
 @SessionAttributes
-@Secured("ROLE_ADMIN")
 public class AdminController {
 
     @Log
@@ -116,7 +116,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin", params = {"title"}, method = RequestMethod.GET)
-    @Secured("ROLE_ADMIN")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public ModelAndView adminEditGallery(@RequestParam("title") String title) throws IOException {
         String realTitle = URLDecoder.decode(title, "UTF-8");
         ModelAndView modelAndView = new ModelAndView("admin/edit_gallery");
@@ -151,7 +151,6 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/getProgress", method = RequestMethod.GET, headers = "Accept=application/json")
-    @Secured("ROLE_ADMIN")
     public
     @ResponseBody
     int getProgress() {
@@ -159,7 +158,6 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/getTotal", method = RequestMethod.GET, headers = "Accept=application/json")
-    @Secured("ROLE_ADMIN")
     public
     @ResponseBody
     int getTotal() {

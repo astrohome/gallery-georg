@@ -28,7 +28,10 @@ public class ImageService {
 
     public Path getFile(String gallery, String image) {
         try {
-            return fileUtils.getImage(gallery, image);
+            String name = image;
+            if (!name.endsWith(fileUtils.getFormattedExtension()))
+                name += fileUtils.getFormattedExtension();
+            return fileUtils.getImage(gallery, name);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -130,7 +133,7 @@ public class ImageService {
         return result;
     }
 
-    private Integer progress;
+    private Integer progress = 0;
     private Integer imageCount;
 
     public void generatePreviews(Gallery gallery) {
@@ -143,8 +146,8 @@ public class ImageService {
             for (int j = 0; j < images.size(); j++) {
                 getThumb(gallery.getTitle(), images.get(j));
                 getBig(gallery.getTitle(), images.get(j), gallery.isWatermark());
-                this.progress = (i * pageSize + j);
-                System.out.println("-------- processing preview " + (i * pageSize + j) + " of " + imageCount);
+                this.progress = i * pageSize + j + 1;
+                System.out.println("-------- processing preview " + this.progress + " of " + imageCount);
             }
         }
     }

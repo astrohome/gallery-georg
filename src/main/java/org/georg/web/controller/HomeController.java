@@ -241,7 +241,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/profile")
-    @Secured("ROLE_USER")
+    @Secured({"ROLE_USER"})
     public ModelAndView profile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();

@@ -16,6 +16,13 @@
         <fileset id="fileset" name="Spring Application Context" removed="false">
           <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/application-security.xml</file>
         </fileset>
+        <fileset id="fileset2" name="Spring Application Context (2)" removed="false">
+          <dependency>fileset</dependency>
+          <file>file://$MODULE_DIR$/src/main/java/org/georg/web/config/MvcConfiguration.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/org/georg/web/config/AppConfig.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/org/georg/web/config/SecurityConfiguration.java</file>
+          <file>file://$MODULE_DIR$/src/main/java/org/georg/web/config/RepositoryConfig.java</file>
+        </fileset>
       </configuration>
     </facet>
   </component>

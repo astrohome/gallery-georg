@@ -81,7 +81,7 @@
                                 <a href="<c:out value="${editLink}" escapeXml="false" />"
                                    class="btn btn-toolbar">
                                     <div class="icon-pencil"></div>
-                                    Редактировать</a>
+                                    <spring:message code="edit"/></a>
                                 <button class="btn dropdown-toggle" data-toggle="dropdown">
                                     <span class="caret"></span>
                                 </button>

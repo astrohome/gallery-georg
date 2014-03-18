@@ -24,12 +24,12 @@
                         $("#progressbar").progressbar({
                             value: data / total * 100
                         });
-                        $(".progress-label").text("Изображение " + data + " из " + total);
+                        $(".progress-label").text(<spring:message code="image" /> +" " + data + <spring:message code="of" /> +" " + total);
 
                         /* test to see if the job has completed */
                         if (data / total * 100 > 99.999) {
                             clearInterval(progresspump);
-                            $("#progressbar").html("Готово.");
+                            $("#progressbar").html(<spring:message code="ready" />);
                         }
                     })
                 }, 2000);
@@ -38,7 +38,7 @@
     </jsp:attribute>
     <jsp:body>
         <div id="progressbar">
-            <div class="progress-label">Идет обработка...</div>
+            <div class="progress-label"><spring:message code="processing"/></div>
         </div>
     </jsp:body>
 </t:generic>
