@@ -41,6 +41,7 @@ public class RepositoryConfig {
         ds.setUrl(url);
         ds.setUsername(username);
         ds.setPassword(password);
+        ds.setConnectionProperties(hibernateProperties());
         return ds;
     }
 

@@ -20,6 +20,14 @@ import javax.servlet.ServletRegistration;
 public class MvcWebApplicationInitializer implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
+        FilterRegistration charEncodingfilterReg = servletContext.addFilter("characterFilter", CharacterEncodingFilter.class);
+        charEncodingfilterReg.setInitParameter("encoding", "UTF8");
+        charEncodingfilterReg.setInitParameter("forceEncoding", "true");
+        charEncodingfilterReg.addMappingForUrlPatterns(null, false, "*");
+
+        servletContext.addFilter("HttpMethodFilter", HiddenHttpMethodFilter.class)
+                .addMappingForUrlPatterns(null, false, "/*");
+
         WebApplicationContext context = getContext();
         servletContext.addListener(new ContextLoaderListener(context));
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet("DispatcherServlet", new DispatcherServlet(context));
@@ -27,15 +35,6 @@ public class MvcWebApplicationInitializer implements WebApplicationInitializer {
         dispatcher.addMapping("/");
 
         servletContext.addFilter("springSecurityFilterChain", new DelegatingFilterProxy("springSecurityFilterChain"))
-                .addMappingForUrlPatterns(null, false, "/*");
-
-        FilterRegistration charEncodingfilterReg = servletContext.addFilter("characterFilter", CharacterEncodingFilter.class);
-
-        charEncodingfilterReg.setInitParameter("encoding", "UTF8");
-        charEncodingfilterReg.setInitParameter("forceEncoding", "true");
-        charEncodingfilterReg.addMappingForUrlPatterns(null, false, "*");
-
-        servletContext.addFilter("HttpMethodFilter", HiddenHttpMethodFilter.class)
                 .addMappingForUrlPatterns(null, false, "/*");
 /*
         servletContext.getJspConfigDescriptor().getJspPropertyGroups().add(new JspPropertyGroupDescriptor() {

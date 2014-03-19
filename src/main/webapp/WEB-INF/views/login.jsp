@@ -17,8 +17,8 @@
 
         <form class="form-signin" name='f'
               action="<c:url value='/login' />"
-              method='POST'>
-            <legend><h3><spring:message code="please-sign-in"/></h3></legend>
+              method="POST">
+        <legend><h3><spring:message code="please-sign-in"/></h3></legend>
 
             <div class="alert alert-success">
                 <spring:message code="login-info"/>

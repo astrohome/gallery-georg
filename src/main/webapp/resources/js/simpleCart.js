@@ -507,6 +507,9 @@
             N.each(e.data, function (e, n, r) {
                 t.append(N.$create("input").attr("type", "hidden").attr("name", r).val(e))
             });
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            t.append(N.$create("input").attr("type", "hidden").attr("name", "_csrf").val(token));
             N.$("body").append(t);
             t.el.submit();
             t.remove()

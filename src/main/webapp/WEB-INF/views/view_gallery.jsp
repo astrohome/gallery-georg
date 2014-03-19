@@ -66,6 +66,9 @@
         </script>
 
         <script>
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
             simpleCart({
                 checkout: {
                     type: "SendForm",
@@ -77,12 +80,12 @@
                 cartStyle: 'table',
                 currency: "UAH",
                 cartColumns: [
-                    { attr: "name", label: "Название"},
-                    { view: "currency", attr: "price", label: "Цена"},
-                    { attr: "quantity", label: "Шт."},
-                    { view: "currency", attr: "total", label: "Сумма" },
-                    { attr: "size", label: "Формат" },
-                    { view: "remove", text: "Удалить", label: false}
+                    { attr: "name", label: "<spring:message code="page.order.photo"/>"},
+                    { view: "currency", attr: "price", label: "<spring:message code="page.order.price"/>"},
+                    { attr: "quantity", label: "<spring:message code="page.order.quantity"/>"},
+                    { view: "currency", attr: "total", label: "<spring:message code="summ"/>" },
+                    { attr: "size", label: "<spring:message code="page.order.format"/>" },
+                    { view: "remove", text: "<spring:message code="delete"/>", label: false}
                 ]
             });
         </script>
@@ -124,7 +127,8 @@
             <a href="#" class="btn btn-small" onclick="simpleCart.empty();"><i class="icon-remove"></i> <spring:message
                     code="clear"/> </a>
             <a href="javascript:;" class="btn btn-small simpleCart_checkout"><spring:message code="checkout"/></a> <br/>
-            <span class="simpleCart_quantity"></span> фотографий - <span class="simpleCart_total"></span>
+            <span class="simpleCart_quantity"></span> <spring:message code="page.gallery.photos"/> - <span
+                class="simpleCart_total"></span>
         </sec:authorize>
     </jsp:body>
 </t:generic>

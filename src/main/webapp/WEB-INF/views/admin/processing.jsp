@@ -24,12 +24,12 @@
                         $("#progressbar").progressbar({
                             value: data / total * 100
                         });
-                        $(".progress-label").text(<spring:message code="image" /> +" " + data + <spring:message code="of" /> +" " + total);
+                        $(".progress-label").text("<spring:message code="image" /> " + data + "<spring:message code="of" /> " + total);
 
                         /* test to see if the job has completed */
                         if (data / total * 100 > 99.999) {
                             clearInterval(progresspump);
-                            $("#progressbar").html(<spring:message code="ready" />);
+                            $(".progress-label").text("<spring:message code="ready" />");
                         }
                     })
                 }, 2000);
