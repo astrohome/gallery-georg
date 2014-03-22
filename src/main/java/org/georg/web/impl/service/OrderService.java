@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -22,6 +23,9 @@ public class OrderService extends BaseService<Order, Integer> {
 
     @Autowired
     private IOrderDAO orderDAO;
+
+    @Autowired
+    private OrderItemService orderItemService;
 
     @Override
     @Transactional(readOnly = true)
@@ -62,13 +66,17 @@ public class OrderService extends BaseService<Order, Integer> {
 
     @Transactional(readOnly = false)
     public Order composeOrder(List<OrderItem> items) {
-        Order item = new Order();
-        item.setItems(new HashSet<>(items));
-        item.setUser(items.get(0).getUser());
-        item.setStatus(OrderStatus.CONFIRMED);
-        return orderDAO.update(item);
+        Order order = new Order();
+        order.setItems(new HashSet<>(items));
+        order.setUser(items.get(0).getUser());
+        order.setStatus(OrderStatus.CONFIRMED);
+        order.setCreated(new Date());
+
+        orderItemService.updateItemOrderId(items, order);
+        return orderDAO.update(order);
     }
 
+    @Transactional(readOnly = true)
     public List<Order> getByUser(User user) {
         orderDAO.getByUser(user.getLogin());
         return null;

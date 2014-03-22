@@ -1,7 +1,10 @@
 package org.georg.web.impl.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +22,12 @@ public class Order {
     @Column
     @NotNull
     private OrderStatus status;
+
+    @NotNull
+    @Temporal(value = TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Column
+    private Date created;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderItem> items = new HashSet<>(0);
@@ -53,6 +62,22 @@ public class Order {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public float getSumm() {
+        float res = 0;
+        for (OrderItem item : items) {
+            res += item.getPrice().getPrice();
+        }
+        return res;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 }
 

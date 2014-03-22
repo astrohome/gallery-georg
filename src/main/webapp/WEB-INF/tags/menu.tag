@@ -55,6 +55,11 @@
     <sec:authorize access="isAuthenticated()">
         <c:if test="${type ne 'admin'}">
             <p class="nav navbar-text" style="color: #ffffff;"><spring:message code="logged-in-as"/></p>
+
+            <form id="logout-form" name="logoutform" style="display: none"
+                  action="<c:url value="/j_spring_security_logout" />">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            </form>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" style="color: #ffffff;" data-toggle="dropdown"><sec:authentication
                         property="principal.username"/> <b class="caret"></b></a>
@@ -66,10 +71,11 @@
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a href="<c:url value="j_spring_security_logout" />"><spring:message code="logout"/></a>
+                        <a href="#" onclick="document.logoutform.submit()"><spring:message code="logout"/></a>
                     </li>
                 </ul>
             </li>
+
         </c:if>
     </sec:authorize>
 </ul>

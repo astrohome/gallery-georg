@@ -18,7 +18,8 @@
         </script>
     </jsp:attribute>
     <jsp:body>
-        <spring:message code="page.order.info"/>
+        <h2><spring:message code="page.order.info"/></h2>
+        <br/>
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
@@ -46,14 +47,21 @@
 
         <p>
             <spring:message code="payment.info"/>
+            <br/>
             <c:forEach var="item" varStatus="i" items="${methods}">
                 <b>${i}:</b> ${item.text}<br/>
             </c:forEach>
         </p>
 
-        <spring:message code="page.order.confirmation"/>
-        <form:form action="/confirmOrder">
-            <input type="submit" class="btn">
+        <spring:message code="page.order.confirmation-text"/>
+        <form:form method="post" action="/confirmOrder">
+            <input type="submit" class="btn btn-primary"
+                   value="<spring:message code="page.order.confirmation-button" />"/>
+            <input type="hidden"
+                   name="${_csrf.parameterName}"
+                   value="${_csrf.token}"/>
         </form:form>
+
+        <a href="javascript:history.back()"><spring:message code="page.order.refusing-button"/></a>
     </jsp:body>
 </t:generic>

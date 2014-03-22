@@ -6,6 +6,7 @@ import org.georg.web.impl.model.Order;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class OrderDAO extends GenericDAO<Order, Integer> implements IOrderDAO {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Order> getByUser(String id) {
         Criteria criteria = getCurrentSession().createCriteria(Order.class)
                 .createCriteria("user", "user")

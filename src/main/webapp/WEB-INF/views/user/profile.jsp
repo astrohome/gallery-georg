@@ -8,13 +8,16 @@
         <t:menu menuItems="${menuItems}" showLogin="true"/>
     </jsp:attribute>
     <jsp:body>
+        <h2><spring:message code="page.profile.your-orders"/></h2>
+        <br/>
         <table class="table table-bordered table-hover">
             <thead>
             <tr>
-                <th>ID заказа</th>
-                <th>Состояние</th>
-                <th>Количество фотографий</th>
-                <th>Сумма</th>
+                <th><spring:message code="page.profile.order-id"/></th>
+                <th><spring:message code="page.profile.status"/></th>
+                <th><spring:message code="page.profile.quantity"/></th>
+                <th><spring:message code="page.profile.summ"/></th>
+                <th><spring:message code="page.profile.date"/></th>
             </tr>
             </thead>
             <tbody id="orderListContainer">
@@ -23,7 +26,8 @@
                     <td>${order.id}</td>
                     <td>${order.status}</td>
                     <td>${order.items.size}</td>
-                    <td>сумма</td>
+                    <td>${order.summ}</td>
+                    <td>${order.date}</td>
                 </tr>
             </c:forEach>
 

@@ -2,6 +2,7 @@ package org.georg.web.impl.service;
 
 import org.georg.web.impl.dao.base.IGenericDAO;
 import org.georg.web.impl.dao.custom.base.IOrderItemDAO;
+import org.georg.web.impl.model.Order;
 import org.georg.web.impl.model.OrderItem;
 import org.georg.web.impl.model.User;
 import org.georg.web.impl.service.base.BaseService;
@@ -61,5 +62,13 @@ public class OrderItemService extends BaseService<OrderItem, Integer> {
     @Transactional(readOnly = false)
     public OrderItem updateItem(OrderItem item) {
         return orderItemDAO.update(item);
+    }
+
+    @Transactional(readOnly = false)
+    public void updateItemOrderId(List<OrderItem> items, Order order) {
+        for (OrderItem item : items) {
+            item.setOrder(order);
+            this.updateItem(item);
+        }
     }
 }

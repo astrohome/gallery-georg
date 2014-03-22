@@ -28,6 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 @Controller
+@SessionAttributes
 public class HomeController {
 
     @Autowired
@@ -133,6 +134,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/private", method = RequestMethod.GET)
+    @Secured({"ROLE_USER"})
     public ModelAndView showCodeAccessPage() {
         ModelAndView modelAndView = new ModelAndView("private");
         modelAndView.addObject("prices", priceService.getAll());
@@ -141,7 +143,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/code", method = RequestMethod.GET)
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({"ROLE_USER"})
     public ModelAndView singlePrivateGallery(HttpServletResponse response,
                                              @RequestParam("code") String code,
                                              @RequestParam(value = "page", defaultValue = "1") Integer page) {
@@ -172,7 +174,7 @@ public class HomeController {
 
     @RequestMapping(value = "/private/download/{gallery}", produces = "application/octet-stream")
     @ResponseBody
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @Secured({"ROLE_USER"})
     public byte[] getDirectoryArchive(@PathVariable("gallery") String gallery, HttpServletResponse response)
             throws UnsupportedEncodingException {
 
@@ -252,11 +254,11 @@ public class HomeController {
         constructPublicMenu(modelAndView);
         return modelAndView;
     }
-
+/*
     @ExceptionHandler(Exception.class)
     public ModelAndView handleNotFoundException(Exception ex) {
 
         ModelAndView model = new ModelAndView("service/404");
         return model;
-    }
+    }*/
 }
