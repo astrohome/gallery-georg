@@ -1,6 +1,6 @@
 package org.georg.web.impl.service;
 
-import org.georg.web.impl.dao.custom.UserDAO;
+import org.georg.web.impl.dao.custom.base.IUserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,12 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService implements UserDetailsService {
 
     @Autowired
-    private UserDAO userDetailsServiceDAO;
+    private IUserDAO userDAO;
 
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        org.georg.web.impl.model.User user = userDetailsServiceDAO.getById(s);
+        org.georg.web.impl.model.User user = userDAO.getById(s);
         if (user == null) throw new UsernameNotFoundException("User " + s + " not found.");
 
         return user;

@@ -12,9 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * TODO
- */
 @Service
 public class FormatService extends BaseContainerService<Format, FormatListContainer, Integer> {
     @Autowired

@@ -5,7 +5,7 @@
 
     <groupId>org.georg.web</groupId>
     <artifactId>gallery</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.5.0</version>
     <packaging>war</packaging>
 
     <name>gallery</name>
@@ -122,8 +122,8 @@
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <version>1.0.1.Final</version>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.0.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -293,14 +293,14 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>tomcat-maven-plugin</artifactId>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
                 <configuration>
                     <url>${remote.protocol}://${remote.hostname}:${remote.port}/manager/text</url>
                     <server>TomcatServer</server>
                     <path>${remote.context}</path>
                 </configuration>
-                <version>1.1</version>
+                <version>2.2</version>
             </plugin>
         </plugins>
     </build>
